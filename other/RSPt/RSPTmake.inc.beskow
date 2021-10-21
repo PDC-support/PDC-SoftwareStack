@@ -1,0 +1,24 @@
+# module switch PrgEnv-cray PrgEnv-gnu
+# module switch gcc/8.1.0 gcc/9.3.0
+# module add cray-fftw/3.3.8.6
+
+# FORTRAN:
+FCOMPILER        = ftn -craype-verbose
+FCOMPILERFLAGS   = -Ofast -march=native -mtune=native -fopenmp -ffree-line-length-144 -ffpe-summary=none
+FCPPFLAGS        = -DMPI -DMEMORY_STORE
+FTARGETARCH      =
+FORTRANLIBS      = #-lifcore -lsvml -lirc -lifport -limf
+F90COMPILER      = ftn -craype-verbose
+F90COMPILERFLAGS = -Ofast -march=native -mtune=native -fopenmp -ffree-line-length-144 -ffpe-summary=none #-ip -xCORE-AVX2
+# C:
+CCOMPILER        = cc -craype-verbose
+CCOMPILERFLAGS   = -O3 #-ip -xCORE-AVX2
+CTARGETARCH      =
+CPPFLAGS         = -DMPI -DMEMORY_STORE
+
+## LIBRARIES AND INCLUDE DIRECTORIES
+LAPACKLIB        = #-Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_sequential.a -Wl,--end-group -lpthread -lm -ldl
+BLASLIB          =
+FFTWLIB          =
+EXTRALIBS        =
+INCLUDEDIRS      = #-I${MKLROOT}/include -I${MKLROOT}/include/fftw

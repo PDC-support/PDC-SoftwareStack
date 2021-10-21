@@ -1,0 +1,5 @@
+# Build status of the CP2K recipes
+
+## CP2K-8.2.69b8c2e-cpeGNU-21.08.eb
+- Works on eiger.cscs.ch
+- On Dardel the EasyBuild toolchain cpeGNU is not available

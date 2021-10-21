@@ -1,0 +1,26 @@
+#
+# Standard GFORTRAN/GCC under CentOS release 5.3 (Final)
+#
+## COMPILERS
+# 
+FHOME            =
+FCOMPILER        = ftn
+FCOMPILERFLAGS   = -O2 -ffree-line-length-0
+FCPPFLAGS        = 
+FTARGETARCH      =
+FORTRANLIBS      =
+F90COMPILER      = ftn
+F90COMPILERFLAGS = $(FCOMPILERFLAGS) -ffree-form
+# gcc
+CCOMPILER        = cc
+CCOMPILERFLAGS   = -O2
+CTARGETARCH      = 
+CPPFLAGS         =
+CLOADER          = 
+
+## LIBRARIES AND INCLUDE DIRECTORIES
+LAPACKLIB        =
+BLASLIB          =
+FFTWLIB          =
+EXTRALIBS        = 
+INCLUDEDIRS      = 

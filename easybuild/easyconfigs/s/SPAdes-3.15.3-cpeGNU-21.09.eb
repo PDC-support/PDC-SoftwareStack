@@ -1,0 +1,31 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'CMakeMake'
+
+name = 'SPAdes'
+version = '3.15.3'
+
+homepage = 'https://github.com/ablab/spades'
+description = """SPAdes – St. Petersburg genome assembler – is an assembly toolkit containing various assembly pipelines. This manual will help you to install and run SPAdes.""" 
+
+toolchain = {'name': 'cpeGNU', 'version': '21.09'}
+
+source_urls = ['https://cab.spbu.ru/files/release%(version)s/']
+sources = ['%(name)s-%(version)s.tar.gz']
+
+dependencies = [
+    ('CMake', '3.21.2', '', ('system', '')),
+    ('bzip2', '1.0.6', '', ('system', '')),
+    ('zlib', '1.2.11', '', ('system', '')),
+]
+
+start_dir = 'src'
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['spades-bwa', 'spades-core', 'spades-gbuilder', 'spades-hammer',
+                                     'spades-ionhammer', 'spades-kmercount', 'spades.py']],
+    'dirs': [],
+}
+
+sanity_check_commands = [('spades.py', '--test')]
+
+moduleclass = 'bio'
