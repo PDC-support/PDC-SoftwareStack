@@ -23,10 +23,11 @@ local local_user = os.getenv("HOME") .. "/easybuild_user/"
 
 -- Local paths
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
+local pdc_software = repos .. "PDC-SoftwareStack/easybuild/"
 
 prepend_path("PATH", pathJoin(root, "bin"))
 prepend_path("PYTHONPATH", pathJoin(root, "lib/python3.6/site-packages/"))
-append_path("EASYBUILD_ROBOT_PATHS", pathJoin(repos, "software-validation/easybuild/easyconfigs"))
+append_path("EASYBUILD_ROBOT_PATHS", pathJoin(pdc_software, "easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(lumi_software, "easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(repos, "LUMI-EasyBuild-contrib/easybuild/easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(repos, "CSCS-production/easybuild/easyconfigs"))
