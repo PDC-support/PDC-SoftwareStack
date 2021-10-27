@@ -1,0 +1,30 @@
+# Built by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'MakeCp'
+
+name = 'BWA'
+version = '0.7.17'
+
+homepage = 'http://bio-bwa.sourceforge.net/'
+description = """BWA is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. It consists of three algorithms: BWA-backtrack, BWA-SW and BWA-MEM""" 
+
+toolchain = SYSTEM
+
+source_urls = ['https://sourceforge.net/projects/bio-bwa/files/']
+sources = ['%(namelower)s-%(version)s.tar.bz2']
+
+files_to_copy = [(['*'], 'bin')]
+
+postinstallcmds = [
+    "rm %(installdir)s/bin/*.o",
+    "rm %(installdir)s/bin/*.c",
+    "rm %(installdir)s/bin/*.h",
+    "rm %(installdir)s/bin/Makefile",
+]
+
+
+sanity_check_paths = {
+    'files': ['bin/bwa', 'bin/bwakit/run-bwamem'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
