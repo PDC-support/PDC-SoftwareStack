@@ -1,0 +1,76 @@
+# MPICH container with other dev tools and an MPI example
+BootStrap: docker
+From: ubuntu:18.04
+
+%post
+# Runs within the container during Bootstrap
+export ARG DEBIAN_FRONTEND=noninteractive
+
+# Install the necessary packages (from repo)
+apt-get update 
+apt-get install -y --no-install-recommends \
+apt-utils build-essential curl git libopenblas-dev \
+libcurl4-openssl-dev libfreetype6-dev libpng-dev libzmq3-dev \
+python-pip pkg-config python-dev python-setuptools \
+rsync software-properties-common unzip vim \
+zip zlib1g-dev language-pack-en \
+dkms libtool autoconf automake build-essential numactl libnuma-dev \
+gcc g++ libtool pkg-config wget gfortran \
+liblua5.1-0 liblua5.1-0-dev lua-filesystem-dev lua-filesystem \
+lua-posix-dev lua-posix lua5.1 tcl tcl-dev lua-term lua-term-dev lua-json
+apt-get clean
+
+# Set up some required environment defaults
+# MC issue with locale (LC_ALL, LANGUAGE), to get it right:
+locale-gen "en_US.UTF-8"
+dpkg-reconfigure locales
+export LANGUAGE="en_US.UTF-8"
+echo 'LANGUAGE="en_US.UTF-8"' >> /etc/default/locale
+echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
+
+# Download and build an ABI compatible MPICH
+export MPICH_VERSION=3.3.2
+cd /tmp
+wget http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz 
+tar zxvf mpich-$MPICH_VERSION.tar.gz
+cd mpich-$MPICH_VERSION
+./configure --prefix=/opt/mpich-$MPICH_VERSION
+make install
+export PATH=$PATH:/opt/mpich-$MPICH_VERSION/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mpich-$MPICH_VERSION/lib
+
+# build example
+mkdir -p /opt/mpitests/src
+mkdir -p /opt/mpitests/bin
+cat <<EOF >/opt/mpitests/src/mpi_procs.c
+    // Simple MPI test program
+    #include <stdio.h>
+    #include <mpi.h>
+    int main(int argc, char **argv) {
+        MPI_Comm comm_node,byranks_comm;
+        int rank,size,node_rank,nodes, one=1;
+        MPI_Init(&argc, &argv);
+        MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+        MPI_Comm_size(MPI_COMM_WORLD,&size);
+        MPI_Comm_split_type(MPI_COMM_WORLD,MPI_COMM_TYPE_SHARED,rank,MPI_INFO_NULL,&comm_node);
+        MPI_Comm_rank(comm_node,&node_rank);
+        MPI_Comm_split(MPI_COMM_WORLD,node_rank,rank,&byranks_comm);
+        printf("Hello from node %d\n",node_rank);
+        if (node_rank==0) {
+            MPI_Comm_size(byranks_comm,&nodes);
+            if (rank==0) {
+                printf("Running MPI program on %d processes on %d nodes\n",size,nodes);
+                }
+            }
+        MPI_Finalize();
+        }
+EOF
+
+cd /opt/mpitests/src
+/opt/mpich-$MPICH_VERSION/bin/mpicc -o ../bin/mpi_procs mpi_procs.c
+install ../bin/mpi_procs /usr/local/bin
+
+%help
+Container with MPICH and MPI example(s) in /opt/mpich-3.3.2 and /opt/mpitests
+Internal test /opt/mpich-3.3.2/bin/mpirun -n 2 /usr/local/bin/mpi_procs
+MPICH_VERSION=3.3.2

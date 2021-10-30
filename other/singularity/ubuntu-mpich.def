@@ -1,0 +1,41 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+# Build variables
+export MPICH_VERSION=3.3.2
+
+# Install needed packages
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y wget git bash gcc gfortran g++ make
+
+# Fix timezone issue
+export TZ=Europe/Stockholm
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Installing MPICH.
+cd /tmp
+wget http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz 
+tar zxvf mpich-$MPICH_VERSION.tar.gz
+cd mpich-$MPICH_VERSION
+./configure --prefix=/opt/mpich-$MPICH_VERSION
+make install
+export PATH=$PATH:/opt/mpich-$MPICH_VERSION/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mpich-$MPICH_VERSION/lib
+
+# Compiling a MPI test application
+wget https://raw.githubusercontent.com/PDC-support/introduction-to-pdc/master/example/hello_world_mpi.c
+mpicc -fopenmp -o /usr/local/bin/hello_world_mpi hello_world_mpi.c
+
+%help
+Container with MPICH and MPI example(s) in /opt/mpich-<MPICH_VERSION>.
+MPICH_VERSION=3.3.2
+See environment to examine the mpich version.
+In order to test MPI functionality
+
+Local:
+singularity exec <CONTAINER_NAME>.sif /opt/mpich-3.3.2/bin/mpirun -n <PROCS> hello_world_mpi
+
+MPI cluster:
+srun -n <PROCS> --mpi=pmi2 singularity exec <container name>.sif hello_world_mpi
