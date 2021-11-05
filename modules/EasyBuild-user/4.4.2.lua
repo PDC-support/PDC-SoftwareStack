@@ -20,8 +20,11 @@ local cpe = "/pdc/software/21.09/"
 local repos = "/pdc/software/eb_repo/"
 local root = cpe .. "other/easybuild/4.4.2/"
 local local_user = os.getenv("HOME") .. "/easybuild_user/"
+local user = os.getenv("USER")
+local user_dir = string.sub(user, 1, 1) .. "/" .. user .. "/"
 
 -- Local paths
+local cfs = "/cfs/klemming/"
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
 local pdc_software = repos .. "PDC-SoftwareStack/easybuild/"
 
@@ -42,5 +45,5 @@ setenv("EASYBUILD_MODULE_EXTENSIONS", "True")
 setenv("EASYBUILD_RECURSIVE_MODULE_UNLOAD", "False")
 setenv("EASYBUILD_INSTALLPATH", local_user)
 setenv("EASYBUILD_SOURCEPATH",  local_user .. "sources/")
-setenv("EASYBUILD_BUILDPATH", "/tmp/")
+setenv("EASYBUILD_BUILDPATH", cfs .. "scratch/" .. user_dir)
 append_path("MODULEPATH", local_user .. "/modules/all/")
