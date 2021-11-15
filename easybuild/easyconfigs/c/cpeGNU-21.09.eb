@@ -29,7 +29,6 @@ PrgEnv_family = 'PrgEnv'
 CPE_load      = None
 
 dependencies = [
-    ('gcc/10.3.0', EXTERNAL_MODULE),
     ('cray-dsmml/0.2.1', EXTERNAL_MODULE),
     ('perftools-base/21.09.0', EXTERNAL_MODULE),
     ('xpmem', EXTERNAL_MODULE),
