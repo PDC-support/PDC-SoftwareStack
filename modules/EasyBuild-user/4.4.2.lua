@@ -16,7 +16,7 @@ whatis([==[Description:
 whatis([==[Homepage: https://easybuild.io/]==])
 
 -- Main path for external repositories, for EasyBuild installation path and for EasyBuild
-local cpe = "/pdc/software/21.09/"
+local cpe = "/pdc/software/" .. os.getenv("CRAY_PE_VERSION") .. "/"
 local repos = "/pdc/software/eb_repo/"
 local root = cpe .. "other/easybuild/4.4.2/"
 local local_user = os.getenv("HOME") .. "/easybuild_user/"
