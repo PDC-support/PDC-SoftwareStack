@@ -1,0 +1,31 @@
+# contributed by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+easyblock = 'PythonPackage'
+
+name = 'ASE'
+version = '3.22.0'
+
+homepage = 'https://wiki.fysik.dtu.dk/ase/'
+description = """ASE is a python package providing an open source Atomic Simulation Environment
+ in the Python scripting language."""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+
+source_urls = ['https://pypi.python.org/packages/source/a/ase']
+sources = ['%(namelower)s-%(version)s.tar.gz']
+
+dependencies = [
+    ('Anaconda3', '2021.05', '', ('system', '')),
+]
+
+postinstallcmds = ['cp -r %(builddir)s/%(namelower)s-%(version)s/ase %(installdir)s/']
+
+allow_prepend_abs_path = True
+modextrapaths = {'PYTHONPATH': ['%(installdir)s']}
+
+sanity_check_paths = {
+    'files': ['bin/ase'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'chem'
