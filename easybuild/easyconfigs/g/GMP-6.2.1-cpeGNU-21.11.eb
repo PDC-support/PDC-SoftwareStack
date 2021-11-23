@@ -40,9 +40,7 @@ docurls = [
 ]
 
 
-toolchain = {'name': 'cpeGNU', 'version': '21.09'}
-#toolchainopts = {'lowopt': True}               # CSCS settings
-#toolchainopts = {'precise': True, 'pic': True} # EasyBuilders settings
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
 toolchainopts = {
     'verbose': True,
     'precise': True, 'loop': True, 'lto': True,
@@ -56,6 +54,7 @@ sources =     [SOURCELOWER_TAR_BZ2]
 # enable C++ interface
 configopts = '--enable-cxx'
 
+# Does not work as you have to run make check on compute node
 runtest = 'check'
 
 # the output of config.guess is used by default and can be changed with --build
@@ -67,7 +66,6 @@ sanity_check_paths = {
     'dirs':  ['share/info'],
 }
 
-# No binaries to easily check, but we do check if pkg-config can read the .pc files.
 sanity_check_commands = [
     'pkg-config --libs gmp',
     'pkg-config --libs gmpxx',

@@ -13,11 +13,7 @@ toolchainopts = {'usempi': True, 'pic': True}
 source_urls = ['https://github.com/JuliaLang/julia/releases/download/v%(version)s/']
 sources = ['%(namelower)s-%(version)s.tar.gz']
 
-files_to_copy = [(['usr/bin/*'], 'bin'),
-                 (['usr/lib/*'], 'lib'),
-                 (['usr/include/*'], 'include'),
-                 (['usr/share/*'], 'share')
-]
+files_to_copy = [(['usr/*'], '%(installdir)s')]
 
 sanity_check_paths = {
    'files': ['bin/julia'],
