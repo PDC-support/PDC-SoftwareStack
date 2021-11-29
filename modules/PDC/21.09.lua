@@ -9,8 +9,9 @@ whatis([==[Description:
     CPE for user to built software
 ]==])
 
-setenv("CRAY_PE_VERSION", "21.09")
-local root = "/pdc/software/" .. os.getenv("CRAY_PE_VERSION") .. "/"
+local cpe_version = "21.09"
+setenv("CRAY_PE_VERSION", cpe_version)
+local root = "/pdc/software/" .. cpe_version .. "/"
 
 append_path("MODULEPATH", pathJoin(root, "other/modules"))
 append_path("MODULEPATH", pathJoin(root, "eb/modules/all"))
