@@ -10,6 +10,9 @@ whatis([==[Description:
 ]==])
 
 local cpe_version = "21.09"
+
+conflict("PDC")
+
 setenv("CRAY_PE_VERSION", cpe_version)
 local root = "/pdc/software/" .. cpe_version .. "/"
 
