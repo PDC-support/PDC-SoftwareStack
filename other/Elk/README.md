@@ -43,8 +43,8 @@ srun -n 1 ./test-threads32.sh
 * Load the enviroment
 
 ```bash
-ml swap PrgEnv-cray/8.1.0 PrgEnv-gnu/8.1.0
-ml add cray-fftw/3.3.8.11
+ml swap PrgEnv-cray/8.2.0 PrgEnv-gnu/8.2.0
+ml add cray-fftw/3.3.8.12
 ```
 
 * Compile and link
@@ -54,7 +54,7 @@ tar xf elk-7.2.42.tgz
 cd elk-7.2.42/
 ./setup
 #cp -p make.inc make.inc.org
-# Copy make.inc.gfortran.dardel make.inc
+# Copy make.inc.gfortran.dardel.optimized make.inc
 # Revise the make.inc if needed
 make
 ```
@@ -73,4 +73,3 @@ sbatch jobtest-mpi-srun-N8n32t32.sh
 ```
 
 * Expected output: 28 passed, 0 skipped
-
