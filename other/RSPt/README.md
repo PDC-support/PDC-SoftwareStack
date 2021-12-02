@@ -44,8 +44,8 @@ srun make test
 * Load the environment
 
 ```bash
-ml swap PrgEnv-cray/8.1.0 PrgEnv-gnu/8.1.0
-ml add cray-fftw/3.3.8.11
+ml swap PrgEnv-cray/8.2.0 PrgEnv-gnu/8.2.0
+ml add cray-fftw/3.3.8.12
 ```
 
 * Compile and link
@@ -53,7 +53,7 @@ ml add cray-fftw/3.3.8.11
 ```bash
 unzip rspt-master.zip
 cd rspt-master
-# cp -p RSPTmake.inc.gfortranftn.dardel RSPtmake.inc
+# cp -p RSPTmake_GNU_dardel.inc RSPtmake.inc
 make
 ```
 
