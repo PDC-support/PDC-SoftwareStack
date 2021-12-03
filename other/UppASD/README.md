@@ -38,8 +38,7 @@ OMP_NUM_THREADS=16 make asd-tests
 * Load the environment
 
 ```bash
-ml swap PrgEnv-cray/8.1.0 PrgEnv-gnu/8.1.0
-ml swap gcc/11.2.0 gcc/9.3.0
+ml PrgEnv-cray/8.2.0 PrgEnv-gnu/8.2.0
 ```
 
 * Compile and link UppASD
