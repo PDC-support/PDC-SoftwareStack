@@ -28,6 +28,12 @@ PrgEnv_load   = False
 PrgEnv_family = 'PrgEnv'
 CPE_load      = None
 
+cray_targets = [
+    'craype-x86-rome',
+    'craype-accel-host',
+    'craype-network-ofi'
+    ]
+
 dependencies = [
     ('gcc/11.2.0', EXTERNAL_MODULE),
     ('craype/2.7.12', EXTERNAL_MODULE),
