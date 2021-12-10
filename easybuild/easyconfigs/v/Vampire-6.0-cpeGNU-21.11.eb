@@ -1,3 +1,4 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'MakeCp'
 
 name = 'Vampire'
