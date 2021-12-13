@@ -1,0 +1,25 @@
+easyblock = 'ConfigureMake'
+
+name = 'petsc'
+version = '3.16.2'
+
+homepage = 'https://petsc.org/release/'
+description = """PETSc, the Portable, Extensible Toolkit for Scientific Computation. It is a suite of data structures and routines for the scalable (parallel) solution of scientific applications modeled by partial differential equations."""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+
+source_urls = ['https://ftp.mcs.anl.gov/pub/petsc/release-snapshots']
+sources = [{'filename':'petsc-3.16.2.tar.gz'}]
+
+dependencies = [
+    ('Anaconda3/2021.05', EXTERNAL_MODULE)
+]
+
+configopts = "--with-batch"
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/']
+}
+
+moduleclass = 'tools'
