@@ -1,0 +1,40 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'MakeCp'
+
+name = 'Smilei'
+version = '4.6'
+
+homepage = 'http://www.maisondelasimulation.fr/smilei/'
+description = """Smilei is a Particle-In-Cell code for plasma simulation. 
+Open-source, collaborative, user-friendly and designed for high performances on super-computers, 
+it is applied to a wide range of physics studies: from relativistic laser-plasma interaction to astrophysics..""" 
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['http://www.maisondelasimulation.fr/smilei/_downloads/']
+sources = ['%(namelower)s-v%(version)s.tar.gz']
+
+builddependencies = [
+    ('Boost', '1.75.0')
+]
+
+dependencies = [
+    ('cray-hdf5-parallel', EXTERNAL_MODULE),
+    ('Anaconda3', '2021.05', '', ('system', ''))
+]
+
+prebuildopts = "export LDFLAGS='-fno-lto' &&"
+
+buildopts = 'SMILEICXX=CC'
+
+files_to_copy = [(['build/smilei'], 'bin'),
+                 (['build/smilei_test'], 'bin'), 
+]
+
+sanity_check_paths = {
+    'files': ['bin/smilei', 'bin/smilei_test'],
+    'dirs': [],
+}
+
+moduleclass = 'phys'
