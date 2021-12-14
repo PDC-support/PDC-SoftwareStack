@@ -9,13 +9,14 @@ description = """PETSc, the Portable, Extensible Toolkit for Scientific Computat
 toolchain = {'name': 'cpeGNU', 'version': '21.11'}
 
 source_urls = ['https://ftp.mcs.anl.gov/pub/petsc/release-snapshots']
-sources = [{'filename':'petsc-3.16.2.tar.gz'}]
+sources = ['%(namelowercase)s-%(version)s.tar.gz']
 
 dependencies = [
-    ('Anaconda3/2021.05', EXTERNAL_MODULE)
+    ('Anaconda3', '2021.05', '', ('system', ''))
 ]
 
-configopts = "--with-batch"
+configopts = "--with-batch --download-scalapack --download-hypre --download-metis --download-parmetis"
+configopts += "--download-ptscotch --download-mumps"
 
 sanity_check_paths = {
     'files': [],
