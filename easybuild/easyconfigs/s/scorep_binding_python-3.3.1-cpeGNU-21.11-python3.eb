@@ -1,4 +1,5 @@
 # jg (CSCS)
+# Adapted by Johan Hellsvik (hellsvik@kth.se) for PDC, KTH, Stockholm
 easyblock = 'PythonPackage'
 
 name = 'scorep_binding_python'
