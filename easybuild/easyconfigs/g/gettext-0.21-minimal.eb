@@ -1,0 +1,24 @@
+# contributed by Luca Marsella (CSCS)
+# Adapted by Johan Hellsvik (hellsvik@kth.se) for PDC, KTH, Stockholm
+
+easyblock = 'ConfigureMake'
+
+name = 'gettext'
+version = '0.21'
+versionsuffix = '-minimal'
+
+homepage = 'http://www.gnu.org/software/gettext/'
+description = """GNU `gettext' is an important step for the GNU Translation Project, as it is an asset on which we may build many other steps. This package offers to programmers, translators, and even users, a well integrated set of tools and documentation"""
+
+toolchain = SYSTEM
+
+sources = [SOURCE_TAR_GZ]
+source_urls = [GNU_SOURCE]
+
+dependencies = [
+    ('ncurses', '6.2'),
+]
+
+configopts = '--without-emacs --with-libncurses-prefix=$EBROOTNCURSES --with-included-libunistring --with-included-libxml'
+
+moduleclass = 'vis'
