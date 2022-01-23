@@ -64,7 +64,7 @@ builddependencies = [
 dependencies = [
     ('cray-fftw', EXTERNAL_MODULE),
     ('Boost',     local_Boost_version),
-    ('zlib',      local_zlib_version),
+    ('zlib',      local_zlib_version, '', ('system', '')),
     ('GSL',       local_GSL_version),
 ]
 
