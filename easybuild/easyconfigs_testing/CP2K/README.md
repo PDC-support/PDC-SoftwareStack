@@ -21,7 +21,6 @@ CP2K-9.1-cpeGNU.psmp
 ###
 CP2K-9.1-cpeGNU-21.11.eb
 - 21.11 version of the LUMI recipe
-- Includes also the SIRIUS package
 - Builds on Dardel
 - Todo: Run test suite and scaling analysis suite
 
