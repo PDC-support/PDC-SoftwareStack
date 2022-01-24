@@ -19,7 +19,8 @@ CP2K-9.1-cpeGNU.psmp
 - Works on LUMI
 
 ###
-CP2K-9.1-cpeGNU-21.11.eb
+CP2K-9.1-cpeGNU-21.11.eb    # moved to easyconfigs/c/
+CP2K-9.1-cpeGNU.psmp        # moved to easyconfigs/c/
 - 21.11 version of the LUMI recipe
 - Builds on Dardel
 - Todo: Run test suite and scaling analysis suite
