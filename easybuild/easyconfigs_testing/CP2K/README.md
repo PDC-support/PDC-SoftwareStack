@@ -24,3 +24,8 @@ CP2K-9.1-cpeGNU-21.11.eb
 - Includes also the SIRIUS package
 - Builds on Dardel
 - Todo: Run test suite and scaling analysis suite
+
+###
+job_CP2K_build_test.sh
+do_regtest_dardel.sh
+- Scripts to run test suite as batch job on Dardel
