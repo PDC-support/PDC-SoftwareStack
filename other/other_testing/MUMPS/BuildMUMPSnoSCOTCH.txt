@@ -1,0 +1,19 @@
+#! Build instructions for MUMPS 5.4.1 on Dardel
+
+# Obtain and untar the MUMPS source code
+wget http://mumps.enseeiht.fr/MUMPS_5.4.1.tar.gz
+tar xf MUMPS_5.4.1.tar.gz
+cd MUMPS_5.4.1
+
+# Load the environment
+ml PDC
+ml PrgEnv-gnu
+ml METIS
+
+# Edit the Makefile.inc.
+# For a build linked with METIS, but without ParMETIS and SCOTCH
+# the template Makefile.inc.NoSCOTCH can be used
+cp -p Makefile.inc.NoSCOTCH Makefile.inc
+
+# Compile and link
+make all
