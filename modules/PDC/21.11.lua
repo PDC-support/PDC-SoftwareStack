@@ -16,6 +16,6 @@ conflict("PDC")
 setenv("CRAY_PE_VERSION", cpe_version)
 local root = "/pdc/software/" .. cpe_version .. "/"
 
-append_path("MODULEPATH", pathJoin(root, "other/modules"))
-append_path("MODULEPATH", pathJoin(root, "eb/modules/all"))
-append_path("MODULEPATH", pathJoin(root, "spack/modules"))
+prepend_path("MODULEPATH", pathJoin(root, "other/modules"))
+prepend_path("MODULEPATH", pathJoin(root, "eb/modules/all"))
+prepend_path("MODULEPATH", pathJoin(root, "spack/modules"))
