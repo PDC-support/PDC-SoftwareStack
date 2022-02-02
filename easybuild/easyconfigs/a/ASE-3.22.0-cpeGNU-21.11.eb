@@ -21,7 +21,10 @@ dependencies = [
 postinstallcmds = ['cp -r %(builddir)s/%(namelower)s-%(version)s/ase %(installdir)s/']
 
 allow_prepend_abs_path = True
-modextrapaths = {'PYTHONPATH': ['%(installdir)s']}
+# The extra pythonpath is needed as there are different format in the egg package. See to it to adapt to the right anaconda version
+modextrapaths = {'PYTHONPATH': ['%(installdir)s'],
+	'PYTHONPATH': ['%(installdir)s/lib64/python3.8/site-packages/ase-3.22.0-py3.8.egg']
+}
 
 sanity_check_paths = {
     'files': ['bin/ase'],
