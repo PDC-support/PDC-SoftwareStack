@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Written by jacobwah Feb 2022
+
+GROUP="cac-pdc.staff"
+BASEPAT="/cfs/klemming/projects/snic/\|/cfs/klemming/home/[^/]\?/\|/cfs/klemming/scratch/[^/]\?/"
+RESTORE="access-$(date -Is).restore"
+
+if [ $# -ne 1 ]; then
+	echo "Grant PDC support access to a directory:"
+	echo "    support-access DIR"
+	echo ""
+	echo "This generates a restore file so you can later revoke access:"
+	echo "    setfacl --restore \"access-XXX.restore\""
+	exit
+fi
+
+path=$(realpath "$1")
+base=$(expr match "$path" "\($BASEPAT\)")
+
+if [ $? -ne 0 ]
+then
+	echo -e "error: path must be in project, or your home/scratch\n"
+	exit 1
+fi
+
+base="${base%/}"
+
+# Grant r-x access to DIR
+getfacl -pR -- "$path" > "$RESTORE" || exit 1
+setfacl -Rm "g:$GROUP:rx" -- "$path"
+
+path="${path%/*}"
+while [ "$path" != "$base" ]
+do
+	# If others already have access, do nothing
+	if ! getfacl -p -- "$path" | grep -q "^other::..x"
+	then
+		# Grant --x access to parents
+		getfacl -p -- "$path" >> ${RESTORE} || exit 1
+		setfacl -m "g:$GROUP:x" -- "$path"
+	fi
+
+	path="${path%/*}"
+done
+
+echo "Access granted!"
+echo
+echo "Generated restore file. If you want to undo, run the following command:"
+echo "    setfacl --restore \"$RESTORE\""
