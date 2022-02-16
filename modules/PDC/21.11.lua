@@ -12,10 +12,12 @@ whatis([==[Description:
 local cpe_version = "21.11"
 
 conflict("PDC")
+if mode() ~= "spider" then
+	setenv("CRAY_PE_VERSION", cpe_version)
+	local root = "/pdc/software/" .. cpe_version .. "/"
 
-setenv("CRAY_PE_VERSION", cpe_version)
-local root = "/pdc/software/" .. cpe_version .. "/"
+	prepend_path("MODULEPATH", pathJoin(root, "other/modules"))
+	prepend_path("MODULEPATH", pathJoin(root, "eb/modules/all"))
+	prepend_path("MODULEPATH", pathJoin(root, "spack/modules"))
+	end
 
-prepend_path("MODULEPATH", pathJoin(root, "other/modules"))
-prepend_path("MODULEPATH", pathJoin(root, "eb/modules/all"))
-prepend_path("MODULEPATH", pathJoin(root, "spack/modules"))
