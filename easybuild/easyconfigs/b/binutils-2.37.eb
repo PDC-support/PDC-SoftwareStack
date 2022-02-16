@@ -1,0 +1,26 @@
+# contributed by Luca Marsella (CSCS)
+name = 'binutils'
+version = '2.37'
+
+homepage = 'http://directory.fsf.org/project/binutils/'
+description = "binutils: GNU binary utilities"
+
+toolchain = SYSTEM
+
+source_urls = [GNU_SOURCE]
+sources = [SOURCE_TAR_GZ]
+
+builddependencies = [
+    ('Bison', '3.7.5', '', ('system', '')),
+    ('flex', '2.6.4', '', ('system', '')),
+    ('zlib', '1.2.11', '', ('system', '')),
+]
+
+configopts = " --enable-gold=yes "
+
+sanity_check_paths = {
+    'files': ['bin/gprof', 'bin/ranlib'],
+    'dirs': ['bin', 'lib', 'include'],
+}
+
+moduleclass = 'tools'
