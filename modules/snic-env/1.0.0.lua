@@ -13,6 +13,8 @@ whatis([==[Description:
     This is an environment module so that SNIC users will be familiar with the setup.
 ]==])
 
+add_property("lmod","sticky")
+
 -- Local paths
 local cfs = "/cfs/klemming/"
 local user = os.getenv("USER")
