@@ -29,6 +29,9 @@ sanity_check_paths = {
     'dirs': []
 }
 
-modextrapaths = { 'PATH': 'lmod/lmod/libexec' }
+modextrapaths = {
+    'LMOD_CMD': 'lmod/%(version)s/libexec/lmod',
+    'PATH': 'lmod/lmod/libexec' 
+}
 
 moduleclass = "tools"
