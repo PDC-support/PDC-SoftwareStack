@@ -2,8 +2,12 @@
 
 # Written by jacobwah Feb 2022
 
+# Disabled in project directories. Since root owns project directories users
+# cannot set access rights there.
+
 GROUP="cac-pdc.staff"
-BASEPAT="/cfs/klemming/projects/snic/\|/cfs/klemming/home/[^/]\?/\|/cfs/klemming/scratch/[^/]\?/"
+#BASEPAT="/cfs/klemming/projects/snic/\|/cfs/klemming/home/[^/]\?/\|/cfs/klemming/scratch/[^/]\?/"
+BASEPAT="/cfs/klemming/home/[^/]\?/\|/cfs/klemming/scratch/[^/]\?/"
 RESTORE="access-$(date -Is).restore"
 
 if [ $# -ne 1 ]; then
@@ -20,7 +24,7 @@ base=$(expr match "$path" "\($BASEPAT\)")
 
 if [ $? -ne 0 ]
 then
-	echo -e "error: path must be in project, or your home/scratch\n"
+	echo -e "error: path must be in your home or scratch\n"
 	exit 1
 fi
 
