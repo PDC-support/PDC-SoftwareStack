@@ -10,13 +10,12 @@ whatis([==[Description:
 ]==])
 
 local cpe_version = "21.09"
+family("cpe")
 
 conflict("PDC")
+local root = "/pdc/software"
 
 setenv("CRAY_PE_VERSION", cpe_version)
-local root = "/pdc/software/PDC/"
-
-prepend_path("MODULEPATH", pathJoin(root, cpe_version, "eb"))
-prepend_path("MODULEPATH", pathJoin(root, cpe_version, "other"))
-prepend_path("MODULEPATH", pathJoin(root, cpe_version, "spack"))
-
+prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "eb"))
+prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "other"))
+prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "spack"))
