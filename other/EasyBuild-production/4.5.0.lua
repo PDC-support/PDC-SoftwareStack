@@ -19,11 +19,8 @@ whatis([==[Homepage: https://easybuild.io/]==])
 local cpe = "/pdc/software/" ..os.getenv("CRAY_PE_VERSION") .. "/"
 local repos = "/pdc/software/eb_repo/"
 local root = cpe .. "other/easybuild/4.5.0/"
-local user = os.getenv("USER")
-local user_dir = string.sub(user, 1, 1) .. "/" .. user .. "/"
 
 -- Local paths
-local cfs = "/cfs/klemming/"
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
 local pdc_software = repos .. "PDC-SoftwareStack/easybuild/"
 
@@ -33,6 +30,7 @@ append_path("EASYBUILD_ROBOT_PATHS", pathJoin(pdc_software, "easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(lumi_software, "easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(repos, "LUMI-EasyBuild-contrib/easybuild/easyconfigs"))
 append_path("EASYBUILD_ROBOT_PATHS", pathJoin(repos, "CSCS-production/easybuild/easyconfigs"))
+setenv("EASYBUILD_REPOSITORYPATH", repos)
 setenv("EASYBUILD_INCLUDE_EASYBLOCKS", lumi_software .. "easyblocks/*/*.py")
 setenv("EASYBUILD_INCLUDE_TOOLCHAINS", lumi_software .. "toolchains/*.py," .. lumi_software .. "toolchains/compiler/*.py")
 setenv("EB_PYTHON", "python3")
@@ -43,6 +41,6 @@ setenv("EASYBUILD_MODULE_DEPENDS_ON", "False")
 setenv("EASYBUILD_MODULE_EXTENSIONS", "True")
 setenv("EASYBUILD_PARALLEL","64")
 setenv("EASYBUILD_RECURSIVE_MODULE_UNLOAD", "False")
-setenv("EASYBUILD_INSTALLPATH", cpe .. "eb/")
-setenv("EASYBUILD_SOURCEPATH",  cpe .. "eb/sources/")
-setenv("EASYBUILD_BUILDPATH", "/tmp/")
+setenv("EASYBUILD_INSTALLPATH", pathJoin(cpe, "eb"))
+setenv("EASYBUILD_SOURCEPATH",  pathJoin(cpe, "eb/sources"))
+setenv("EASYBUILD_BUILDPATH", "/tmp/eb-build")
