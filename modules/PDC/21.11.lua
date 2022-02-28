@@ -2,7 +2,7 @@ help([==[
 
 Description
 ===========
-Cray Programming Environment 21.09
+Cray Programming Environment 21.11
 ]==])
 
 whatis([==[Description: 
