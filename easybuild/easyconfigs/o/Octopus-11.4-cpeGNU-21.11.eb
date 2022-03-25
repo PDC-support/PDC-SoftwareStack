@@ -1,0 +1,41 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'ConfigureMake'
+
+name = 'Octopus'
+version = '11.4'
+
+homepage = 'https://octopus-code.org/'
+description = """ABINIT is a package whose main program allows one to find the total energy,
+ charge density and electronic structure of systems made of electrons and nuclei (molecules
+ and periodic solids) within Density Functional Theory (DFT), using pseudopotentials and a
+ planewave or wavelet basis."""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+sources = ['/pdc/software/21.11/eb/sources/o/Octopus/octopus-11.4.tar.gz']
+#source_urls = ['https://octopus-code.org/down.php?_%(version_major)s_%(version_minor)s/']
+#sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('libxc', '5.1.7'),
+    ('GSL', '2.7')
+]
+
+configopts = 'CC="cc" CFLAGS="-O3 -march=znver2 -mtune=znver2 -mfma -mavx2 -m3dnow -fomit-frame-pointer" '
+configopts += 'FC="ftn" FCFLAGS="-O3 -march=znver2 -mtune=znver2 -mfma -mavx2 -m3dnow -fomit-frame-pointer" '
+configopts += '--with-gsl-prefix="${EBROOTGSL}" '	  
+configopts += '--with-libxc-prefix="${EBROOTLIBXC}" '
+configopts += '--with-fft-flavor=fftw3 FFTW3_LIBS="-L${FFTW_ROOT} -lfftw3f -lfftw3" '
+
+# 'make check' to run the test suite
+# Tests inactivated as it requires launching with srun
+#runtest = "check"
+
+sanity_check_paths = {
+    'files': ['bin/octopus','bin/oct-xyz-anim', 'bin/oct-wannier90','lib/liboct.a'],
+    'dirs': ['bin','lib','include'],
+}
+
+moduleclass = 'chem'
