@@ -14,4 +14,4 @@ whatis([==[Description:
 ]==])
 add_property("lmod","sticky")
 prepend_path("PATH","/pdc/software/modules/systemdefault/bin")
-prepend_path("PATH","/afs/pdc.kth.se/misc/pdc/adm/Allocation/plasma")
+append_path("PATH","/pdc/software/tools")
