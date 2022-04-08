@@ -14,6 +14,8 @@ sources = ['/pdc/software/21.11/eb/sources/o/Octopus/octopus-11.4.tar.gz']
 #source_urls = ['https://octopus-code.org/down.php?_%(version_major)s_%(version_minor)s/']
 #sources = [SOURCELOWER_TAR_GZ]
 
+patches = ['%(name)s-%(version)s.patch']
+
 dependencies = [
     ('cray-fftw', EXTERNAL_MODULE),
     ('libxc', '5.1.7'),
