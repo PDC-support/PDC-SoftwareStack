@@ -1,0 +1,29 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'ConfigureMake'
+
+name = 'Motif'
+version = '2.3.8'
+
+homepage = 'https://sourceforge.net/projects/motif/'
+
+description = """
+Motif is a freely available source code distribution for the Motif user interface component toolkit.
+Motif 2.3.8 is an updated version of Open Motif 2.3 and is a major bug fix release.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://downloads.sourceforge.net/project/motif/%(name)s%202.3.8%20Source%20Code/']
+sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('X11', '21.11')
+]
+
+sanity_check_paths = {
+    'files': ['bin/mwm','bin/uil'],
+    'dirs': ['bin','lib','include'],
+}
+
+moduleclass = 'devel'
