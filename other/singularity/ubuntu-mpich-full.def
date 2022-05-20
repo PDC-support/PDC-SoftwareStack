@@ -45,10 +45,13 @@ mkdir -p /opt/mpitests/bin
 cat <<EOF >/opt/mpitests/src/mpi_procs.c
     // Simple MPI test program
     #include <stdio.h>
+    #include <unistd.h>
     #include <mpi.h>
     int main(int argc, char **argv) {
         MPI_Comm comm_node,byranks_comm;
-        int rank,size,node_rank,nodes, one=1;
+        int rank,size,node_rank,nodes;
+        char hostname[80];
+        gethostname(hostname, 80);
         MPI_Init(&argc, &argv);
         MPI_Comm_rank(MPI_COMM_WORLD,&rank);
         MPI_Comm_size(MPI_COMM_WORLD,&size);
