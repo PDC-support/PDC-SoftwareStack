@@ -1,0 +1,6 @@
+setenv TASKSET "no"
+if ( ! $?USE_REMOTE ) setenv USE_REMOTE 1
+if ( ! $?MPI_REMOTE ) setenv MPI_REMOTE 1
+setenv WIEN_GRANULARITY 1
+setenv DELAY 0.1
+setenv SLEEPY 1

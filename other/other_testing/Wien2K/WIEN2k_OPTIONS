@@ -1,0 +1,27 @@
+current:FOPT:-O -FR -mp1 -w -prec_div -pc80 -pad -ip -traceback -assume buffered_io
+current:FPOPT:-O -FR -mp1 -w -prec_div -pc80 -pad -ip -traceback -assume buffered_io
+current:OMP_SWITCH:-qopenmp
+current:OMP_SWITCHP:-qopenmp
+current:LDFLAGS:$(FOPT) -L/pdc/software/21.11/other/intel/openblas/lib -lpthread -lm -ldl -liomp5
+current:DPARALLEL:'-DParallel'
+current:R_LIBS:-lopenblas -lifcore
+current:RP_LIBS:$(R_LIBS)
+current:FFTWROOT:/pdc/software/21.11/other/intel/fftw/
+current:FFTW_VERSION:FFTW3
+current:FFTW_LIB:lib
+current:FFTW_LIBNAME:fftw3
+current:LIBXCROOT:
+current:LIBXC_FORTRAN:
+current:LIBXC_LIBNAME:
+current:LIBXC_LIBDNAME:
+current:SCALAPACKROOT:
+current:SCALAPACK_LIBNAME:
+current:BLACSROOT:
+current:BLACS_LIBNAME:
+current:ELPAROOT:
+current:ELPA_VERSION:
+current:ELPA_LIB:
+current:ELPA_LIBNAME:
+current:MPIRUN:mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_
+current:CORES_PER_NODE:1
+current:MKL_TARGET_ARCH:intel64
