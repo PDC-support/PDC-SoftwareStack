@@ -1,0 +1,17 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+name = 'Eigen'
+version = '3.4.0'
+
+homepage = 'https://eigen.tuxfamily.org'
+description = """Eigen is a C++ template library for linear algebra: matrices, vectors, numerical solvers,
+ and related algorithms."""
+
+# only includes header files, so no need for a non-dummy toolchain
+toolchain = SYSTEM
+
+source_urls = ['https://gitlab.com/libeigen/eigen/-/archive/%(version)s/']
+sources = [SOURCELOWER_TAR_BZ2]
+
+moduleclass = 'math'
