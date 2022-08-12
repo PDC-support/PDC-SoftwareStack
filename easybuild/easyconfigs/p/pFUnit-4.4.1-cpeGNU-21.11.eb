@@ -1,0 +1,38 @@
+easyblock = 'CMakeMake'
+
+name = 'pFUnit'
+version = '4.4.1'
+local_fargparse_major_minor_version = '1.2'
+local_gftl_major_minor_version = '1.6'
+local_gftl_shared_major_minor_version = '1.4'
+
+
+homepage = 'https://github.com/Goddard-Fortran-Ecosystem/pFUnit'
+description = """pFUnit is a unit testing framework enabling JUnit-like testing of serial and MPI-parallel software written in Fortran."""
+
+toolchain =  {'name': 'cpeGNU', 'version': '21.11'}
+toolchainopts = {'usempi': True, 'openmp': True}
+
+source_urls = ['https://github.com/Goddard-Fortran-Ecosystem/pFUnit/releases/download/v%(version)s/']
+sources = ['%(name)s-v%(version)s.tar']
+
+
+builddependencies = [
+	('CMake', '3.22.3', '', True),
+]
+
+dependencies = [
+	('cray-python', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+	'files': ['PFUNIT-%(version_major_minor)s/bin/funitproc',
+		  'PFUNIT-%(version_major_minor)s/lib/libpfunit.a'],
+	'dirs': [
+		 'FARGPARSE-%s' % local_fargparse_major_minor_version,
+		 'GFTL-%s' % local_gftl_major_minor_version,
+		 'GFTL_SHARED-%s' % local_gftl_shared_major_minor_version,
+		],
+}
+
+moduleclass = 'tools'
