@@ -1,4 +1,5 @@
 # author: Jillian Rowe <jillian.e.rowe@gmail.com>
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'EB_Anaconda'
 
 name = 'Anaconda3'
@@ -14,5 +15,9 @@ toolchain = SYSTEM
 
 source_urls = ['https://repo.continuum.io/archive/']
 sources = ['%(name)s-%(version)s-Linux-x86_64.sh']
-checksums = []
+
+# Install packages
+local_prep_env = "PATH=%(installdir)s/bin:$PATH "
+postinstallcmds = [local_prep_env + "conda install -p %(installdir)s -c bioconda -c conda-forge snakemake-minimal"]
+
 moduleclass = 'lang'
