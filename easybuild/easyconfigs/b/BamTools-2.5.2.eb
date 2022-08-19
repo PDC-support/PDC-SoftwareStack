@@ -1,0 +1,24 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+easyblock='CMakeMake'
+
+name = 'BamTools'
+version = '2.5.2'
+
+homepage = 'https://github.com/pezmaster31/bamtools'
+description = "BamTools provides both a programmer's API and an end-user's toolkit for handling BAM files."
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/pezmaster31/bamtools/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [('CMake', '3.23.0')]
+
+sanity_check_paths = {
+  'files': ["bin/bamtools"],
+  'dirs': ["bin", "lib", "include"]
+  }
+
+moduleclass = 'bio'
+
