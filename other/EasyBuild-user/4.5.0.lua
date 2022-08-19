@@ -2,7 +2,7 @@ help([==[
 
 Description
 ===========
-Global EasyBuild module file.
+Local user EasyBuild module file.
 
 
 More information
@@ -16,9 +16,10 @@ whatis([==[Description:
 whatis([==[Homepage: https://easybuild.io/]==])
 
 -- Main path for external repositories, for EasyBuild installation path and for EasyBuild
-local cpe = "/pdc/software/" ..os.getenv("CRAY_PE_VERSION") .. "/"
+local cpe = "/pdc/software/" .. os.getenv("CRAY_PE_VERSION") .. "/"
 local repos = "/pdc/software/eb_repo/"
-local root = cpe .. "other/easybuild/4.5.5/"
+local root = cpe .. "other/easybuild/4.5.0/"
+local local_user = os.getenv("HOME") .. "/.local/easybuild/"
 
 -- Local paths
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
@@ -41,6 +42,7 @@ setenv("EASYBUILD_MODULE_DEPENDS_ON", "False")
 setenv("EASYBUILD_MODULE_EXTENSIONS", "True")
 setenv("EASYBUILD_PARALLEL","64")
 setenv("EASYBUILD_RECURSIVE_MODULE_UNLOAD", "False")
-setenv("EASYBUILD_INSTALLPATH", pathJoin(cpe, "eb"))
-setenv("EASYBUILD_SOURCEPATH",  pathJoin(cpe, "eb/sources"))
+setenv("EASYBUILD_INSTALLPATH", local_user)
+setenv("EASYBUILD_SOURCEPATH", pathJoin(local_user, "sources"))
+append_path("MODULEPATH", pathJoin(local_user, "modules/all/"))
 setenv("EASYBUILD_BUILDPATH", pathJoin("/tmp", os.getenv("USER")))

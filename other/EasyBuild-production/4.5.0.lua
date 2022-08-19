@@ -18,7 +18,7 @@ whatis([==[Homepage: https://easybuild.io/]==])
 -- Main path for external repositories, for EasyBuild installation path and for EasyBuild
 local cpe = "/pdc/software/" ..os.getenv("CRAY_PE_VERSION") .. "/"
 local repos = "/pdc/software/eb_repo/"
-local root = cpe .. "other/easybuild/4.5.5/"
+local root = cpe .. "other/easybuild/4.5.0/"
 
 -- Local paths
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
