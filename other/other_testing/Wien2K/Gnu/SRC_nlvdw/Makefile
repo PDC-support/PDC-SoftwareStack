@@ -1,0 +1,166 @@
+###############################################################################
+#                                                                             #
+#                          Generic Makefile for nlvdw                         #
+#                                                                             #
+#  make           ... generate executable for the sequential version          #
+#  make seq       ... generate executable for the sequential version          #
+#  make para      ... generate executable for the COMPLEX sequential version  #
+#  make all       ... generate sequential and parallel version                #
+#  make last      ... repeat latest make (seq or para)                        #
+#  make clean     ... delete unnecessary files                                #
+#                                                                             #
+###############################################################################
+
+.SUFFIXES:        .F
+.SUFFIXES:        .F90
+SHELL = /bin/sh
+
+###############################################################################
+#                           User defined variables                            #
+###############################################################################
+
+#---------------- compilers ----------------
+FC = ftn
+MPF = ftn
+CC = cc
+
+#------------------- fftw ------------------
+#FFTW_VERSION = FFTW3
+#FFTWROOT = /opt/cray/pe/fftw/3.3.8.12/x86_rome/
+#FFTW_LIB = lib
+#FFTW_LIBNAME = fftw3
+#ifneq ($(FFTWROOT),)
+FFTW_FOPT = -DFFTW3 -DFFTW_OMP -I$(FFTW_INC)
+FFTW_LIBS = 
+FFTW_PLIBS = 
+#endif
+
+#------------- compiler options ------------
+OMP_SWITCH = -fopenmp
+OMP_SWITCHP = -fopenmp
+FOPT =  -ffree-form -O2 -ftree-vectorize -march=znver2 -ffree-line-length-none -ffpe-summary=none -fallow-argument-mismatch $(FFTW_FOPT) $(OMP_SWITCH)
+FPOPT =  -ffree-form -O2 -ftree-vectorize -march=native -ffree-line-length-none -ffpe-summary=none -fallow-argument-mismatch $(FFTW_FOPT) $(OMP_SWITCHP)
+DParallel = '-DParallel'
+FGEN = $(PARALLEL)
+
+#-------------- loader options -------------
+LDFLAGS = $(FOPT)
+R_LIBS     = 
+RP_LIBS    =  
+RR_LIBS    = $(FFTW_LIBS) $(R_LIBS)
+RPP_LIBS   = $(FFTW_PLIBS) $(FFTW_LIBS) $(RP_LIBS) 
+
+###############################################################################
+#                       End of user defined variables                         #
+###############################################################################
+
+DESTDIR  = ./
+
+S_EXECNAME = nlvdw
+P_EXECNAME = nlvdw_mpi
+
+###############################################################################
+###############################################################################
+
+S_EXEC   = $(DESTDIR)$(S_EXECNAME)
+P_EXEC   = $(DESTDIR)$(P_EXECNAME)
+#..............................................................................
+#
+#  All object files, including $(SP_OBJS) and $(OBJSMOD) 
+#
+OBJS  = modules.o W2kinit.o fft_modules.o calc_kmax.o calc_vvdw.o \
+        calculate_neighbours.o charge.o cputim.o calc_density.o deter.o \
+        errclr.o errflg.o gener.o getfft.o \
+        get_potential.o get_q0_on_grid.o get_q0_on_grid_rvv10.o \
+        get_q0_on_grid_rvv10s.o get_thetas_on_grid.o gtfnam.o gvectors.o \
+        initialize_spline_interpolation.o interp.o kdelta.o latgen.o \
+        local_g.o numerical_gradient.o outerr.o radial.o read_input.o \
+        read_kernel_table.o read_struct.o recpr.o reduc.o rotat.o \
+        rotate.o rotato.o rotdef.o rotdef2.o setfft2.o sortag.o \
+        sphbes.o spline_interpolation.o stern.o sum.o vdw.o \
+        vdw_energy.o vnorm.o ylm.o W2kutils.o
+
+# object file for parallel and sequential
+SP_OBJS = modules.o W2kinit.o fft_modules.o calc_vvdw.o calc_density.o \
+          getfft.o get_potential.o get_thetas_on_grid.o gtfnam.o \
+          gvectors.o local_g.o numerical_gradient.o outerr.o setfft2.o vdw.o
+
+# Object files using modules
+OBJSMOD = W2kinit.o fft_modules.o calc_kmax.o calc_vvdw.o charge.o \
+          calc_density.o errflg.o gener.o getfft.o get_potential.o get_q0_on_grid.o \
+          get_q0_on_grid_rvv10.o get_q0_on_grid_rvv10s.o \
+          get_thetas_on_grid.o gtfnam.o gvectors.o initialize_spline_interpolation.o \
+          kdelta.o latgen.o local_g.o numerical_gradient.o \
+          outerr.o radial.o read_input.o read_kernel_table.o read_struct.o \
+          recpr.o rotdef2.o setfft2.o spline_interpolation.o stern.o \
+          vdw.o vdw_energy.o
+
+#........................................................................ 
+default: seq
+
+all:    
+	make seq para
+
+last: 
+	if [ ! -f .sequential -a ! -f .parallel ]; then make seq; fi
+	if [ -f .sequential ]; then make seq; fi
+	if [ -f .parallel ]; then make para; fi
+        
+seq: keep_s_files
+	$(MAKE) $(S_EXEC) FORT=$(FC) FFLAGS='$(FGEN) $(FOPT)'
+
+para: keep_p_files
+	$(MAKE) PARALLEL=$(DParallel) $(P_EXEC) \
+	  FORT=$(MPF) FFLAGS='$(FGEN) $(FPOPT) $(DParallel)'
+
+#..............................................................................
+
+$(S_EXEC): $(OBJS)
+	$(FORT) -o $(S_EXEC) $(OBJS) $(LDFLAGS) $(RR_LIBS)
+
+$(P_EXEC): $(OBJS)
+	$(FORT) -o $(P_EXEC) $(OBJS) $(LDFLAGS)  $(RPP_LIBS) 
+
+# sequential
+keep_s_files:
+	if [ -f .parallel ]; then \
+	   rm -f .parallel $(SP_OBJS) *.mod; \
+	fi
+	touch .sequential
+
+# parallel
+keep_p_files:
+	if [ -f .sequential ]; then \
+	   rm -f .sequential $(SP_OBJS) *.mod; \
+	fi
+	touch .parallel
+
+#..............................................................................
+#
+#  All routines depend upon an include file (contains common PARAMETERS)
+#
+$(OBJS):		Makefile
+$(OBJSMOD):		modules.o fft_modules.o W2kinit.o
+
+
+#..............................................................................
+#  remove unnecessary files (executable(s) are not removed)
+#
+clean:
+	rm -f *.o *_tmp_.* *.P .sequential .parallel *.mod
+
+#..............................................................................
+#
+#  define inference rules to generate object files from source files
+#
+.f.o:
+	$(FORT) $(FFLAGS) -c $<
+.F.o:
+	$(FORT) $(FFLAGS) -c $<
+.c.o:
+	$(CC) -c $<
+
+.f90.o:
+	$(FORT) $(FFLAGS) -c $<
+.F90.o:
+	$(FORT) $(FFLAGS) -c $<

@@ -1,0 +1,27 @@
+current:FOPT:-ffree-form -O2 -ftree-vectorize -march=znver2 -ffree-line-length-none -ffpe-summary=none -fallow-argument-mismatch
+current:FPOPT:-ffree-form -O2 -ftree-vectorize -march=native -ffree-line-length-none -ffpe-summary=none -fallow-argument-mismatch
+current:OMP_SWITCH:-fopenmp
+current:OMP_SWITCHP:-fopenmp
+current:LDFLAGS:$(FOPT) -L../SRC_lib
+current:DPARALLEL:'-DParallel'
+current:R_LIBS:-lpthread
+current:RP_LIBS:
+current:FFTWROOT:/opt/cray/pe/fftw/3.3.8.12/x86_rome/
+current:FFTW_VERSION:FFTW3
+current:FFTW_LIB:lib
+current:FFTW_LIBNAME:fftw3
+current:LIBXCROOT:
+current:LIBXC_FORTRAN:
+current:LIBXC_LIBNAME:
+current:LIBXC_LIBDNAME:
+current:SCALAPACKROOT:
+current:SCALAPACK_LIBNAME:
+current:BLACSROOT:
+current:BLACS_LIBNAME:
+current:ELPAROOT:
+current:ELPA_VERSION:
+current:ELPA_LIB:
+current:ELPA_LIBNAME:
+current:MPIRUN:srun -n _NP_ _EXEC_
+current:CORES_PER_NODE:1
+current:MKL_TARGET_ARCH:

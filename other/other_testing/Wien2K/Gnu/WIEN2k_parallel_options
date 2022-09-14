@@ -1,0 +1,7 @@
+setenv TASKSET "no"
+if ( ! $?USE_REMOTE ) setenv USE_REMOTE 0
+if ( ! $?MPI_REMOTE ) setenv MPI_REMOTE 0
+setenv WIEN_GRANULARITY 1
+setenv DELAY 0.1
+setenv SLEEPY 1
+setenv WIEN_MPIRUN "srun -n _NP_ _EXEC_"
