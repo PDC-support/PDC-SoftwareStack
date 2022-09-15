@@ -1,0 +1,3 @@
+# example from Marcus E., see RT134650
+
+# init_lapw -b -vxc 5 -numk 2000 -ecut -10.0
