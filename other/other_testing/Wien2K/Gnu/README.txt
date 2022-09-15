@@ -15,4 +15,4 @@ WIEN2k_VERSION
 # Use the makefiles as contained in directories SRC_*/
 
 # Update in "x_lapw" on line 1063 from
-# "set $def" to "set def"
+"set $def" to "set def"
