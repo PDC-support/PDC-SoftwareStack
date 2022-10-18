@@ -1,0 +1,67 @@
+# contributed by Johan Hellsvik (PDC)
+easyblock = 'MakeCp'
+
+name = 'UppASD'
+version = '6.0.1'
+
+homepage = 'https://github.com/UppASD/UppASD/'
+
+whatis = [
+    'Uppsala Atomistic Spin Dynamics software'
+]
+
+description = """
+The UppASD software package is a simulation suite to study magnetization dynamics by means of the atomistic version of the Landau-Lifshitz-Gilbert (LLG) equation.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+sources = [{
+    'filename': 'UppASD.tar.gz',
+    'git_config': {
+        'url': 'https://github.com/UppASD',
+        'repo_name': 'UppASD',
+        'commit': 'cc8972f',
+        'recursive': False,
+        'keep_git_dir': False,
+    },
+}]
+
+#sources = [{
+#    'filename': 'example-20180920.tar.gz',
+#    'git_config': {
+#        'url': 'https://agitserver.org/example',
+#        'repo_name': 'test',
+#        'commit': 'abcde',
+#        'recursive': True,
+#        'keep_git_dir': True,
+#    },
+#}]
+
+#sources = ['https://github.com/UppASD/UppASD/archive/refs/tags/v6.0.1.tar.gz']
+#source_urls = ['https://github.com/%(name)s/%(name)s/archive/refs/tags/v%(version)s']
+#sources = [SOURCELOWER_TAR_GZ]
+
+#patches = [
+#    ('%(name)s-gfortranftn.make','%(builddir)s/%(name)s-%(version)s/source/make/user_profiles/gfortranftn.make')    
+#]
+
+build_cmd = "make deps && make gfortran-ftn"
+
+dependencies = [
+     ('cray-libsci/21.08.1.2', EXTERNAL_MODULE),
+]
+
+files_to_copy = [
+    (['./source/sd'], './bin/'),
+    (['./ASD_GUI'], '.'),
+    (['./ASD_Tools'], '.'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/sd','ASD_GUI/ASD_GUI/ASD_GUI.py'],
+    'dirs': ['bin','ASD_GUI','ASD_Tools'],
+}
+
+moduleclass = 'phys'
