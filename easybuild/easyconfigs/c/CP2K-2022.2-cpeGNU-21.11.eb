@@ -33,7 +33,7 @@ patches = [
 builddependencies = [('buildtools', '%(toolchain_version)s', '', True)]
 
 dependencies = [
-    ('ELPA', '2021.05.002'),
+    ('ELPA', '2021.11.001'),
     ('Libint-CP2K', '2.6.0'),
     ('libvori', '220621'),
     ('libxc', '6.0.0'),
