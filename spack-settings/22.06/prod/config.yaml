@@ -1,0 +1,5 @@
+config:
+    build_jobs: 32
+    install_path_scheme: '{name}-{version}-{hash:7}'
+    install_missing_compilers: false
+    install_tree: /pdc/software/22.06/spack/0.18.1-prod/opt/spack

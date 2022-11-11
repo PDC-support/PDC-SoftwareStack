@@ -1,0 +1,11 @@
+modules:
+  default:
+    roots:
+      tcl: $SPACK_USER_PREFIX/22.08/0.18.1/modules/tcl
+    enable:
+      - tcl
+    tcl:
+      hash_length: 5
+      projections:
+        all: '{name}/{version}-{compiler.name}'
+
