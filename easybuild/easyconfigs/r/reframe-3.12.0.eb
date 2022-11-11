@@ -1,0 +1,58 @@
+easyblock = 'PythonBundle'
+
+name = 'reframe'
+version = '3.12.0'
+
+homepage = 'https://github.com/eth-cscs/reframe'
+description = '''ReFrame is a framework for writing regression tests for HPC systems.'''
+
+toolchain = SYSTEM
+
+allow_system_deps = [('Python', SYS_PYTHON_VERSION)]
+
+req_py_majver = 3
+req_py_minver = 6
+
+use_pip = True
+
+exts_list = [
+    ('pip', '22.2.2', {
+        'use_pip': False,
+	'checksums': ['3fd1929db052f056d7a998439176d3333fa1b3f6c1ad881de1885c0717608a4b'],
+    }),
+    ('wheel', '0.37.1', {
+        'checksums': ['e9a504e793efbca1b8e0e9cb979a249cf4a0a7b5b8c9e8b65a5e39d49529c1c4'],
+    }),
+    ('setuptools', '65.1.0', {
+        'source_tmpl': 'setuptools-%(version)s.tar.gz',
+        'checksums': ['d2e010624c781b26ad6629a8de9832327cf853dea93894487979e55f9ad06857'],
+    }),
+    ('reframe', version, {
+        'preinstallopts': "./bootstrap.sh +docs +pygelf && cp -r external %(installdir)s && "
+                          "PYTHONPATH=%(builddir)s/reframe/reframe-%(version)s/external:$PYTHONPATH ",
+        'source_tmpl': 'v%(version)s.tar.gz',
+        'source_urls': ['https://github.com/eth-cscs/reframe/archive/'],
+    }),
+]
+
+postinstallcmds = [
+    "cp -r tutorials %(installdir)s",
+    "mkdir -p %(installdir)s/share && cp -r share/completions %(installdir)s/share/completions",
+]
+
+sanity_check_paths = {
+    'files': ['bin/reframe',
+              'share/completions/reframe.bash',
+              'share/completions/reframe.fish',
+              'share/completions/reframe.tcsh'],
+    'dirs': ['lib', 'tutorials', 'external']
+}
+
+sanity_check_commands = ['reframe -V']
+
+modextrapaths = {
+     # bootstrap script installs required dependencies to 'external' subdirectory
+    'PYTHONPATH': 'external',
+}
+
+moduleclass = 'devel'

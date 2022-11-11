@@ -2,7 +2,7 @@
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'ConfigureMake'
 
-name = 'GMP'
+name = 'gmp'
 version = '6.2.1'
 
 homepage = 'http://gmplib.org/'
@@ -32,7 +32,7 @@ speed.
 This module provides static and shared libraries.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.04'}
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
 toolchainopts = {'lowopt': True}
 
 source_urls = [GNU_SOURCE]

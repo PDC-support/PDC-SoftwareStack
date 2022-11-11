@@ -1,7 +1,7 @@
 # Built by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'MakeCp'
 
-name = 'BWA'
+name = 'bwa'
 version = '0.7.17'
 
 homepage = 'http://bio-bwa.sourceforge.net/'
@@ -10,7 +10,7 @@ description = """BWA is a software package for mapping low-divergent sequences a
 toolchain = SYSTEM
 
 source_urls = ['https://sourceforge.net/projects/bio-bwa/files/']
-sources = ['%(namelower)s-%(version)s.tar.bz2']
+sources = ['%(name)s-%(version)s.tar.bz2']
 
 files_to_copy = [(['*'], 'bin')]
 

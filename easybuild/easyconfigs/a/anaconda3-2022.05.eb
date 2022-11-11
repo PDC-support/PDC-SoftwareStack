@@ -2,7 +2,7 @@
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'EB_Anaconda'
 
-name = 'Anaconda3'
+name = 'anaconda3'
 version = "2022.05"
 
 homepage = 'https://www.continuum.io/anaconda-overview'
@@ -14,7 +14,7 @@ that empowers companies to adopt a modern open data science analytics architectu
 toolchain = SYSTEM
 
 source_urls = ['https://repo.continuum.io/archive/']
-sources = ['%(name)s-%(version)s-Linux-x86_64.sh']
+sources = ['Anaconda3-%(version)s-Linux-x86_64.sh']
 
 # Install packages
 local_prep_env = "PATH=%(installdir)s/bin:$PATH "

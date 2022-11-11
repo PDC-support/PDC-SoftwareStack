@@ -1,6 +1,6 @@
 easyblock = 'MakeCp'
 
-name = 'PhyloBayes-MPI'
+name = 'phylobayes-mpi'
 version = '1.8c'
 
 homepage = 'https://github.com/bayesiancook/pbmpi'

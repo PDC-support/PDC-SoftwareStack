@@ -1,6 +1,6 @@
 easyblock = 'ConfigureMake'
 
-name = 'Autoconf'
+name = 'autoconf'
 version = '2.71'
 
 homepage = 'http://www.gnu.org/software/autoconf/'
@@ -16,9 +16,9 @@ description = """
 toolchain = {'name': 'system', 'version': ''}
 
 source_urls = [GNU_SOURCE]
-sources = [SOURCELOWER_TAR_GZ]
+sources = [SOURCE_TAR_GZ]
 
-dependencies = [('M4', '1.4.19')]
+dependencies = [('m4', '1.4.19')]
 
 sanity_check_paths = {
     'files': ["bin/%s" % x for x in ["autoconf", "autoheader", "autom4te",

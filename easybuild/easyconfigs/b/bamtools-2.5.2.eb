@@ -2,7 +2,7 @@
 
 easyblock='CMakeMake'
 
-name = 'BamTools'
+name = 'bamtools'
 version = '2.5.2'
 
 homepage = 'https://github.com/pezmaster31/bamtools'
@@ -10,10 +10,10 @@ description = "BamTools provides both a programmer's API and an end-user's toolk
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/pezmaster31/bamtools/archive/refs/tags/']
+source_urls = ['https://github.com/pezmaster31/%(name)s/archive/refs/tags/']
 sources = ['v%(version)s.tar.gz']
 
-builddependencies = [('CMake', '3.23.0')]
+builddependencies = [('cmake', '3.23.0')]
 
 sanity_check_paths = {
   'files': ["bin/bamtools"],

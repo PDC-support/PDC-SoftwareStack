@@ -1,7 +1,7 @@
 # Contributed by Jean-Guillaume Piccinali and Luca Marsella (CSCS)
 easyblock = 'ConfigureMake'
 
-name = 'Bison'
+name = 'bison'
 version = '3.7.5'
 
 homepage = 'http://www.gnu.org/software/bison'
@@ -14,7 +14,7 @@ source_urls = [GNU_SOURCE]
 sources = [SOURCELOWER_TAR_GZ]
 
 dependencies = [
-    ('M4', '1.4.19'),
+    ('m4', '1.4.19'),
 ]
 
 

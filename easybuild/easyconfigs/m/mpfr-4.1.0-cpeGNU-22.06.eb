@@ -1,19 +1,19 @@
 easyblock = 'ConfigureMake'
 
-name = 'MPFR'
+name = 'mpfr'
 version = '4.1.0'
 
 homepage = 'http://www.mpfr.org'
 description = """The MPFR library is a C library for multiple-precision 
  floating-point computations with correct rounding."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.04'}
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
 
 source_urls = ['http://www.mpfr.org/mpfr-%(version)s/']
-sources = [SOURCELOWER_TAR_BZ2]
+sources = [SOURCE_TAR_BZ2]
 
 dependencies = [
-    ('GMP', '6.2.1'),
+    ('gmp', '6.2.1'),
 ]
 
 runtest = 'check'

@@ -3,7 +3,7 @@
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'EB_BoostCPE'
 
-name = 'Boost'
+name = 'boost'
 version = '1.79.0'
 
 homepage = 'http://www.boost.org/'
@@ -11,11 +11,11 @@ description = """
     Boost provides free peer-reviewed portable C++ source libraries.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.04'}
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
 toolchainopts = {'usempi': True, 'pic': True, 'verbose': False}
 
 source_urls = [SOURCEFORGE_SOURCE]
-sources = ['%(namelower)s_%(version_major)s_%(version_minor)s_0.tar.bz2']
+sources = ['%(name)s_%(version_major)s_%(version_minor)s_0.tar.bz2']
 
 dependencies = [
     ('bzip2', '1.0.8', '', ('system', '')),

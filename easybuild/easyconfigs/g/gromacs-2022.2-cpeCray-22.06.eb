@@ -13,22 +13,22 @@
 #
 easyblock = 'CMakeMake'
 
-name = 'GROMACS'
+name = 'gromacs'
 version = '2022.2'
 
 homepage = 'http://www.gromacs.org'
 description = """GROMACS is a versatile package to perform molecular dynamics,
  i.e. simulate the Newtonian equations of motion for systems with hundreds to millions of particles."""
 
-toolchain = {'name': 'cpeCray', 'version': '22.04'}
+toolchain = {'name': 'cpeCray', 'version': '22.06'}
 toolchainopts = {'opt': True, 'usempi': True, 'verbose': False, 'pic': True, 'dynamic': False, 'openmp': True}
 
-source_urls = ['ftp://ftp.%(namelower)s.org/pub/%(namelower)s/']
+source_urls = ['ftp://ftp.%(name)s.org/pub/%(name)s/']
 sources = [SOURCELOWER_TAR_GZ]
 
 # CMake dependency with SYSTEM toolchain
 builddependencies = [
-    ('CMake', '3.23.0', '', True),
+    ('cmake', '3.23.0', '', True),
 ]
 dependencies = [
     ('craype-hugepages8M', EXTERNAL_MODULE),
