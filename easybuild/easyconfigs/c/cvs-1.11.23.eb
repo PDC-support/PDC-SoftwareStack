@@ -1,6 +1,6 @@
 easyblock = 'ConfigureMake'
 
-name = 'CVS'
+name = 'cvs'
 version = '1.11.23'
 
 homepage = 'https://savannah.nongnu.org/projects/cvs'
@@ -11,10 +11,10 @@ Source Configuration Management (SCM).
 toolchain = SYSTEM
 
 source_urls = [' https://ftp.gnu.org/non-gnu/cvs/source/stable/%(version)s/']
-sources = [SOURCELOWER_TAR_BZ2]
+sources = [SOURCE_TAR_BZ2]
 patches = [
-    'CVS-1.11.23-zlib-1.patch',
-    'CVS-1.11.23-getline.patch',
+    'cvs-1.11.23-zlib-1.patch',
+    'cvs-1.11.23-getline.patch',
 ]
 checksums = [
     '400f51b59d85116e79b844f2d5dbbad4759442a789b401a94aa5052c3d7a4aa9',  # cvs-1.11.23.tar.bz2

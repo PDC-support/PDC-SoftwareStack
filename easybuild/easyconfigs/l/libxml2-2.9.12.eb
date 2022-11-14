@@ -49,7 +49,7 @@ source_urls = ['http://xmlsoft.org/sources/']
 sources =     [SOURCELOWER_TAR_GZ]
 
 dependencies = [
-    ('ICU',  local_ICU_version),
+    ('icu',  local_ICU_version),
     ('zlib', local_zlib_version),
     ('xz',   local_XZ_version),
 ]

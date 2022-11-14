@@ -11,7 +11,7 @@ source_urls = [GNU_SOURCE]
 sources = [SOURCE_TAR_GZ]
 
 builddependencies = [
-    ('Bison', '3.7.5', '', ('system', '')),
+    ('bison', '3.7.5', '', ('system', '')),
     ('flex', '2.6.4', '', ('system', '')),
     ('zlib', '1.2.11', '', ('system', '')),
 ]

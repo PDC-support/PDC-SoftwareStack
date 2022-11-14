@@ -11,10 +11,10 @@ description = """Flex (Fast Lexical Analyzer) is a tool for generating scanners.
 toolchain = {'name': 'system', 'version': ''}
 
 source_urls = ['https://github.com/westes/%(name)s/releases/download/v%(version)s']
-sources = [SOURCELOWER_TAR_GZ]
+sources = [SOURCE_TAR_GZ]
 
 builddependencies = [
-    ('Bison', '3.7.5'),
+    ('bison', '3.7.5'),
 ]
 
 sanity_check_paths = {

@@ -30,7 +30,7 @@ sources =     [SOURCELOWER_TAR_XZ]
 checksums =   ['8e4bd42053b726cf86eb4d13a73bc1d9225a2c2e1a2e0d2a891f1020f83e6b76']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11', '', True),
+    ('buildtools', '22.06', '', True),
 ]
 
 dependencies = [

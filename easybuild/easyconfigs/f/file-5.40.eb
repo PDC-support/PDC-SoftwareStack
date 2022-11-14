@@ -40,7 +40,7 @@ sources =     [SOURCE_TAR_GZ]
 checksums =   ['167321f43c148a553f68a0ea7f579821ef3b11c27b8cbe158e4df897e4a5dd57']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'), # for autotools
+    ('buildtools', '22.06'), # for autotools
 ]
 
 dependencies = [

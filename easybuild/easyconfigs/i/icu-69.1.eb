@@ -2,7 +2,7 @@ easyblock = 'ConfigureMake'
 
 local_ICU_version =          '69.1'          # http://site.icu-project.org/home
 
-name =          'ICU'
+name =          'icu'
 version =       local_ICU_version
 
 homepage = 'http://site.icu-project.org/home'
@@ -25,7 +25,7 @@ sources =     ['icu4c-%(version_major)s_%(version_minor)s-src.tgz']
 checksums =   ['4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'),
+    ('buildtools', '22.06'),
 ]
 
 start_dir = 'source'

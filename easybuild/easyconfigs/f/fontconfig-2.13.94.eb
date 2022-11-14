@@ -1,6 +1,6 @@
 easyblock = 'ConfigureMake'
 
-local_expat_version =        '2.4.6'         # https://github.com/libexpat/libexpat/releases
+local_expat_version =        '2.4.8'         # https://github.com/libexpat/libexpat/releases
 local_util_version =         '2.37.1'        # https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/
 local_freetype_version =     '2.10.4'        # https://download.savannah.gnu.org/releases/freetype/
 local_fontconfig_version =   '2.13.94'       # https://www.freedesktop.org/software/fontconfig/release/
@@ -29,7 +29,7 @@ sources =     [SOURCE_TAR_GZ]
 checksums =   ['246d1640a7e54fba697b28e4445f4d9eb63dda1b511d19986249368ee7191882']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'), # for gperf
+    ('buildtools', '22.06'), # for gperf
 ]
 
 dependencies = [
