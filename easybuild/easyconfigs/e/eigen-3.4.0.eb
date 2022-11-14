@@ -1,7 +1,7 @@
 # This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 
-name = 'Eigen'
+name = 'eigen'
 version = '3.4.0'
 
 homepage = 'https://eigen.tuxfamily.org'
