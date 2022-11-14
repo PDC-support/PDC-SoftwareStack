@@ -1,10 +1,10 @@
 easyblock = 'CrayPEToolchain'
 
-name = 'cpeCray'
+name = 'cpeAOCC'
 version = '22.06'
 
 homepage = 'https://pubs.cray.com/discover'
-description = """Toolchain using Cray compiler wrapper, using PrgEnv-cray.\n"""
+description = """Toolchain using AMD compiler wrapper.\n"""
 
 toolchain = SYSTEM
 
@@ -19,7 +19,7 @@ cray_targets = [
     ]
 
 dependencies = [
-    ('cce/14.0.1', EXTERNAL_MODULE),
+    ('aocc/3.2.0', EXTERNAL_MODULE),
     ('craype/2.7.16', EXTERNAL_MODULE),
     ('cray-mpich/8.1.17', EXTERNAL_MODULE),
     ('cray-libsci/22.06.1.3', EXTERNAL_MODULE),
@@ -31,7 +31,9 @@ dependencies = [
 ]
 
 postinstallcmds = [
-    "export PE_ENV='CRAY'",
+    "export PE_ENV='AOCC'",
 ]
+
+# LD_LIBRARY_PATH is now updated by production.git/login/daint.footer
 
 moduleclass = 'toolchain'

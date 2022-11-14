@@ -36,7 +36,6 @@ cray_targets = [
 
 dependencies = [
     ('gcc/11.2.0', EXTERNAL_MODULE),
-    ('cce/14.0.1', EXTERNAL_MODULE),
     ('craype/2.7.16', EXTERNAL_MODULE),
     ('cray-mpich/8.1.17', EXTERNAL_MODULE),
     ('cray-libsci/22.06.1.3', EXTERNAL_MODULE),
@@ -45,6 +44,10 @@ dependencies = [
     ('xpmem', EXTERNAL_MODULE),
     ('atp/3.14.11', EXTERNAL_MODULE),
     ('cray-pmi/6.1.3', EXTERNAL_MODULE),
+]
+
+postinstallcmds = [
+    "export PE_ENV='GNU'",
 ]
 
 moduleclass = 'toolchain'
