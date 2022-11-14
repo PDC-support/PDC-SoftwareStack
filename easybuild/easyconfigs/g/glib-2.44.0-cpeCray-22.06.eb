@@ -1,0 +1,20 @@
+easyblock = 'ConfigureMake'
+
+name = 'glib'
+version = '2.44.0'
+
+homepage = 'http://www.gtk.org/'
+description = """GLib is one of the base libraries of the GTK+ project"""
+
+toolchain = {'name': 'cpeCray', 'version': '22.06'}
+toolchainopts = {'optarch': True, 'pic': True}
+
+source_urls = ['http://ftp.gnome.org/pub/gnome/sources/glib/%(version_major_minor)s/']
+sources = [SOURCE_TAR_XZ]
+
+dependencies = [
+    ('libffi', '3.2.1', '', ('system', '')),
+    ('gettext', '0.21', '', ('system', '')),
+]
+
+moduleclass = 'vis'
