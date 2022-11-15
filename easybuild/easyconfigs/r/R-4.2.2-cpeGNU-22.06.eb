@@ -1,0 +1,33 @@
+# Author: Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+name = 'R'
+version = '4.2.2'
+
+homepage = 'http://www.r-project.org/'
+description = "R is a free software environment for statistical computing and graphics."
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+source_urls = ['http://cran.us.r-project.org/src/base/R-%(version_major)s']
+sources = [SOURCE_TAR_GZ]
+
+dependencies = [
+    ('libreadline', '8.1', '', True),
+    ('bzip2', '1.0.8', '', True),
+    ('libpng', '1.6.37', '', True),
+    ('libjpeg-turbo', '2.1.1', '', True),
+    ('pcre2','10.40'),
+    ('tcl', '8.6.12'),
+    ('tk', '8.6.12'),
+    ('curl', '7.78.0'),
+    ('libxml2', '2.9.12', '', True),
+]
+
+osdependencies = ['java', ('openssl-devel', 'libssl-dev', 'libopenssl-devel')]
+
+# Set with --enable-BLAS-shlib if you do not want BLAS
+
+configopts = "--enable-threads --enable-R-shlib --with-readline --with-blas --with-pcre1 --with-tcltk --with-tcl-config=$EBROOTTCL/lib/tclConfig.sh --with-tk-config=$EBROOTTK/lib/tkConfig.sh"
+
+moduleclass = 'lang'
+

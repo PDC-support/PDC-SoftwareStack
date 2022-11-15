@@ -1,7 +1,7 @@
 # Contributed by Theofilos Manitaras and Luca Marsella (CSCS)
 easyblock = 'ConfigureMake'
 
-name = 'PROJ'
+name = 'proj'
 version = '8.1.1'
 
 homepage = 'https://proj.org'
@@ -16,7 +16,7 @@ sources = [SOURCELOWER_TAR_GZ]
 
 dependencies = [
     ('libtiff', '4.3.0', '', ('system', '')),
-    ('sqLite', '3.36.0'),
+    ('sqlite', '3.36.0'),
 ]
 
 
