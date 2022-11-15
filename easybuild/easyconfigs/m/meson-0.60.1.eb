@@ -2,7 +2,7 @@
 #
 easyblock = 'PythonPackage'
 
-name = 'Meson'
+name = 'meson'
 version = '0.60.1'
 
 homepage = 'https://mesonbuild.com'
