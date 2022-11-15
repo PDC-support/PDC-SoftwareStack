@@ -29,7 +29,7 @@ sources =     ['macros-util-macros-%(version)s.tar.gz']
 checksums =   ['8205d210a580da0938f5ce4392a96b60cf1d9a5f792eaa1474fa4c1977aef4d0']
 
 builddependencies = [ # Create a reproducible build environment
-    ('buildtools', '21.11'), # Uses autotools
+    ('buildtools', '22.06'), # Uses autotools
 ]
 
 preconfigopts = './autogen.sh && '

@@ -5,7 +5,7 @@ easyblock = 'ConfigureMake'
 local_XZ_version =       '5.2.5'  # https://tukaani.org/xz/
 local_zlib_version =     '1.2.11' # https://zlib.net/
 local_lz4_version =      '1.9.3'  # https://github.com/lz4/lz4/releases
-local_gzip_version =     '1.10'   # https://ftp.gnu.org/gnu/gzip/
+local_gzip_version =     '1.12'   # https://ftp.gnu.org/gnu/gzip/
 local_zstd_version =     '1.5.0'  # https://github.com/facebook/zstd/releases
 
 name =    'zstd'
@@ -39,7 +39,7 @@ source_urls = []
 checksums =   ['0d9ade222c64e912d6957b11c923e214e2e010a18f39bec102f572e693ba2867']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'),
+    ('buildtools', '22.06'),
 ]
 
 dependencies = [

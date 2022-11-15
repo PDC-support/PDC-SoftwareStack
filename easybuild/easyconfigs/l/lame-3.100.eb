@@ -8,10 +8,10 @@
 
 easyblock = 'ConfigureMake'
 
-local_ncurses_version =      '6.2'           # https://ftp.gnu.org/pub/gnu/ncurses/
+local_ncurses_version =      '6.3'           # https://ftp.gnu.org/pub/gnu/ncurses/
 local_LAME_version =         '3.100'         # http://lame.sourceforge.net/
 
-name =    'LAME'
+name =    'lame'
 version = local_LAME_version
 
 homepage = 'http://lame.sourceforge.net/'
@@ -49,14 +49,14 @@ toolchainopts = {'pic': True}
 
 source_urls = ['https://sourceforge.net/projects/lame/files/lame/%(version_major_minor)s/']
 sources =     [SOURCELOWER_TAR_GZ]
-patches =     ['LAME-3.99.5_check-tgetent.patch']
+patches =     ['lame-3.99.5_check-tgetent.patch']
 checksums = [
     'ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e',  # lame-3.100.tar.gz
     '8bfb6a73f2db1511baf90fbd7174f11043ec4b592a4917edc30ccfb53bf37256',  # LAME-3.99.5_check-tgetent.patch
 ]
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'), # For autoconf
+    ('buildtools', '22.06'), # For autoconf
 ]
 
 dependencies = [

@@ -22,10 +22,10 @@ local_XZ_version =           '5.2.5'         # https://tukaani.org/xz/
 local_zlib_version =         '1.2.11'        # https://zlib.net/
 local_zstd_version =         '1.5.0'         # https://github.com/facebook/zstd/releases
 local_giflib_version =       '5.2.1'         # https://sourceforge.net/projects/giflib/files/
-local_libjpegturbo_version = '2.1.0'         # https://github.com/libjpeg-turbo/libjpeg-turbo/releases
+local_libjpegturbo_version = '2.1.1'         # https://github.com/libjpeg-turbo/libjpeg-turbo/releases
 local_libtiff_version =      '4.3.0'         # https://download.osgeo.org/libtiff/
 
-name =    'LibTIFF'
+name =    'libtiff'
 version = local_libtiff_version
 
 homepage = 'http://simplesystems.org/libtiff/'
@@ -89,7 +89,7 @@ sources =     ['tiff-%(version)s.tar.gz']
 checksums =   ['0e46e5acb087ce7d1ac53cf4f56a09b221537fc86dfc5daaad1c2e89e1b37ac8']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11', '', True),
+    ('buildtools', '22.06', '', True),
 ]
 
 dependencies = [
