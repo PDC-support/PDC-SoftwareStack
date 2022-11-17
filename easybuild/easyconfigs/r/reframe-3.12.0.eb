@@ -55,4 +55,5 @@ modextrapaths = {
     'PYTHONPATH': 'external',
 }
 
+modextravars = {'PDC_REFRAME': '/pdc/software/resources/reframe'}
 moduleclass = 'devel'
