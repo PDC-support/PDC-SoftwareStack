@@ -23,7 +23,7 @@ local root = cpe .. "other/easybuild/4.6.2/"
 -- Local paths
 local lumi_software = repos .. "LUMI-SoftwareStack/easybuild/"
 local pdc_software = repos .. "PDC-SoftwareStack/easybuild/"
-local archive = repos .. "archive"
+local archive = cpe .. "archive"
 
 prepend_path("PATH", pathJoin(root, "bin"))
 prepend_path("PYTHONPATH", pathJoin(root, "lib/python3.9/site-packages/"))
