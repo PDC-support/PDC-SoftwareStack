@@ -37,7 +37,7 @@ sources =     ['%(name)s_%(version)s.tar.gz']
 checksums =   ['e70a3335cacacbba0b3a20ec6fecd6783932288ebc8163ad74bcc9606477cae8']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'), # For CMake and YAsm
+    ('buildtools', '22.06'), # For CMake and YAsm
 ]
 
 #osdependencies = [

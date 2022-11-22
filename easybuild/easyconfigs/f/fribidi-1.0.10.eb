@@ -4,7 +4,7 @@ easyblock = 'ConfigureMake'
 
 local_fribidi_version =      '1.0.10'         # https://github.com/fribidi/fribidi/releases
 
-name =    'FriBidi'
+name =    'fribidi'
 version = local_fribidi_version
 
 homepage = 'https://github.com/fribidi/fribidi'
@@ -30,11 +30,11 @@ toolchainopts = {'pic': True}
 
 # https://github.com/fribidi/fribidi/releases/download/v1.0.10/fribidi-1.0.10.tar.xz
 source_urls = ['https://github.com/%(namelower)s/%(namelower)s/releases/download/v%(version)s']
-sources =     [SOURCELOWER_TAR_XZ]
+sources =     [SOURCE_TAR_XZ]
 checksums =   ['7f1c687c7831499bcacae5e8675945a39bacbad16ecaa945e9454a32df653c01']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'),
+    ('buildtools', '22.06'),
 ]
 
 configopts = '--disable-docs'
