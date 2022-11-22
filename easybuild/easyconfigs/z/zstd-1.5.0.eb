@@ -1,7 +1,10 @@
 # Contributed by Kurt Lust, LUMI project & UAntwerpen
-# Modified for PDC by Xavier Aguilar
+# Modified for PDC by Xavier Aguilar, Henric Zazzi
+import os
+
 easyblock = 'ConfigureMake'
 
+local_cpe_version =      os.environ['CRAY_PE_VERSION']
 local_XZ_version =       '5.2.5'  # https://tukaani.org/xz/
 local_zlib_version =     '1.2.11' # https://zlib.net/
 local_lz4_version =      '1.9.3'  # https://github.com/lz4/lz4/releases
@@ -39,7 +42,7 @@ source_urls = []
 checksums =   ['0d9ade222c64e912d6957b11c923e214e2e010a18f39bec102f572e693ba2867']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'),
+    ('buildtools', local_cpe_version),
 ]
 
 dependencies = [
