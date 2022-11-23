@@ -1,0 +1,30 @@
+# contributed by Luca Marsella (CSCS)
+# modified for PDC by Xavier Aguilar
+easyblock = 'ConfigureMake'
+
+name = 'ghostscript'
+version = '9.55.0'
+local_downloadversion = version.replace('.','')
+
+homepage = 'http://ghostscript.com'
+description = """Ghostscript is a versatile processor for PostScript data with the ability to render PostScript to
+ different targets. It used to be part of the cups printing stack, but is no longer used for that."""
+
+toolchain = SYSTEM 
+toolchainopts = {'pic': True}
+
+source_urls = ["https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs{0}/".format(local_downloadversion)]
+sources = [SOURCELOWER_TAR_GZ]
+
+# optional dependencies 
+dependencies = [
+    ('fontconfig', '2.13.94'),
+    ('freetype', '2.10.4'),
+    ('libpng', '1.6.37'),
+    ('libjpeg-turbo', '2.1.1'),
+    ('libtiff', '4.3.0'),
+]
+
+configopts = "--enable-dynamic"
+
+moduleclass = 'tools'
