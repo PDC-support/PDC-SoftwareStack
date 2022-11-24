@@ -29,5 +29,25 @@ osdependencies = ['java', ('openssl-devel', 'libssl-dev', 'libopenssl-devel')]
 
 configopts = "--enable-threads --enable-R-shlib --with-readline --with-blas --with-pcre1 --with-tcltk --with-tcl-config=$EBROOTTCL/lib/tclConfig.sh --with-tk-config=$EBROOTTK/lib/tkConfig.sh"
 
+exts_list = [
+    'base',
+    'compiler',
+    'datasets',
+    'graphics',
+    'grDevices',
+    'grid',
+    'methods',
+    'parallel',
+    'splines',
+    'stats',
+    'stats4',
+    'tcltk',
+    'tools',
+    'utils',
+# Works with manual installation, but not in easybuild?
+#    'doParallel',
+#    'foreach',
+]
+
 moduleclass = 'lang'
 
