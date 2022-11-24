@@ -1,0 +1,30 @@
+# Built by Henric Zazzi, PDC
+
+easyblock = 'ConfigureMake'
+
+name = 'abyss'
+version = '2.3.5'
+
+homepage = 'https://www.bcgsc.ca/platform/bioinfo/software/abyss'
+description = """Assembly By Short Sequences - a de novo, parallel, paired-end sequence assembler"""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['http://github.com/bcgsc/abyss/releases/download/%(version)s/']
+sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('boost', '1.79.0'),
+    ('sparsehash', '2.0.4', '', True),
+    ('sqlite', '3.36.0'),
+]
+
+configopts = 'CXXFLAGS="$CXXFLAGS -Wno-error=deprecated-copy"'
+
+sanity_check_paths = {
+    'files': ["bin/ABYSS", "bin/ABYSS-P"],
+    'dirs': []
+}
+
+moduleclass = 'bio'

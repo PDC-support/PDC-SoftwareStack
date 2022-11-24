@@ -1,0 +1,28 @@
+# Built by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'ConfigureMake'
+
+name = 'sparsehash'
+version = '2.0.4'
+
+homepage = 'https://github.com/sparsehash/sparsehash'
+description = """
+This directory contains several hash-map implementations, similar in
+API to SGI's hash_map class, but with different performance
+characteristics.  sparse_hash_map uses very little space overhead, 1-2
+bits per entry.  dense_hash_map is very fast, particulary on lookup.
+(sparse_hash_set and dense_hash_set are the set versions of these
+routines.)  On the other hand, these classes have requirements that
+may not make them appropriate for all applications.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/%(name)s/%(name)s/archive/refs/tags/']
+sources = ['%(name)s-%(version)s.tar.gz']
+
+sanity_check_paths = {
+    'files': ['include/sparsehash/dense_hash_map'],
+    'dirs': ['lib','include','share'],
+}
+
+moduleclass = 'bio'
