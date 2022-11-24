@@ -1,0 +1,16 @@
+# jg (CSCS)
+name = 'pdt'
+easyblock = 'EB_PDT'
+
+version = '3.25.1'
+homepage = 'http://www.cs.uoregon.edu/research/pdt/'
+description = """Program Database Toolkit (PDT) is a framework for analyzing
+source code written in several programming languages and for making rich
+program knowledge accessible to developers of static and dynamic analysis
+tools. PDT implements a standard program representation, the program database
+(PDB), that can be accessed in a uniform way through a class library supporting
+common PDB operations."""
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+sources = ['/pdc/software/eb_repo/sources/p/pdt.tgz']
+
+moduleclass = 'perf'
