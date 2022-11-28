@@ -1,0 +1,58 @@
+# provided by mkra (CSCS), 2018
+# Adapted by Kurt Lust (kurt.lust@uantwerpen.be) for the LUMI consortium
+# modified for Dardel by Johan Hellsvik (PDC)
+
+easyblock = 'EB_SCOTCH_CPE'
+
+local_SCOTCH_version =       '7.0.1'         # https://gforge.inria.fr/projects/scotch/
+
+local_bzip2_version =        '1.0.8'         # http://www.bzip.org/downloads.html
+local_xz_version =           '5.2.8'         # https://tukaani.org/xz/
+local_zlib_version =         '1.2.13'        # https://zlib.net/
+
+name = 'scotch'
+version = local_SCOTCH_version
+
+homepage = 'https://gitlab.inria.fr/scotch/scotch/'
+
+whatis = [
+    'Description: Scotch is a software package for graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering'
+]
+
+description = """
+Scotch is a software package and libraries for sequential and parallel graph
+partitioning, static mapping, and sparse matrix block ordering, and sequential
+mesh and hypergraph partitioning.
+
+The module provides static libraries only. The library is compiled with support
+for GZ-, BZ2- and LZMA-compressed graph files.
+
+LICENSE
+=======
+SCOTCH is licensed under the CeCILL-C Free Software License Agreement, see
+https://cecill.info/licences/Licence_CeCILL-C_V1-en.html.
+"""
+
+software_license_urls = ['https://cecill.info/licences/Licence_CeCILL-C_V1-en.html']
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://gitlab.inria.fr/%(name)s/%(name)s/-/archive/v%(version)s']
+sources = [SOURCE_TAR_GZ]
+
+checksums =   [
+    '756f21493940baba44e6207c7f86dde1f9ec9c0080958f6ac6509f9c2c95ae10' # scotch-v7.0.1.tar.gz
+]
+
+builddependencies = [ # Create a reproducible build environment.
+    ('buildtools',   '%(toolchain_version)s',   '', True), # For CMake
+]
+
+dependencies = [
+    ('bzip2', local_bzip2_version, '', ('system', '')),
+    ('xz',    local_xz_version, '', ('system', '')),
+    ('zlib',  local_zlib_version, '', ('system', '')),
+]
+
+moduleclass = 'math'
