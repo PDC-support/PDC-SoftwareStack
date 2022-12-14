@@ -36,11 +36,13 @@ files_to_copy = [
     (['./src/eos/eos'], './bin/'),
     (['./src/spacegroup/spacegroup'], './bin/'),
     (['./species'], '.'),
+    (['./examples'], '.'),
+    (['./tests'], '.'),
 ]
 
 sanity_check_paths = {
     'files': ['bin/elk','bin/eos','bin/spacegroup'],
-    'dirs': ['bin','species'],
+    'dirs': ['bin','species', 'examples', 'tests'],
 }
 
 moduleclass = 'phys'
