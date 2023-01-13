@@ -1,0 +1,13 @@
+diff -Nru src.orig/basic/multicomm.F90 src/basic/multicomm.F90
+--- src.orig/basic/multicomm.F90	2022-01-27 20:22:53.000000000 +0100
++++ src/basic/multicomm.F90	2022-04-06 15:27:52.000000000 +0200
+@@ -653,7 +653,8 @@
+ 
+         ! create the topology
+         periodic_mask = .false.
+-        reorder = .true.
++        reorder = .false.
++        !reorder = .true.
+ 
+         ! The domain and states dimensions have to be periodic (2D torus)
+         ! in order to circulate matrix blocks.
