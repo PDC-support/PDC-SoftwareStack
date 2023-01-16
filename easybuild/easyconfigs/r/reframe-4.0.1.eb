@@ -1,7 +1,7 @@
 easyblock = 'PythonBundle'
 
 name = 'reframe'
-version = '3.12.0'
+version = '4.0.1'
 
 homepage = 'https://github.com/eth-cscs/reframe'
 description = '''ReFrame is a framework for writing regression tests for HPC systems.'''
