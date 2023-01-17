@@ -15,7 +15,7 @@ req_py_minver = 7
 
 use_pip = True
 
-dependencies = [('anaconda3','2022.05'), ]
+dependencies = [('cray-python','3.9.12.1'), ]
 
 exts_list = [
     ('pip', '22.2.2', {
