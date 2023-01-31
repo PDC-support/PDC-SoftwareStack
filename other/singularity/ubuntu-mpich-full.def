@@ -1,6 +1,6 @@
 # MPICH container with other dev tools and an MPI example
 BootStrap: docker
-From: ubuntu:18.04
+From: ubuntu:20.04
 
 %post
 # Runs within the container during Bootstrap

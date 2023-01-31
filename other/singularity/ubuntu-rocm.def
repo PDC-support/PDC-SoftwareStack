@@ -1,0 +1,42 @@
+Bootstrap: docker
+From: ubuntu:20.04
+
+%post
+# Install needed packages
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y wget git bash gcc gfortran g++ make libnuma-dev locales language-pack-sv language-pack-en
+
+export LC_ALL=sv_SE.UTF-8
+export LANGUAGE=sv_SE.UTF-8
+export LANG=sv_SE.UTF-8
+locale-gen sv_SE.UTF-8
+dpkg-reconfigure locales
+
+# Fix timezone issue
+export TZ=Europe/Stockholm
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+echo $TZ > /etc/timezone
+
+# Installing rocm.
+cd /tmp
+wget https://repo.radeon.com/amdgpu-install/5.3/ubuntu/focal/amdgpu-install_5.3.50300-1_all.deb 
+apt-get install -y ./amdgpu-install_5.3.50300-1_all.deb
+amdgpu-install -y --usecase=rocm --no-dkms
+
+# Compiling a GPU test application
+wget https://raw.githubusercontent.com/PDC-support/introduction-to-pdc/master/example/hello_world_gpu.cpp
+hipcc --offload-arch=gfx90a -o /usr/local/bin/hello_world_gpu hello_world_gpu.cpp
+
+%help
+Container with AMD GPU support and AMD GPU example(s) built on Ubuntu 20.04
+See *hipcc --version* to see what version is installed
+
+In order to test GPU functionality...
+
+Local:
+singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
+
+GPU:
+srun -n 1 singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
+
