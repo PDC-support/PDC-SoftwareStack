@@ -4,9 +4,9 @@ easyblock = 'CMakeMake'
 
 name =    'hipsycl'
 version = '0.9.4'
-versionsuffix = '-rocm-5.3.3-llvm'
+versionsuffix = '-rocm-5.3.3'
 
-homepage = 'https://github.com/OpenSYCL/OpenSYCL'
+homepage = 'https://opensycl.github.io/'
 
 whatis = [
     "Description: hipSYCL is a modern SYCL implementation targeting CPUs and GPUs, with a focus on leveraging existing toolchains such as CUDA or HIP"
@@ -43,9 +43,6 @@ configopts += '-DWITH_CPU_BACKEND=ON '
 configopts += '-DWITH_CUDA_BACKEND=OFF '
 configopts += '-DWITH_ROCM_BACKEND=ON '
 configopts += '-DDEFAULT_GPU_ARCH=gfx90a '
-configopts += '-DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang '
-configopts += '-DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ '
-configopts += '-DLLVM_DIR=${ROCM_PATH}/llvm/lib/cmake/llvm/ '
 
 sanity_check_paths = {
     'files': ['bin/syclcc-clang', 'include/sycl/sycl.hpp',

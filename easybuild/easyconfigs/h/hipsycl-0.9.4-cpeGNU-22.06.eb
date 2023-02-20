@@ -5,7 +5,7 @@ easyblock = 'CMakeMake'
 name =    'hipsycl'
 version = '0.9.4'
 
-homepage = 'https://hipsycl.github.io/'
+homepage = 'https://opensycl.github.io/'
 
 whatis = [
     "Description: hipSYCL is a modern SYCL implementation targeting CPUs and GPUs, with a focus on leveraging existing toolchains such as CUDA or HIP"
