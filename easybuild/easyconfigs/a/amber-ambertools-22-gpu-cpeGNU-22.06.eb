@@ -42,7 +42,7 @@ patches = [
 
 preconfigopts = 'cd ../amber22_src && ./update_amber --update  && ./update_amber --upgrade && cd build && '
 
-configopts =  '-DMPI=TRUE -DOPENMP=TRUE -DCOMPILER=CRAY ' 
+configopts =  '-DMPI=TRUE -DOPENMP=TRUE -DCOMPILER=CRAY -DSTATIC=TRUE ' 
 configopts += '-DCHECK_UPDATES=TRUE -DAPPLY_UPDATES=TRUE '
 configopts += '-DDOWNLOAD_MINICONDA=FALSE -DBUILD_PYTHON=FALSE '
 configopts += '-DFORCE_EXTERNAL_LIBS="netcdf;fftw;blas;lapack;pnetcdf" -DTRUST_SYSTEM_LIBS=TRUE '

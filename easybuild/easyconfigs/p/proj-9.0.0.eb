@@ -1,0 +1,29 @@
+# Contributed by Theofilos Manitaras and Luca Marsella (CSCS)
+easyblock = 'CMakeMake'
+
+name = 'proj'
+version = '9.0.0'
+
+homepage = 'https://proj.org'
+description = """PROJ is a generic coordinate transformation software that
+transforms geospatial coordinates from one coordinate reference system (CRS) to another."""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+source_urls = ['http://download.osgeo.org/%(namelower)s/']
+sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('libtiff', '4.3.0'),
+    ('sqlite', '3.36.0'),
+]
+
+configopts = ['-DBUILD_SHARED_LIBS=ON', '-DBUILD_SHARED_LIBS=OFF']
+
+sanity_check_paths = {
+    'files': ['bin/cs2cs', 'bin/geod', 'bin/invgeod', 'bin/invproj', 'bin/%(namelower)s'],
+    'dirs': ['include'],
+}
+
+moduleclass = 'lib'

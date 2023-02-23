@@ -1,0 +1,25 @@
+# Created by Henric Zazzi, PDC
+
+easyblock = 'ConfigureMake'
+
+name = 'minizip'
+version = '1.2.11'
+
+homepage = 'http://www.winimage.com/zLibDll/minizip.html'
+description = """minizip is an innovative library supporting direct creation of compressed ZipFile archives."""
+
+toolchain = SYSTEM
+
+source_urls = ['http://www.gaia-gis.it/gaia-sins/dataseltzer-sources/']
+sources = ['%(name)s-%(version)s.tar.gz']
+
+dependencies = [
+	('zlib', '1.2.11')
+]
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['include', 'lib', 'lib64']
+}
+
+moduleclass = 'tools'
