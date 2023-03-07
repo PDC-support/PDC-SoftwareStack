@@ -21,7 +21,9 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('anaconda3' ,'2022.05', '', True)
+    ('cray-python', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5', EXTERNAL_MODULE),
 ]
 
 sanity_check_paths = {
