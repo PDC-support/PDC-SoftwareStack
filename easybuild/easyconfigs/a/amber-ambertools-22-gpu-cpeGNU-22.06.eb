@@ -19,6 +19,7 @@ toolchainopts = {'usempi': True, 'openmp': True}
 sources = [
     '/pdc/software/eb_repo/sources/%(name)s/Amber%(version)s.tar.gz',
     '/pdc/software/eb_repo/sources/%(name)s/AmberTools%(version)s.tar.bz2',
+    {'filename': '/pdc/software/eb_repo/sources/%(name)s/amber_amd.3jan23.tar.bz2', 'extract_cmd': "cd amber22_src && tar -xvf %s"},
 ]
 
 builddependencies = [
@@ -38,6 +39,8 @@ dependencies = [
 patches = [
      'ambertools-22_fix_missing_MPI_LIBRARY_error.patch',
      'amber-22_remove_undeclared_redundant_variable.patch',
+     'amber-22_remove_open-pal-link.patch',
+     'amber-22_hipcc_mpich_linking_amd23.patch', 
 ]
 
 preconfigopts = 'cd ../amber22_src && ./update_amber --update  && ./update_amber --upgrade && cd build && '
