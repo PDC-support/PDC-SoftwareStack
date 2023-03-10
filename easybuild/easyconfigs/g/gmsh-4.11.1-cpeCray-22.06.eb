@@ -1,0 +1,30 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'CMakeMake'
+
+name = 'gmsh'
+version = '4.11.1'
+
+homepage = 'https://gmsh.info/'
+description = """Gmsh is an open source 3D finite element mesh generator with a built-in CAD engine and post-processor"""
+
+toolchain = {'name': 'cpeCray', 'version': '22.06'}
+toolchainopts = {'opt': True, 'usempi': True, 'verbose': False, 'pic': True, 'dynamic': False, 'openmp': True}
+
+source_urls = ['https://gmsh.info/src/']
+sources = ['%(namelower)s-%(version)s-source.tgz']
+
+builddependencies = [
+    ('cmake', '3.23.0', '', True),
+]
+
+configopts = ''
+
+onlytcmod = True
+skipsteps = ['test']
+
+sanity_check_paths = {
+    'files': ['bin/gmsh'],
+    'dirs': ['bin','share'],
+}
+
+moduleclass = 'tools'
