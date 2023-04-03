@@ -15,3 +15,4 @@ whatis([==[Description:
 add_property("lmod","sticky")
 prepend_path("PATH","/pdc/software/modules/systemdefault/bin")
 append_path("PATH","/pdc/software/tools")
+append_path("PDC_REFRAME", "/pdc/software/resources/reframe/")
