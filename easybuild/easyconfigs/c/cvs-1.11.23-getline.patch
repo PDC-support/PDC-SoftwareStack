@@ -1,0 +1,50 @@
+--- cvs-1.11.23/lib/getline.c.old	2023-04-04 15:30:18.580017957 +0200
++++ cvs-1.11.23/lib/getline.c	2023-04-04 15:31:40.752275733 +0200
+@@ -154,19 +154,19 @@
+   return ret;
+ }
+ 
+-int
+-getline (lineptr, n, stream)
+-     char **lineptr;
+-     size_t *n;
++ssize_t
++ getline (lineptr, n, stream)
++      char **lineptr;
++      size_t *n;
+      FILE *stream;
+ {
+   return getstr (lineptr, n, stream, '\n', 0, GETLINE_NO_LIMIT);
+ }
+ 
+-int
+-getline_safe (lineptr, n, stream, limit)
+-     char **lineptr;
+-     size_t *n;
++ssize_t
++ getline_safe (lineptr, n, stream, limit)
++      char **lineptr;
++      size_t *n;
+      FILE *stream;
+      int limit;
+ {
+--- cvs-1.11.23/lib/getline.h.old	2023-04-04 15:24:11.562782841 +0200
++++ cvs-1.11.23/lib/getline.h	2023-04-04 15:25:30.151061858 +0200
+@@ -11,11 +11,11 @@
+ 
+ #define GETLINE_NO_LIMIT -1
+ 
+-int
+-  getline __PROTO ((char **_lineptr, size_t *_n, FILE *_stream));
+-int
+-  getline_safe __PROTO ((char **_lineptr, size_t *_n, FILE *_stream,
+-                         int limit));
++ssize_t
++   getline __PROTO ((char **_lineptr, size_t *_n, FILE *_stream));
++ssize_t
++   getline_safe __PROTO ((char **_lineptr, size_t *_n, FILE *_stream,
++                          int limit));
+ int
+   getstr __PROTO ((char **_lineptr, size_t *_n, FILE *_stream,
+ 		   int _terminator, int _offset, int limit));
+
