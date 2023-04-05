@@ -3,6 +3,7 @@ help([==[
 Description
 ===========
 Environment module for SNIC
+Deprecated!!!
 
 More information
 ================
@@ -12,8 +13,6 @@ More information
 whatis([==[Description: 
     This is an environment module so that SNIC users will be familiar with the setup.
 ]==])
-
-add_property("lmod","sticky")
 
 -- Local paths
 local cfs = "/cfs/klemming/"

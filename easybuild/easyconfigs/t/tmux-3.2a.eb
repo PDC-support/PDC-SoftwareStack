@@ -1,7 +1,7 @@
 easyblock = 'ConfigureMake'
 
 name = 'tmux'
-version = '3.3'
+version = '3.2a'
 
 homepage = 'https://tmux.github.io'
 description = """tmux is a terminal multiplexer. It lets you switch easily
