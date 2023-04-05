@@ -33,5 +33,4 @@ sanity_check_commands = [
     'singularity --version',
 ]
 
-modextravars = {'PDC_SHUB': '/pdc/software/resources/sing_hub'}
 moduleclass = 'tools'
