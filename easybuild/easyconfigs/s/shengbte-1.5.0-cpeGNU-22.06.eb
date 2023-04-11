@@ -1,0 +1,56 @@
+# contributed by Johan Hellsvik (PDC)
+easyblock = 'MakeCp'
+
+name = 'shengbte'
+version = '1.5.0'
+
+homepage = 'https://bitbucket.org/sousaw/shengbte'
+
+whatis = [
+    'Solver of the Boltzmann transport equation for phonons. Outputs the lattice thermal conductivity and related variables.'
+]
+
+description = """
+ShengBTE is a software package for solving the Boltzmann Transport Equation for phonons.
+Its main purpose is to compute the lattice contribution to the thermal conductivity of
+bulk crystalline solids, but nanowires can also be treated under a hypothesis of diffusive
+boundary conditions.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+sources = [{
+    'filename': 'ShengBTE.tar.gz',
+    'git_config': {
+        'url': 'https://bitbucket.org/sousaw',
+        'repo_name': 'shengbte',
+        'commit': '2cafc0b2286f', #v1.5.0
+        'recursive': False,
+        'keep_git_dir': False,
+    },
+}]
+
+# Creating the arch.make file
+prebuildopts = 'echo "export FFLAGS=-Ofast -fopenmp -fallow-argument-mismatch" > arch.make && '
+prebuildopts += 'echo "export LDFLAGS=-L$EBROOTSPGLIB" >> arch.make && '
+prebuildopts += 'echo "export MPIFC=ftn" >> arch.make && '
+prebuildopts += 'echo "export LIBS=-lsymspg" >> arch.make && '
+prebuildopts += 'cp arch.make ./Src/ && '
+
+build_cmd = "cd Src && make all"
+
+dependencies = [
+     ('spglib', '1.16.3'),
+]
+
+files_to_copy = [
+    (['./ShengBTE'], './bin/'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/ShengBTE'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'phys'
