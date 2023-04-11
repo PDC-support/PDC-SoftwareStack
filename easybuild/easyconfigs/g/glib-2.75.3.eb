@@ -1,0 +1,22 @@
+easyblock = 'MesonNinja'
+
+name = 'glib'
+version = '2.75.3'
+
+homepage = 'http://www.gtk.org/'
+description = """GLib is one of the base libraries of the GTK+ project"""
+
+toolchain = SYSTEM
+toolchainopts = {'optarch': True, 'pic': True}
+
+source_urls = ['http://ftp.gnome.org/pub/gnome/sources/glib/%(version_major_minor)s/']
+sources = [SOURCE_TAR_XZ]
+
+dependencies = [
+    ('meson', '0.60.1'),
+    ('ninja', '1.11.0'),
+    ('libffi', '3.2.1'),
+    ('gettext', '0.21'),
+]
+
+moduleclass = 'vis'
