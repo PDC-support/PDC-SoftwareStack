@@ -25,6 +25,7 @@ srun --pty bash -i
 ```
 AUTO_VERSION=2.71
 OPENMPI_VERSION=4.1.5
+LIBFABRIC_VERSION=1.15.0.0
 mkdir -p ~/opt/autoconf/$AUTO_VERSION
 mkdir -p ~/opt/openmpi/$OPENMPI_VERSION
 
@@ -38,7 +39,7 @@ make install
 export PATH=~/opt/autoconf/$AUTO_VERSION/bin:$PATH
 cd ~/source/openmpi-$OPENMPI_VERSION
 mkdir build && cd build
-../configure --with-pmi --with-pmi-libdir=/usr/lib64 --with-slurm --prefix=$HOME/opt/openmpi/$OPENMPI_VERSION --with-libfabric=/opt/cray/libfabric/1.11.0.4.67
+../configure --with-pmi --with-pmi-libdir=/usr/lib64 --with-slurm --prefix=$HOME/opt/openmpi/$OPENMPI_VERSION --with-libfabric=/opt/cray/libfabric/$LIBFABRIC_VERSION
 make -j 16
 make install
 ```
