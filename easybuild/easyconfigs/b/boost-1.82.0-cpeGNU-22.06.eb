@@ -1,0 +1,32 @@
+# contributed by Luca Marsella (CSCS)
+# Adapted by Kurt Lust (kurt.lust@uantwerpen.be) for the LUMI consortium
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'EB_BoostCPE'
+
+name = 'boost'
+version = '1.82.0'
+
+homepage = 'http://www.boost.org/'
+description = """
+    Boost provides free peer-reviewed portable C++ source libraries.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'usempi': True, 'pic': True, 'verbose': False}
+
+source_urls = [SOURCEFORGE_SOURCE]
+sources = ['%(name)s_%(version_major)s_%(version_minor)s_0.tar.bz2']
+
+dependencies = [
+    ('bzip2', '1.0.8', '', ('system', '')),
+    ('zlib', '1.2.13', '', ('system', '')),
+]
+
+configopts = '--without-libraries=python'
+
+# also build boost_mpi
+boost_mpi = True
+
+modextravars = {'BOOST_ROOT': '%(installdir)s'}
+
+moduleclass = 'devel'
