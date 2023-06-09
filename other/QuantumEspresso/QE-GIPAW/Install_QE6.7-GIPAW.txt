@@ -1,0 +1,50 @@
+#---------------------------------
+# UPDATE 2023-05-22 (for cpe 22.06), Tor
+#----------------------------------
+git clone -b 'qe-6.7.0' --single-branch --depth 1 https://github.com/QEF/q-e.git QEdir
+
+
+##########################
+# Load modules and configure
+##########################
+
+#---------------------------------
+# UPDATE 2023-05-22 (cpe 22.06)
+#---------------------------------
+ml PDC
+ml swap PrgEnv-cray/8.3.3 PrgEnv-gnu
+ml cray-python
+ml libxc/6.0.0-cpeGNU-22.06
+ml openblas/0.3.20-cpeGNU-22.06
+ml ScaLAPACK/3.2-cpeGNU-22.06-amd
+ml elpa/2021.11.001-cpeGNU-22.06
+
+export CRAYPE_LINK_TYPE=dynamic
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cray/pe/python/3.9.12.1/lib/
+export MPIF90=ftn
+export F90=gfortran
+export F77=gfortran
+export FC=gfortran
+export FCFLAGS="-O3 -fopenmp -fallow-argument-mismatch -cpp -ffree-line-length-512"
+export F90FLAGS=$FCLAGS
+export CC=gcc
+export CXX=g++
+export MPIFC=ftn
+export MPIF90=ftn
+export MPIF70=ftn
+export MPICC=cc
+export MPICXX=CC
+
+export SCALAPACK_LIBS="/pdc/software/22.06/eb/software/ScaLAPACK/3.2-cpeGNU-22.06-amd/lib/libscalapack.so"
+
+cd QEdir
+
+
+./configure --enable-openmp --with-scalapack=yes --with-libxc=yes --with-libxc-prefix=/pdc/software/22.06/eb/software/libxc/6.0.0-cpeGNU-22.06/ --prefix=/pdc/software/22.06/other/quantum-espresso/6.7-gipaw
+
+make pw
+
+#.. (gipaw+yambo might need to be done on login node due to download issue from compute nodes)
+make gipaw
+make yambo
+
