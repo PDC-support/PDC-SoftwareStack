@@ -1,0 +1,52 @@
+#!/bin/bash -l
+# The -l above is required to get the full environment with modules
+# Set the allocation to be charged for this job
+# not required if you have set a default allocation
+#SBATCH -A pdc.staff
+# The name of the script
+#SBATCH -J QATK_Test
+# Max time allocated for the job
+#SBATCH -t 00:20:00
+
+# Number of nodes/cores
+#SBATCH -N 2
+#SBATCH -n 4
+#SBATCH -c 1
+
+# The partition
+#SBATCH -p shared
+
+#SBATCH -e qatk_%j.e
+#SBATCH -o qatk_%j.o
+
+ulimit -s unlimited
+
+
+#module load intel/2022.0.2
+
+ml load PrgEnv-intel/8.3.3
+ml cray-mpich-abi/8.1.15
+
+#.. OpenMP threads
+export OMP_NUM_THREADS=SLURM_CPUS_PER_TASK
+
+#.. MPI-options for using IntelMPI
+export I_MPI_FABRICS=tcp
+export I_MPI_PMI2=yes
+export PMI_DEBUG=yes
+export I_MPI_PMI_LIBRARY=/opt/cray/pe/lib64/libpmi2.so
+
+#.. Environmentals for QATK
+export QATK_PATH=/cfs/klemming/home/t/torkj/QuantumATK/QuantumATK-T-2022.03/bin/
+export PATH=$QATK_PATH/bin/:$PATH
+export LD_LIBRARY_PATH=$QATK_PATH/lib/:$LD_LIBRARY_PATH
+
+#.. license server
+export SNPSLMD_LICENSE_FILE=
+
+#.. Make an overall export of current envs to linker
+export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
+
+#.. "-v" option is for verbose, not really needed if things work.
+srun -v atkpython ptse2-2l-3x3.py
+
