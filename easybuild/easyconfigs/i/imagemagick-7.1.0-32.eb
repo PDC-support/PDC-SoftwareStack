@@ -1,0 +1,31 @@
+# contributed by Luca Marsella (CSCS)
+easyblock = 'ConfigureMake'
+
+name = 'ImageMagick'
+version = '7.1.0-32'
+
+homepage = 'http://www.imagemagick.org/'
+description = """ImageMagick is a software suite to create, edit, compose, or convert bitmap images"""
+
+toolchain = SYSTEM 
+toolchainopts = {'pic': True, 'verbose': False}
+
+sources = [SOURCE_TAR_GZ]
+source_urls = ['http://www.imagemagick.org/download/']
+
+dependencies = [
+    ('x11', '22.06-cpeGNU-22.06'),
+    ('ghostscript', '9.55.0'),
+    ('zstd', '1.5.0'),
+    ('libjpeg-turbo', '2.1.1'),
+]
+configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L/pdc/software/22.06/eb/software/libjpeg-turbo/2.1.1/lib -L/pdc/software/22.06/eb/software/zstd/1.5.0/lib' "
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['bin', 'etc/%(name)s-%(version_major)s', 'include/%(name)s-%(version_major)s', 'lib', 'share'],
+}
+
+modextravars = {'MAGICK_HOME': '%(installdir)s'}
+
+moduleclass = 'vis'
