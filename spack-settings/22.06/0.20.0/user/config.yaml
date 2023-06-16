@@ -1,0 +1,9 @@
+config:
+    build_jobs: 32
+    install_path_scheme: '{name}-{version}-{hash:7}'
+    install_tree: $SPACK_USER_PREFIX/22.06/0.20.0
+    source_cache: $SPACK_USER_PREFIX/22.06/0.20.0/cache
+    misc_cache: $SPACK_USER_PREFIX/22.06/0.20.0/cache
+    install_missing_compilers: false
+    suppress_gpg_warnings: true
+
