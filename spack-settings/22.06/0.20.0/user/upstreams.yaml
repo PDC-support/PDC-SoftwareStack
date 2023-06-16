@@ -1,0 +1,3 @@
+upstreams:
+  lumi:
+    install_tree: /pdc/software/22.06/spack/0.20.0/prod/opt/spack
