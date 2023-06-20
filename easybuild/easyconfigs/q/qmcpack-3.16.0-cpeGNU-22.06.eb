@@ -1,0 +1,43 @@
+# by Arash Alizad Banaei (PDC)
+
+easyblock = 'CMakeMake'
+
+name = 'qmcpack'
+version = '3.16.0-dp'
+
+homepage = 'https://qmcpack.org'
+description = "QMCPACK, is a modern high-performance open-source Quantum Monte Carlo (QMC) simulation code"
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+sources = [{
+    'filename': '3.0.16.tar.gz',
+    'git_config': {
+        'url': 'https://github.com/QMCPACK',
+        'repo_name': 'qmcpack',
+        'commit': '7f077afbc428ef85691c756a5e3417c887fd5e41',
+        'recursive': True,
+        'keep_git_dir': True,
+    },
+}]
+
+builddependencies = [
+    ('cmake','3.23.0','',True),
+    ('libxml2','2.9.12','',True),
+    ('boost','1.79.0'),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5-parallel',EXTERNAL_MODULE)
+]
+dependencies = [
+    ('cray-python','EXTERNAL_MODULE')
+]
+
+
+configopts = '-DQMC_COMPLEX=1 -DBUILD_AFQMC=ON -DCMAKE_SYSTEM_NAME=CrayLinuxEnvironment'
+
+sanity_check_paths = {
+    'files': ['bin/qmca', 'bin/qdens'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'quantum'
