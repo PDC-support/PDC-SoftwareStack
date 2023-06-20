@@ -1,0 +1,34 @@
+# Arash Alizad Banaei (PDC)
+easyblock = 'ConfigureMake'
+
+name = 'petsc'
+version = '3.18.5'
+
+homepage = 'https://petsc.org/release/'
+description = """PETSc, the Portable, Extensible Toolkit for Scientific Computation. It is a suite of data structures and routines for the scalable (parallel) solution of scientific applications modeled by partial differential equations."""
+
+toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+
+source_urls = ['https://ftp.mcs.anl.gov/pub/petsc/release-snapshots']
+sources = ['%(namelower)s-%(version)s.tar.gz']
+
+dependencies = [
+    ('Anaconda3', '2021.05', '', True)
+]
+
+configopts = "FC=ftn CC=cc CXX=CC --FFLAGS=-O3 --CXXFLAGS=-O3 --CFLAGS=-O3 --with-batch=1 --download-hypre=yes "
+configopts += "--download-mumps=yes --download-ptscotch=yes --download-scalapack=yes --with-debugging=0"
+
+install_cmd = 'cd arch-linux-c-opt ; cp -r * %(installdir)s ; cp -r externalpackages/git.hypre/src/lib/* %(installdir)s/lib; '
+install_cmd += 'cp -r externalpackages/MUMPS_5.5.1/lib/* %(installdir)s/lib; '
+install_cmd += 'cp -r externalpackages/git.ptscotch/lib/*  %(installdir)s/lib; '
+install_cmd += 'cp -r externalpackages/git.scalapack/petsc-build/lib/libscalapack* %(installdir)s/lib; '
+install_cmd += 'cd .. ; cp -r include/*  %(installdir)s/include/; '
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/']
+}
+
+
+moduleclass = 'tools'
