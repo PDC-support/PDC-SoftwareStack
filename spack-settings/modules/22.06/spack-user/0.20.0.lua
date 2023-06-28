@@ -13,7 +13,7 @@ local cpe_version = os.getenv("CRAY_PE_VERSION")
 local spack_type = "user"
 local spack_root = "/pdc/software/" .. cpe_version .. "/spack/" .. spack_version .. "/" .. spack_type
 local cpe_spack = cpe_version .. "/" .. spack_version
-local userdir = os.getenv("HOME") .. "/.local/spack/"
+local userdir = os.getenv("HOME") .. "/.local/spack"
 
 require("lfs")
 
@@ -56,7 +56,7 @@ if mode() == "load" then
   local moduledir = userdir .. "/" .. cpe_spack .. "/modules/tcl"
   if not isDir(moduledir) then
     LmodMessage("Creating the Spack modules directory " .. (userdir .. "/modules/tcl"))
-    ok,_,_ = os.execute("mkdir -p " .. userdir .. cpe_spack .. "/modules/tcl")
+    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_spack .. "/modules/tcl")
     if not ok then
       LmodError("The modules directory (" .. moduledir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
@@ -77,18 +77,18 @@ if mode() == "load" then
 end
 
 -- This adds the "spack" binary (but not the spack shell functions)
-prepend_path("PATH",spack_root .. "/bin")
+prepend_path("PATH",spack_root, "bin")
 
 -- The Spack root directory needs to be set
-setenv("SPACK_ROOT",spack_root)
+setenv("SPACK_ROOT", spack_root)
 
 -- Override the user settings in the home directory
 setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
-prepend_path("MODULEPATH",userdir .. cpe_spack .. "/modules/tcl/cray-sles15-zen")
-prepend_path("MODULEPATH",userdir .. cpe_spack .. "/modules/tcl/cray-sles15-zen2")
-prepend_path("MODULEPATH",spack_root .. "/share/spack/modules/cray-sles15-zen")
-prepend_path("MODULEPATH",spack_root .. "/share/spack/modules/cray-sles15-zen2")
+prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/cray-sles15-zen")
+prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/cray-sles15-zen2")
+prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen")
+prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen2")
 prepend_path("SPACK_USER_PREFIX", userdir)
 
