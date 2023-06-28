@@ -11,7 +11,7 @@ family( 'PDC-SoftwareStack' )
 local spack_version = "0.20.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
 local spack_type = "user"
-local spackroot = "/pdc/software/" .. cpe_version .. "/spack/" .. spack_version .. "/" .. spack_type
+local spack_root = "/pdc/software/" .. cpe_version .. "/spack/" .. spack_version .. "/" .. spack_type
 local cpe_spack = cpe_version .. "/" .. spack_version
 local userdir = os.getenv("HOME") .. "/.local/spack/"
 
@@ -77,10 +77,10 @@ if mode() == "load" then
 end
 
 -- This adds the "spack" binary (but not the spack shell functions)
-prepend_path("PATH",spackroot .. "/bin")
+prepend_path("PATH",spack_root .. "/bin")
 
 -- The Spack root directory needs to be set
-setenv("SPACK_ROOT",spackroot)
+setenv("SPACK_ROOT",spack_root)
 
 -- Override the user settings in the home directory
 setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
