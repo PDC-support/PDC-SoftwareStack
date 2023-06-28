@@ -42,7 +42,7 @@ if mode() == "load" then
   LmodMessage("$SPACK_USER_PREFIX = " .. userdir)
   
   -- Check that the install directory actually exists, create it otherwise
-  -- Note: the code below does not create the subdirectories 22.08/0.18.1, if they don't exist
+  -- Note: the code below does not create the subdirectories, if they don't exist
   -- they will be created in the next step anyhow
   if not isDir(userdir) then
     LmodMessage("Creating the directory " .. userdir)
@@ -53,7 +53,7 @@ if mode() == "load" then
   end
   
   -- Check for the modules directory and try to create it
-  local moduledir = userdir .. "/22.08/0.18.1/modules/tcl"
+  local moduledir = userdir .. "/" .. cpe_spack .. "/modules/tcl"
   if not isDir(moduledir) then
     LmodMessage("Creating the Spack modules directory " .. (userdir .. "/modules/tcl"))
     ok,_,_ = os.execute("mkdir -p " .. userdir .. cpe_spack .. "/modules/tcl")
