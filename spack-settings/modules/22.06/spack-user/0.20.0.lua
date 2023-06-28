@@ -63,7 +63,7 @@ if mode() == "load" then
   end
 
   -- Check for the cache directory and try to create it
-  local cachedir = userdir .. cpe_spack .. "/cache"
+  local cachedir = userdir .. "/" .. cpe_spack .. "/cache"
   if not isDir(cachedir) then
     LmodMessage("Creating the Spack cache directory " .. (userdir .. "/cache"))
     ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_spack .. "/cache")
