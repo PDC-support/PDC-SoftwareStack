@@ -13,7 +13,7 @@ local cpe_version = os.getenv("CRAY_PE_VERSION")
 local spack_type = "user"
 local spackroot = "/pdc/software/" .. cpe_version .. "/spack/" .. spack_version .. "/" .. spack_type
 local cpe_spack = cpe_version .. "/" .. spack_version
-local userdir = os.getenv("SPACK_USER_PREFIX")
+local userdir = os.getenv("HOME") .. "/.local/spack/"
 
 require("lfs")
 
@@ -90,3 +90,5 @@ prepend_path("MODULEPATH",userdir .. cpe_spack .. "/modules/tcl/cray-sles15-zen"
 prepend_path("MODULEPATH",userdir .. cpe_spack .. "/modules/tcl/cray-sles15-zen2")
 prepend_path("MODULEPATH",spack_root .. "/share/spack/modules/cray-sles15-zen")
 prepend_path("MODULEPATH",spack_root .. "/share/spack/modules/cray-sles15-zen2")
+prepend_path("SPACK_USER_PREFIX", userdir)
+
