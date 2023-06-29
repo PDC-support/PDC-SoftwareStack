@@ -1,12 +1,15 @@
 help( [[
-A module to activate Spack and configure it to install packages in a directory specified by the user in the environment variable $SPACK_USER_PREFIX. The set-up is such that you use a common central Spack instance in /appl/lumi/spack, but you install packages in your own directory. Thus, you cannot change the configurations and update the Spack package repository. This has to be done by LUMI User Support Team . But you save the hassle of having to clone your own spack directory and write the configuration files.  
+A module to activate Spack and configure it to install packages in a directory. See $SPACK_USER_PREFIX. 
+The set-up is such that you use a common central Spack instance in, but you install packages in your own directory.
+Thus, you cannot change the configurations and update the Spack package repository.
+But you save the hassle of having to clone your own spack directory and write the configuration files.  
 ]]
 )
 whatis("Version: 22.06")
 whatis("Keywords: Spack")
 whatis("Description: the Spack package manager configured to install in a user specified directory")
 
-family( 'PDC-SoftwareStack' )
+family("cpe")
 
 local spack_version = "0.20.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
@@ -91,4 +94,3 @@ prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/cray-sles15-zen2")
 prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen")
 prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen2")
 prepend_path("SPACK_USER_PREFIX", userdir)
-
