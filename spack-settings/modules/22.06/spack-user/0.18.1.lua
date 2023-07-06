@@ -9,7 +9,8 @@ whatis("Version: 22.06")
 whatis("Keywords: Spack")
 whatis("Description: the Spack package manager configured to install in a user specified directory")
 
-family("cpe")
+-- Is this needed?
+-- family("cpe")
 
 local spack_version = "0.18.1"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
