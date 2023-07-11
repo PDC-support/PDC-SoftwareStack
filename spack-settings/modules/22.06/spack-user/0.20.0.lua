@@ -81,7 +81,7 @@ if mode() == "load" then
 end
 
 -- This adds the "spack" binary (but not the spack shell functions)
-prepend_path("PATH",spack_root, "bin")
+prepend_path("PATH", spack_root .. "/bin")
 
 -- The Spack root directory needs to be set
 setenv("SPACK_ROOT", spack_root)
