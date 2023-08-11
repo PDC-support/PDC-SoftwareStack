@@ -18,10 +18,11 @@ cd gromacs-v2023.2
 ml PDC/22.06
 ml rocm/5.3.3
 ml cray-fftw/3.3.10.1
-#ml craype-hugepages8M
-#ml craype-accel-amd-gfx90a
+ml craype-hugepages8M
+ml craype-accel-amd-gfx90a
 ml cmake/3.23.0
 ml hipsycl/0.9.4-cpeGNU-22.06-rocm-5.3.3-llvm
+ml heffte/2.3.0-cpeGNU-22.06
 
 # Configure Single precision GPU SYCL
 mkdir buildGPU
@@ -32,6 +33,8 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF \
       -DCMAKE_INSTALL_PREFIX=`pwd`/install \
       -DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang \
       -DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ \
+      -DCMAKE_CXX_FLAGS=-fuse-ld=ld -DCMAKE_C_FLAGS=-fuse-ld=ld \
+      -DGMX_GPU_FFT_LIBRARY=rocFFT -DGMX_USE_HEFFTE=ON \
       -DGMX_GPU=SYCL -DGMX_SYCL_HIPSYCL=ON -DHIPSYCL_TARGETS='hip:gfx90a' > BuildGROMACS_CMakeLog.txt 2>&1
 
 # Build and install
