@@ -90,8 +90,8 @@ setenv("SPACK_ROOT", spack_root)
 setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
-prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/cray-sles15-zen")
-prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/cray-sles15-zen2")
-prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen")
-prepend_path("MODULEPATH", spack_root, "share/spack/modules/cray-sles15-zen2")
+prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/linux-sles15-zen")
+prepend_path("MODULEPATH", userdir, cpe_spack, "modules/tcl/linux-sles15-zen2")
+prepend_path("MODULEPATH", spack_root, "share/spack/modules/linux-sles15-zen")
+prepend_path("MODULEPATH", spack_root, "share/spack/modules/linux-sles15-zen2")
 prepend_path("SPACK_USER_PREFIX", userdir)
