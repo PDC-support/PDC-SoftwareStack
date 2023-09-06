@@ -1,0 +1,40 @@
+# Built by Henric Zazzi, PDC, KTH
+# Needs Lua-devel and on Dardel can only be compiled on uan02
+easyblock = 'ConfigureMake'
+
+name = "Lmod"
+version = "8.7"
+
+homepage = "http://sourceforge.net/projects/lmod/"
+description = """Lmod is a Lua based module system. Modules allow for dynamic
+modification of a user's environment under Unix systems. See
+www.tacc.utexas.edu/tacc-projects/lmod for a complete description. Lmod is a
+new implementation that easily handles the MODULEPATH Hierarchical problem. It
+is drop-in replacement for TCL/C modules and reads TCL modulefiles directly."""
+
+toolchain = SYSTEM
+
+sources = ['%(name)s-%(version)s.tar.bz2']
+source_urls = [
+    'http://sourceforge.net/projects/lmod/files/',
+    'http://sourceforge.net/projects/lmod/files/Testing'
+]
+
+builddependencies = [
+    ('tcl', '8.6.12'),
+    ('lua-devel', '5.3.6')
+]
+
+configopts = "--with-lua-include=$EBROOTLUAMINDEVEL/src"
+
+sanity_check_paths = {
+    'files': ["lmod/%(version)s/libexec/lmod", "lmod/%(version)s/init/profile"],
+    'dirs': []
+}
+
+modextrapaths = {
+    'LMOD_CMD': 'lmod/%(version)s/libexec/lmod',
+    'PATH': 'lmod/lmod/libexec' 
+}
+
+moduleclass = "tools"

@@ -1,0 +1,24 @@
+# Written by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'MakeCp'
+
+name = 'lua-devel'
+version = '5.3.6'
+easyblock = 'MakeCp'
+
+homepage = 'https://www.lua.org'
+description = """Lua is a powerful, efficient, lightweight, embeddable scripting language. It supports procedural programming, object-oriented programming, functional programming, data-driven programming, and data description. This does only containt the development files"""
+
+# only includes source files, so no need for a non-dummy toolchain
+toolchain = SYSTEM
+
+source_urls = ['https://www.lua.org/ftp/']
+sources = ['lua-%(version)s.tar.gz']
+
+files_to_copy = [(['*'], '.')]
+
+sanity_check_paths = {
+    'files': ['src/lua.h'],
+    'dirs': [],
+}
+
+moduleclass = 'compiler'
