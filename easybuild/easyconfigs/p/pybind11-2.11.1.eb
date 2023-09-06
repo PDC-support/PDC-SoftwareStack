@@ -1,0 +1,34 @@
+# Arash Alizad Banaei (PDC)
+easyblock = 'CMakeMake'
+
+name = 'pybind11'
+version = '2.11.1'
+
+homepage = 'https://pybind11.readthedocs.io/en/stable/basics.html'
+
+
+description = """pybind11 is a lightweight header-only library that exposes C++ types in Python and vice versa"""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+source_urls = ['https://github.com/pybind/pybind11/archive/refs/tags']
+
+sources =     ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.23.0', '', True),
+]
+
+configopts = '-DPYTHON_EXECUTABLE:FILEPATH=/opt/cray/pe/python/3.9.12.1/bin/python3'
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['include'],
+}
+
+modextrapaths = {'CPATH':'include/pybind11'}
+
+moduleclass = 'devel'
+
+
+
