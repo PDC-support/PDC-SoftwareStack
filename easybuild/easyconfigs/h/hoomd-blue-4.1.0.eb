@@ -1,0 +1,47 @@
+# Arash Alizad Banaei (PDC)
+easyblock = 'CMakeMake'
+
+name = 'hoomd-blue'
+version = '4.1.0'
+
+homepage = 'https://hoomd-blue.readthedocs.io/en/v4.1.0/index.html'
+
+description = """Python package that runs simulations of particle systems on CPUs and GPUs"""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+source_urls = ['https://github.com/glotzerlab/hoomd-blue/releases/download/v4.1.0']
+
+sources =     ['hoomd-%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.23.0', '', True),
+    ('eigen', '3.4.0', '', True),
+    ('cray-python', EXTERNAL_MODULE)
+]
+
+
+dependencies = [
+    ('pybind11','2.11.1'),
+    ('llvm', '16.0.6'),
+    ('eigen', '3.4.0', '', True),
+    ('cray-python', EXTERNAL_MODULE),
+    ('rocm/5.3.3', EXTERNAL_MODULE),
+    ('cereal/1.3.2',EXTERNAL_MODULE)
+]
+
+preconfigopts = "export cereal_DIR=/pdc/software/22.06/other/cereal/1.3.2/install; "
+
+configopts = '-DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_COMPILER:FILEPATH=/opt/cray/pe/mpich/default/ofi/gnu/9.1/bin/mpicxx '
+configopts+= '-DCMAKE_C_COMPILER:FILEPATH=/opt/cray/pe/mpich/default/ofi/gnu/9.1/bin/mpicc -DENABLE_LLVM:BOOL=ON '
+configopts+= '-DENABLE_MPI:BOOL=ON -DHOOMD_GPU_PLATFORM:STRING=HIP'
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib'],
+}
+
+moduleclass = 'phys'
+
+
+
