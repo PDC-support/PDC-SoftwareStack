@@ -29,5 +29,7 @@ if user ~= "root" then
 
 setenv("PDC_SITE", "pdc")
 setenv("PDC_RESOURCE", "dardel")
+-- Software specific environment variables
 setenv("PDC_REFRAME", "/pdc/software/resources/reframe")
 setenv("PDC_SHUB", "/pdc/software/resources/sing_hub")
+setenv("BLASTDB", "/pdc/software/resources/blastdb")
