@@ -36,6 +36,9 @@ configopts = '-DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_COMPILER:FILEPATH=/o
 configopts+= '-DCMAKE_C_COMPILER:FILEPATH=/opt/cray/pe/mpich/default/ofi/gnu/9.1/bin/mpicc -DENABLE_LLVM:BOOL=ON '
 configopts+= '-DENABLE_MPI:BOOL=ON -DHOOMD_GPU_PLATFORM:STRING=HIP'
 
+
+modextrapaths = {'PYTHONPATH':'hoomd'}
+
 sanity_check_paths = {
     'files': [],
     'dirs': ['lib'],
