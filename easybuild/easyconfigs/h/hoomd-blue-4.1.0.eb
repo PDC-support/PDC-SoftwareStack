@@ -37,7 +37,7 @@ configopts+= '-DCMAKE_C_COMPILER:FILEPATH=/opt/cray/pe/mpich/default/ofi/gnu/9.1
 configopts+= '-DENABLE_MPI:BOOL=ON -DHOOMD_GPU_PLATFORM:STRING=HIP'
 
 
-modextrapaths = {'PYTHONPATH':'hoomd'}
+modextrapaths = {'PYTHONPATH':''}
 
 sanity_check_paths = {
     'files': [],
