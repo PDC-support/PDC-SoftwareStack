@@ -1,0 +1,31 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'MakeCp'
+
+name = 'vampire'
+version = '6.0'
+
+homepage = 'https://vampire.york.ac.uk/'
+description = """VAMPIRE is a state-of-the-art atomistic simulator for magnetic nanomaterials. This
+software is the culmination of several years of continuous development, with an
+aim to make atomistic simulation of magnetic materials routinely available to
+the non-specialist researcher.""" 
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['https://github.com/richard-evans/vampire/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+
+buildopts = "parallel-archer"
+
+files_to_copy = [(['vampire-*'], 'bin'),
+                (['input'], 'examples'),
+                (['Co.mat'], 'examples')
+                ]
+
+sanity_check_paths = {
+    'files': ['bin/vampire-parallel'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'bio'
