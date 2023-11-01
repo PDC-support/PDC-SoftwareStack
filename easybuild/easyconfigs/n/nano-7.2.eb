@@ -1,0 +1,26 @@
+# contributed by Luca Marsella (CSCS)
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+# use eb --robot to install as this is dependent on ncurses/6.2
+easyblock = 'ConfigureMake'
+
+name = 'nano'
+version = '7.2'
+
+homepage = 'http://www.nano-editor.org/'
+description = """GNU nano is designed to be a free replacement for the Pico
+text editor"""
+
+toolchain = SYSTEM
+
+# https://www.nano-editor.org/dist/v5/nano-5.8.tar.gz
+source_urls = ['http://www.nano-editor.org/dist/v%s' % '.'.join(version.split('.')[0:1])]
+sources = [SOURCE_TAR_GZ]
+
+dependencies = [('ncurses', '6.4'), ]
+
+sanity_check_paths = {
+    'files': ['bin/nano'],
+    'dirs': [],
+}
+
+moduleclass = 'tools'

@@ -1,0 +1,30 @@
+# contributed by Luca Marsella (CSCS)
+easyblock = 'ConfigureMake'
+
+name = 'zlib'
+version = '1.3'
+
+homepage = 'http://www.zlib.net/'
+description = """
+    zlib is designed to be a free, general-purpose, legally unencumbered --
+    that is, not covered by any patents -- lossless data-compression library
+    for use on virtually any computer hardware and operating system.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+source_urls = ['https://zlib.net/']
+sources =     [SOURCE_TAR_GZ]
+
+# need to take care of $CFLAGS ourselves with dummy toolchain
+# we need to add -fPIC, but should also include -O* option to
+# avoid compiling with -O0 (default for GCC)
+buildopts = 'CFLAGS="-O2 -fPIC"'
+
+sanity_check_paths = {
+    'files': ['include/zconf.h', 'include/zlib.h', 'lib/libz.a', 'lib/libz.so'],
+    'dirs': [],
+}
+
+moduleclass = 'lib'
