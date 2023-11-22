@@ -32,8 +32,8 @@ However, this module is for Dardel and only contains AMD GPU support.
 toolchain = {'name': 'cpeGNU', 'version': '22.06'}
 toolchainopts = {'verbose': False, 'openmp': True}
 
-source_urls = ["https://github.com/v%(name)s/v%(name)s/archive/refs/tags/"]
-#source_urls = ["https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/"]
+#source_urls = ["https://github.com/v%(name)s/v%(name)s/archive/refs/tags/"]
+source_urls = ["https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/"]
 sources =     ["v%(version)s.tar.gz"]
 
 dependencies = [
