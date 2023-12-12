@@ -13,4 +13,8 @@ toolchainopts = {'usempi': True}
 source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/']
 sources = ['ncbi-blast-%(version)s+-src.tar.gz']
 
+dependencies = [
+    ('glib', '2.78.0'),
+]
+
 moduleclass = 'bio'

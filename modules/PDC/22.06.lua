@@ -16,7 +16,7 @@ conflict("PDC")
 local root = "/pdc/software"
 
 setenv("CRAY_PE_VERSION", cpe_version)
-prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "eb"))
-prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "other"))
+prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "eb", "modules"))
+prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "other", "modules"))
 prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "spack"))
 load("cpe/" .. cpe_version)
