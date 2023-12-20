@@ -1,0 +1,34 @@
+# Contributed by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+easyblock = 'CMakeMake'
+
+name = 'espressomd'
+version = '4.2.1'
+
+homepage = 'https://espressomd.org/'
+description = """ESPResSo is a highly versatile software package for performing and analyzing scientific Molecular Dynamics many-particle simulations of “coarse-grained” bead-spring models as they are used in soft matter research in physics, chemistry and molecular biology. It can be used to simulate systems such as polymers, liquid crystals, colloids, ferrofluids and biological systems, for example DNA and lipid membranes.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+source_urls = ['https://github.com/espressomd/espresso/archive/refs/tags/']
+sources = ['%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.27.7', '', True),
+    ('boost', '1.83.0'),
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+    'files': ['bin/pypresso'],
+    'dirs': ['bin', 'lib'],
+}
+
+moduleclass = 'phys'

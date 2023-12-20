@@ -1,0 +1,23 @@
+# author: Jillian Rowe <jillian.e.rowe@gmail.com>
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'EB_Anaconda'
+
+name = 'anaconda3'
+version = "2023.09-0"
+
+homepage = 'https://www.continuum.io/anaconda-overview'
+description = """Built to complement the rich, open source Python community,
+the Anaconda platform provides an enterprise-ready data analytics platform 
+that empowers companies to adopt a modern open data science analytics architecture.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://repo.continuum.io/archive/']
+sources = ['Anaconda3-%(version)s-Linux-x86_64.sh']
+
+# Install packages
+local_prep_env = "PATH=%(installdir)s/bin:$PATH "
+postinstallcmds = [local_prep_env + "conda install -p %(installdir)s -c bioconda -c conda-forge snakemake-minimal"]
+
+moduleclass = 'lang'

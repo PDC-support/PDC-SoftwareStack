@@ -1,0 +1,25 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'CMakeMake'
+
+name = 'catch2'
+version = '3.5.0'
+
+homepage = 'https://github.com/catchorg/Catch2'
+description = """Catch2 is mainly a unit testing framework for C++,
+but it also provides basic micro-benchmarking features, and simple BDD macros"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/catchorg/%(name)s/archive/']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+sanity_check_paths = {
+    'files': ['include/catch2/catch_all.hpp', 'lib64/libCatch2.a', 'lib64/libCatch2Main.a'],
+    'dirs': ['include', 'lib64'],
+}
+
+moduleclass = 'devel'

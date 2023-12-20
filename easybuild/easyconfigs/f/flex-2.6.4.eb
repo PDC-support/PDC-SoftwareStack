@@ -14,7 +14,7 @@ source_urls = ['https://github.com/westes/%(name)s/releases/download/v%(version)
 sources = [SOURCE_TAR_GZ]
 
 builddependencies = [
-    ('bison', '3.7.5'),
+    ('bison', '3.8.2'),
 ]
 
 sanity_check_paths = {

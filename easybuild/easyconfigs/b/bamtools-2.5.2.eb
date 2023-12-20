@@ -13,7 +13,7 @@ toolchain = SYSTEM
 source_urls = ['https://github.com/pezmaster31/%(name)s/archive/refs/tags/']
 sources = ['v%(version)s.tar.gz']
 
-builddependencies = [('cmake', '3.23.0')]
+builddependencies = [('cmake', '3.27.7')]
 
 sanity_check_paths = {
   'files': ["bin/bamtools"],
