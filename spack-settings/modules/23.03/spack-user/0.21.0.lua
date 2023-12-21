@@ -16,7 +16,6 @@ local spack_version = "0.21.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
 local spack_type = "user"
 local spack_root = "/pdc/software/" .. cpe_version .. "/spack/" .. spack_version .. "/" .. spack_type
-local cpe_spack = cpe_version .. "/" .. spack_version
 local userdir = os.getenv("HOME") .. "/.local/spack"
 
 require("lfs")
@@ -57,20 +56,20 @@ if mode() == "load" then
   end
   
   -- Check for the modules directory and try to create it
-  local moduledir = userdir .. "/" .. cpe_spack .. "/modules/tcl"
+  local moduledir = userdir .. "/" .. cpe_version .. "/modules/tcl"
   if not isDir(moduledir) then
     LmodMessage("Creating the Spack modules directory " .. (userdir .. "/modules/tcl"))
-    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_spack .. "/modules/tcl")
+    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_version .. "/modules/tcl")
     if not ok then
       LmodError("The modules directory (" .. moduledir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
   end
 
   -- Check for the cache directory and try to create it
-  local cachedir = userdir .. "/" .. cpe_spack .. "/cache"
+  local cachedir = userdir .. "/" .. cpe_version .. "/cache"
   if not isDir(cachedir) then
     LmodMessage("Creating the Spack cache directory " .. (userdir .. "/cache"))
-    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_spack .. "/cache")
+    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_version .. "/cache")
     if not ok then
       LmodError("The cache directory (" .. cachedir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
@@ -90,6 +89,6 @@ setenv("SPACK_ROOT", spack_root)
 setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
-prepend_path("MODULEPATH", userdir .."/" .. cpe_spack .. "/modules/tcl/linux-sles15-zen")
+prepend_path("MODULEPATH", userdir .."/" .. cpe_version .. "/modules/tcl/linux-sles15-zen")
 prepend_path("MODULEPATH", spack_root .. "/" .. "/share/spack/modules/linux-sles15-zen")
 prepend_path("SPACK_USER_PREFIX", userdir)
