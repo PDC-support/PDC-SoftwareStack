@@ -1,0 +1,9 @@
+config:
+    build_jobs: 32
+    install_path_scheme: '{name}-{version}-{hash:7}'
+    install_tree: /pdc/software/23.03/spack/
+    source_cache: /pdc/software/23.03/spack/cache
+    misc_cache: /pdc/software/23.03/spack/cache
+    install_missing_compilers: false
+    suppress_gpg_warnings: true
+
