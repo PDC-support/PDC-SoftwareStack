@@ -22,7 +22,7 @@ modules:
     : - CMAKE_PREFIX_PATH
   default:
     roots:
-      tcl: $SPACK_USER_PREFIX/23.03/modules/tcl
+      tcl: $SPACK_USER_PREFIX/modules/tcl
     enable:
       - tcl
     tcl:
