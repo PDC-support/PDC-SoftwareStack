@@ -33,43 +33,43 @@ end
 
 if mode() == "load" then
   -- Check that $SPACK_USER_PREFIX is set
-  if userdir == nil then
+  if installdir == nil then
     LmodError("Please set $SPACK_USER_PREFIX to where you want to install Spack packages. We recommend using your project persistent storage for this. E.g. /project/project_<project-number>/spack")
   end
 
   -- Sanity check of the path
-  if string.sub(userdir,1,6) == "/appl/" then
+  if string.sub(installdir,1,6) == "/appl/" then
     LmodError("You cannot set $SPACK_USER_PREFIX to somewhere in the /appl filesystem, because it is read-only.")
   end
 
-  LmodMessage("$SPACK_USER_PREFIX = " .. userdir)
+  LmodMessage("$SPACK_USER_PREFIX = " .. installdir)
   
   -- Check that the install directory actually exists, create it otherwise
   -- Note: the code below does not create the subdirectories, if they don't exist
   -- they will be created in the next step anyhow
-  if not isDir(userdir) then
-    LmodMessage("Creating the directory " .. userdir)
-    ok,_,_ = os.execute("mkdir -p " .. userdir)
+  if not isDir(installdir) then
+    LmodMessage("Creating the directory " .. installdir)
+    ok,_,_ = os.execute("mkdir -p " .. installdir)
     if not ok then
-      LmodError("The directory (" .. userdir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
+      LmodError("The directory (" .. installdir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
   end
   
   -- Check for the modules directory and try to create it
-  local moduledir = userdir .. "/" .. cpe_version .. "/modules/tcl"
+  local moduledir = installdir .. "/modules/tcl"
   if not isDir(moduledir) then
-    LmodMessage("Creating the Spack modules directory " .. (userdir .. "/modules/tcl"))
-    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_version .. "/modules/tcl")
+    LmodMessage("Creating the Spack modules directory " .. (installdir .. "/modules/tcl"))
+    ok,_,_ = os.execute("mkdir -p " .. installdir .. "/modules/tcl")
     if not ok then
       LmodError("The modules directory (" .. moduledir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
   end
 
   -- Check for the cache directory and try to create it
-  local cachedir = userdir .. "/" .. cpe_version .. "/cache"
+  local cachedir = installdir .. "/cache"
   if not isDir(cachedir) then
-    LmodMessage("Creating the Spack cache directory " .. (userdir .. "/cache"))
-    ok,_,_ = os.execute("mkdir -p " .. userdir .. "/" .. cpe_version .. "/cache")
+    LmodMessage("Creating the Spack cache directory " .. (installdir .. "/cache"))
+    ok,_,_ = os.execute("mkdir -p " .. installdir .. "/cache")
     if not ok then
       LmodError("The cache directory (" .. cachedir .. ") specified in $SPACK_USER_PREFIX does not exist and the Spack module tried to create it, but it did not work.")
     end
@@ -89,6 +89,5 @@ setenv("SPACK_ROOT", spack_root)
 setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
-prepend_path("MODULEPATH", userdir .."/" .. cpe_version .. "/modules/tcl/linux-sles15-zen")
-prepend_path("MODULEPATH", spack_root .. "/" .. "/share/spack/modules/linux-sles15-zen")
-prepend_path("SPACK_USER_PREFIX", userdir)
+prepend_path("MODULEPATH", installdir .. "/modules/tcl/linux-sles15-zen")
+prepend_path("SPACK_USER_PREFIX", installdir)

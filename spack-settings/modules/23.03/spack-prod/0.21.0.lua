@@ -14,7 +14,7 @@ whatis("Description: the Spack package manager configured to install in a user s
 
 local spack_version = "0.21.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
-local spack_type = "user"
+local spack_type = "prod"
 local spack_root = "/pdc/software/" .. cpe_version .. "/other/spack/" .. spack_version .. "/" .. spack_type
 local installdir = "/pdc/software/" .. cpe_version .. "/spack"
 
