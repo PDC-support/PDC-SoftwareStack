@@ -16,7 +16,7 @@ local spack_version = "0.21.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
 local spack_type = "user"
 local spack_root = "/pdc/software/" .. cpe_version .. "/other/spack/" .. spack_version .. "/" .. spack_type
-local installdir = os.getenv("HOME") .. "/.local/spack"
+local installdir = os.getenv("HOME") .. "/.local/spack/" .. cpe_version
 
 require("lfs")
 
