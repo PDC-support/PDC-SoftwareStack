@@ -16,7 +16,7 @@ local spack_version = "0.21.0"
 local cpe_version = os.getenv("CRAY_PE_VERSION") 
 local spack_type = "user"
 local spack_root = "/pdc/software/" .. cpe_version .. "/other/spack/" .. spack_version .. "/" .. spack_type
-local installdir = os.getenv("HOME") .. "/.local/spack/" .. cpe_version
+local installdir = os.getenv("SPACK_USER_PREFIX")
 
 require("lfs")
 
@@ -34,7 +34,8 @@ end
 if mode() == "load" then
   -- Check that $SPACK_USER_PREFIX is set
   if installdir == nil then
-    LmodError("Please set $SPACK_USER_PREFIX to where you want to install Spack packages. We recommend using your project persistent storage for this. E.g. /project/project_<project-number>/spack")
+    installdir = os.getenv("HOME") .. "/.local/spack/" .. cpe_version
+    prepend_path("SPACK_USER_PREFIX", installdir)
   end
 
   -- Sanity check of the path
@@ -90,4 +91,4 @@ setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
 prepend_path("MODULEPATH", installdir .. "/modules/tcl/linux-sles15-zen")
-prepend_path("SPACK_USER_PREFIX", installdir)
+

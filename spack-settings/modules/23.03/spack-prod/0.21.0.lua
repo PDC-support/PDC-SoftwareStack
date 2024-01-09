@@ -32,10 +32,7 @@ function isDir(name)
 end
 
 if mode() == "load" then
-  -- Check that $SPACK_USER_PREFIX is set
-  if installdir == nil then
-    LmodError("Please set $SPACK_USER_PREFIX to where you want to install Spack packages. We recommend using your project persistent storage for this. E.g. /project/project_<project-number>/spack")
-  end
+  prepend_path("SPACK_USER_PREFIX", installdir)
 
   -- Sanity check of the path
   if string.sub(installdir,1,6) == "/appl/" then
@@ -90,4 +87,4 @@ setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
 prepend_path("MODULEPATH", installdir .. "/modules/tcl/linux-sles15-zen")
-prepend_path("SPACK_USER_PREFIX", installdir)
+
