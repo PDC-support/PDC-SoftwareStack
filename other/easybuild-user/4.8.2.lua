@@ -19,10 +19,10 @@ whatis([==[Homepage: https://easybuild.io/]==])
 local cpe = "/pdc/software/" .. os.getenv("CRAY_PE_VERSION") .. "/"
 local repos = "/pdc/software/eb_repo/"
 local root = cpe .. "other/easybuild/4.8.2/"
-local local_user = os.getenv("EASYBUILD_USER_PREFIX")
+local local_user = os.getenv("EB_USER_PREFIX")
 
 if mode() == "load" then
-  -- Check that $EASYBUILD_USER_PREFIX is set
+  -- Check that $EB_USER_PREFIX is set
   if local_user == nil then
     local_user = os.getenv("HOME") .. "/.local/easybuild/"
     end
