@@ -1,5 +1,8 @@
 easyblock = 'CMakeMake'
 
+import os
+
+local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_x265_version =         '3.5'           # https://bitbucket.org/multicoreware/x265_git/downloads/
 
 name =    'x265'
@@ -37,7 +40,7 @@ sources =     ['%(name)s_%(version)s.tar.gz']
 checksums =   ['e70a3335cacacbba0b3a20ec6fecd6783932288ebc8163ad74bcc9606477cae8']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'), # For CMake and YAsm
+    ('buildtools', local_cpe_version),      # For CMake and YAsm
 ]
 
 #osdependencies = [
