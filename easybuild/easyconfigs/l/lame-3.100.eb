@@ -11,7 +11,7 @@ easyblock = 'ConfigureMake'
 import os
 
 local_cpe_version =           os.environ['CRAY_PE_VERSION']
-local_ncurses_version =      '6.3'           # https://ftp.gnu.org/pub/gnu/ncurses/
+local_ncurses_version =      '6.4'           # https://ftp.gnu.org/pub/gnu/ncurses/
 local_LAME_version =         '3.100'         # http://lame.sourceforge.net/
 
 name =    'lame'
