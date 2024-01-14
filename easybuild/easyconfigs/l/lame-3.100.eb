@@ -8,6 +8,9 @@
 
 easyblock = 'ConfigureMake'
 
+import os
+
+local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_ncurses_version =      '6.3'           # https://ftp.gnu.org/pub/gnu/ncurses/
 local_LAME_version =         '3.100'         # http://lame.sourceforge.net/
 
@@ -56,7 +59,7 @@ checksums = [
 ]
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'), # For autoconf
+    ('buildtools', local_cpe_version),   # For autoconf
 ]
 
 dependencies = [
