@@ -7,7 +7,7 @@ import os
 local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_libreadline_version =  '8.2'           # https://ftp.gnu.org/pub/gnu/readline/
 
-local_ncurses_version =      '6.3'           # https://ftp.gnu.org/pub/gnu/ncurses/
+local_ncurses_version =      '6.4'           # https://ftp.gnu.org/pub/gnu/ncurses/
 
 name =    'libreadline'
 version = local_libreadline_version
