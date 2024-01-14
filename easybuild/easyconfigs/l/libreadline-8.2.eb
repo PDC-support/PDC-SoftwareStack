@@ -2,6 +2,9 @@
 # modified for PDC by Xavier Aguilar
 easyblock = 'ConfigureMake'
 
+import os
+
+local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_libreadline_version =  '8.2'           # https://ftp.gnu.org/pub/gnu/readline/
 
 local_ncurses_version =      '6.3'           # https://ftp.gnu.org/pub/gnu/ncurses/
@@ -45,7 +48,7 @@ source_urls = ['http://ftp.gnu.org/gnu/readline']
 sources =     ['readline-%(version)s.tar.gz']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06', '', True),
+    ('buildtools', local_cpe_version),
 ]
 
 dependencies = [
