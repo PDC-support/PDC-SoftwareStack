@@ -16,7 +16,7 @@ source_urls = ['https://github.com/%(name)s/%(namelower)s/archive/refs/tags/']
 sources = ['%s.tar.gz' % _release]
 
 builddependencies = [
-    ('cmake', '3.23.0', '', ('system', '')),
+    ('cmake', '3.27.7', '', ('system', '')),
     ('cray-fftw', EXTERNAL_MODULE),
 ]
 
