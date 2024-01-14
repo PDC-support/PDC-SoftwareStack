@@ -1,5 +1,8 @@
 easyblock = 'ConfigureMake'
 
+import os
+
+local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_x264_commit =          'c347e7a0'      # Just follow EasyBuild as the distribution is currently a mess
 local_x264_version =         '20210414'      # Just follow EasyBuild as the distribution is currently a mess
 
@@ -34,7 +37,7 @@ sources =     [{'download_filename': 'x264-%s.tar.gz' % local_x264_commit, 'file
 checksums =   ['88b8f738e420bcb1dcc6ef27e13d10261dbcddd047712a31867a946a265eec4d']
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'), # USes NASM
+    ('buildtools', local_cpe_version),     # USes NASM
 ]
 
 configopts = " --enable-shared --enable-static"
