@@ -1,0 +1,36 @@
+easyblock = 'ConfigureMake'
+
+name = 'fastp'
+version = '0.20.1'
+
+homepage = 'https://github.com/OpenGene/%(name)s'
+description = """A tool designed to provide fast all-in-one preprocessing for FastQ files.
+ This tool is developed in C++ with multithreading supported to afford high performance."""
+
+toolchain = SYSTEM
+
+github_account = 'OpenGene'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['e1b663717850bed7cb560c0c540e9a05dd9448ec76978faaf853a6959fd5b1b3']
+
+dependencies = [
+    ('zlib', '1.2.11'),
+]
+
+skipsteps = ['configure']
+
+buildopts = ' CXX=${CXX}'
+
+preinstallopts = 'mkdir -p %(installdir)s/bin && '
+
+installopts = 'PREFIX=%(installdir)s'
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = [('%(name)s', '--help')]
+
+moduleclass = 'bio'
