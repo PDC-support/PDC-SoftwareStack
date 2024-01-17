@@ -1,0 +1,12 @@
+diff -Nru pblat-cluster-1.1.orig/inc/htmshell.h pblat-cluster-1.1/inc/htmshell.h
+--- pblat-cluster-1.1.orig/inc/htmshell.h       2020-06-14 06:04:11.000000000 +0200
++++ pblat-cluster-1.1/inc/htmshell.h    2024-01-09 22:24:39.906386507 +0100
+@@ -160,7 +160,7 @@
+ void htmlImage(char *fileName, int width, int height);
+ /* Display centered image file. */
+ 
+-jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
++extern jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
+ 
+ void htmlVaWarn(char *format, va_list args);
+ /* Write an error message.  (Generally you just call warn() or errAbort().
