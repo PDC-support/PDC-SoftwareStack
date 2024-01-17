@@ -1,0 +1,48 @@
+diff -ruN RSEM/buildReadIndex.cpp RSEM.new/buildReadIndex.cpp
+--- RSEM/buildReadIndex.cpp	2020-05-08 16:39:47.551507578 +0200
++++ RSEM.new/buildReadIndex.cpp	2024-01-11 15:47:12.927232390 +0100
+@@ -37,15 +37,15 @@
+ 		streampos pos = fin.tellg();
+ 		success = true;
+ 
+-		success = (getline(fin, line));
++		success = ((bool)getline(fin, line));
+ 		if (!success) continue;
+-		success = (getline(fin, line));
++		success = ((bool)getline(fin, line));
+ 		if (!success) continue;
+ 
+ 		if (hasQ) {
+-			success = (getline(fin, line));
++			success = ((bool)getline(fin, line));
+ 			if (!success) continue;
+-			success = (getline(fin, line));
++			success = ((bool)getline(fin, line));
+ 			if (!success) continue;
+ 		}
+ 
+De binära filerna RSEM/.git/index och RSEM.new/.git/index skiljer
+diff -ruN RSEM/PairedEndHit.h RSEM.new/PairedEndHit.h
+--- RSEM/PairedEndHit.h	2020-05-08 16:39:47.471507574 +0200
++++ RSEM.new/PairedEndHit.h	2024-01-11 15:47:12.927232390 +0100
+@@ -26,7 +26,7 @@
+ 
+ bool PairedEndHit::read(std::istream& in) {
+ 	conprb = 0.0;
+-    return (in>>sid>>pos>>insertL);
++    return ((bool)(in>>sid>>pos>>insertL));
+ }
+ 
+ void PairedEndHit::write(std::ostream& out) {
+diff -ruN RSEM/SingleHit.h RSEM.new/SingleHit.h
+--- RSEM/SingleHit.h	2020-05-08 16:39:47.474840908 +0200
++++ RSEM.new/SingleHit.h	2024-01-11 15:47:12.927232390 +0100
+@@ -43,7 +43,7 @@
+ 
+ bool SingleHit::read(std::istream& in) {
+ 	conprb = 0.0;
+-	return (in>>sid>>pos);
++	return ((bool)(in>>sid>>pos));
+ }
+ 
+ void SingleHit::write(std::ostream& out) {

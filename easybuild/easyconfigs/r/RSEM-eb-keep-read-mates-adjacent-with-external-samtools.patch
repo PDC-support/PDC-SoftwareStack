@@ -1,0 +1,25 @@
+diff -ruN RSEM/rsem-calculate-expression RSEM.new/rsem-calculate-expression
+--- RSEM/rsem-calculate-expression	2024-01-12 17:01:55.139010473 +0100
++++ RSEM.new/rsem-calculate-expression	2024-01-12 17:04:17.395670834 +0100
+@@ -565,14 +565,19 @@
+ }
+ 
+ if ( $sort_bam_by_read_name ) {
+-    my $sorted_bam = "$imdName.sorted.bam";
++    my $sorted_bam = "$imdName.tmp_sorted.bam";
++    my $final_sorted_bam = "$imdName.sorted.bam";
+     $command = "samtools sort -n -@ $nThreads -m $sort_bam_memory -o $sorted_bam $inpF";
+     &runCommand($command);
+     if (!$is_alignment) {
+         $command = "rm -f $inpF";
+         &runCommand($command);
+     }
+-    $inpF = $sorted_bam;
++    $command = "rsem-scan-for-paired-end-reads $nThreads $sorted_bam $final_sorted_bam";
++    &runCommand($command);
++    $command = "rm -f $sorted_bam";
++    &runCommand($command);
++    $inpF = $final_sorted_bam;
+ }
+ 
+ if ($mTime) { $time_start = time(); }

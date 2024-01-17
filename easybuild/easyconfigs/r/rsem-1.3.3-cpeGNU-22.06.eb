@@ -1,0 +1,58 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage: 	https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::	Robert Qiao <rob.qiao@flinders.edu.au>
+# License::	GPLv3.0
+#
+# Notes::
+##
+
+easyblock = 'ConfigureMake'
+
+name = 'rsem'
+version = '1.3.3'
+
+homepage = 'https://deweylab.github.io/RSEM/'
+description = "RNA-Seq by Expectation-Maximization"
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'cstd': 'gnu++11'}
+
+source_urls = ['https://github.com/deweylab/RSEM/archive/']
+sources = ['v%(version)s.tar.gz']
+patches = ['RSEM-eb-external-samtools.patch','RSEM-eb-keep-read-mates-adjacent-with-external-samtools.patch','RSEM-eb-stdgnu++11.patch','RSEM-eb-use-external-boost.patch']
+checksums = [
+    {'v%(version)s.tar.gz':'90e784dd9df8346caa2a7e3ad2ad07649608a51df1c69bfb6e16f45e611a40dc'},
+    {'RSEM-eb-external-samtools.patch':'568c2d2f4f6971b4c5bf6143107ae9dfc3b9dd42e4ce75daaaf78c16779bc84d'},
+    {'RSEM-eb-use-external-boost.patch':'9cad846b9e07c6990d5cd9f8cc35d288d982b614b1c3c77772640488685de890'},
+    {'RSEM-eb-stdgnu++11.patch':'d1c6f959a0100eb8f678be01a0f188c6493e314b3c47027d84077a6963265a87'},
+    {'RSEM-eb-keep-read-mates-adjacent-with-external-samtools.patch':'bd2b65a48ee9e235dcf0a5a0ba25c25b372da3828a28deed6bdb64804614fea2'},
+]
+
+skipsteps = ['configure']
+
+builddependencies = [('boost','1.77.0'),]
+buildopts = "BOOST=${EBROOTBOOST}/include"
+installopts = "prefix=%(installdir)s BOOST=${EBROOTBOOST}/include"
+
+dependencies = [
+    ('ncurses', '6.3', '', SYSTEM),
+    ('zlib', '1.2.11', '', SYSTEM),
+    #('Perl', '5.34.1'),
+    ('R', '4.3.0'),
+    ('hisat2', '2.2.1'),
+    ('rnastar', '2.7.11b'),
+    ('bowtie2', '2.5.1'),
+    ('bowtie', '1.5.1'),
+    ('htslib', '1.15.1'),
+    ('samtools', '1.15.1'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/rsem-calculate-expression', 'bin/rsem-plot-model', 'bin/rsem-plot-transcript-wiggles',
+              'bin/rsem-bam2wig', 'bin/rsem-generate-data-matrix', 'bin/rsem-run-em', 'bin/convert-sam-for-rsem'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
