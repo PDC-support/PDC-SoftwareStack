@@ -14,9 +14,6 @@ source_urls = ['https://github.com/oneapi-src/oneTBB/archive/refs/tags/']
 sources = ['%(version)s.tar.gz']
 checksums = ['65101b3a0eda38320ec3e3603daa79c54e6a60fb59ed2959738eaf4ce6d17f0a']
 
-#builddependencies = [('binutils', '2.37','',SYSTEM)]
-dependencies = [('hwloc', '2.9.0','',SYSTEM)]
-
 buildopts = "cfg=release tbb_build_prefix=LIBS"
 
 files_to_copy = ['include',(['README.md'],'share/doc/TBB')]
