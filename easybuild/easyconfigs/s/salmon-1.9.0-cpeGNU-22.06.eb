@@ -1,0 +1,63 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au>
+# License::     GLPv2
+#
+# Notes::
+##
+# Contribution from the NIHR Biomedical Research Centre
+# Guy's and St Thomas' NHS Foundation Trust and King's College London
+# uploaded by J. Sassmannshausen
+# Thanks to people like Simon Brandord, Mikael Oehmann and Kenneth Hoste
+# for their help with the ICE
+
+easyblock = 'CMakeMake'
+
+name = 'salmon'
+version = '1.9.0'
+
+homepage = 'https://github.com/COMBINE-lab/salmon'
+description = """Salmon is a wicked-fast program to produce a highly-accurate,
+ transcript-level quantification estimates from RNA-seq data."""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'pic': True}
+
+github_account = 'COMBINE-lab'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Salmon-eb-external-tbb.patch']
+checksums = [
+	  {'v%(version)s.tar.gz':'450d953a5c43fe63fd745733f478d3fbaf24d926cb52731fd38ee21c4990d613'},
+	  {'Salmon-eb-external-tbb.patch':'8481f4aa2b47ded71d2b791e6e64fbe1fe8b261900f99f9779f9a83e51da87cc'},
+]
+
+builddependencies = [
+    ('boost', '1.79.0'),
+]
+
+dependencies = [
+    ('onetbb', '2021.5.0'),
+    ('xz', '5.2.8','',SYSTEM),
+    ('libiconv', '1.16'),
+]
+
+# Disable link-time optimizations (-flto) because it triggers a segfault/internal compiler error (ICE)
+# this issue might magically disappear in future versions of Salmon or GCC
+# see https://github.com/COMBINE-lab/salmon/issues/778
+configopts = '-DUSE_SHARED_LIBS=OFF -DNO_IPO=1'
+configopts+= ' -DTBB_ROOT_SEARCH=$EBROOTONETBB'
+
+skipsteps = ['test']
+#runtest = 'test'
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'] + ['lib/lib%s.a' % x for x in ['graphdump', 'ntcard', 'salmon_core', 'twopaco']],
+    'dirs': [],
+}
+
+sanity_check_commands = ["salmon --help"]
+
+moduleclass = 'bio'

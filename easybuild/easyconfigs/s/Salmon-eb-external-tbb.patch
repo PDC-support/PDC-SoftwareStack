@@ -1,0 +1,56 @@
+diff -ruN salmon/src/CMakeLists.txt salmon.new/src/CMakeLists.txt
+--- salmon/src/CMakeLists.txt	2024-01-13 13:54:22.710111602 +0100
++++ salmon.new/src/CMakeLists.txt	2024-01-14 00:06:01.171819310 +0100
+@@ -253,8 +253,8 @@
+     alevin_core
+     ${ASAN_LIB}
+     ${FAST_MALLOC_LIB}
+-    TBB::tbb
+-    TBB::tbbmalloc
++    tbb
++    tbbmalloc
+     ${LIBRT}
+     ${CMAKE_DL_LIBS}
+ )
+@@ -289,8 +289,8 @@
+     ${LIBLZMA_LIBRARIES}
+     ${BZIP2_LIBRARIES}
+     #${TBB_LIBRARIES}
+-    TBB::tbb
+-    TBB::tbbmalloc
++    tbb
++    tbbmalloc
+     ${LIBSALMON_LINKER_FLAGS}
+     ${NON_APPLECLANG_LIBS}
+     ${ASAN_LIB}
+@@ -402,30 +402,6 @@
+ set(INSTALL_BIN_DIR bin )
+ set(INSTALL_INCLUDE_DIR include )
+ 
+-if(TBB_RECONFIGURE OR TBB_TARGET_EXISTED)
+-#set(TBB_SOURCE_DIR $<TARGET_FILE:TBB::tbb>)
+-#add_custom_target(genexdebug COMMAND ${CMAKE_COMMAND} -E echo "$<TARGET_LINKER_FILE:TBB::tbb>")
+-get_target_property(TBB_LIB_INSTALL_NAME TBB::tbb IMPORTED_LOCATION_RELEASE)
+-get_filename_component(TBB_LIB_INSTALL_DIR ${TBB_LIB_INSTALL_NAME} DIRECTORY)
+-message("TBB_LIB_INSTALL_DIR = ${TBB_LIB_INSTALL_DIR}")
+-file(GLOB TBB_FILES ${TBB_LIB_INSTALL_DIR}/libtbb*.${SHARED_LIB_EXTENSION}*)
+-message("TBBGLOBS = ${TBB_FILES}")
+-
+-install(FILES 
+-  ${TBB_FILES}
+-  DESTINATION ${INSTALL_LIB_DIR}
+-) 
+-#install(FILES 
+-#  $<TARGET_FILE:TBB::tbbmalloc>
+-#  DESTINATION ${INSTALL_LIB_DIR}
+-#)
+-#install(DIRECTORY
+-#       ${TBB_SOURCE_DIR}
+-#       DESTINATION ${INSTALL_LIB_DIR}
+-#	     FILES_MATCHING PATTERN "libtbb*.${SHARED_LIB_EXTENSION}*"
+-#)
+-endif()
+-
+ #install(DIRECTORY
+ #        ${GAT_SOURCE_DIR}/external/install/lib/
+ #        DESTINATION ${INSTALL_LIB_DIR}
