@@ -1,0 +1,49 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'CMakeMake'
+
+name = 'sailfish'
+version = '0.10.1'
+
+homepage = 'http://www.cs.cmu.edu/~ckingsf/software/%(namelower)s/'
+description = """Sailfish is a software tool that implements a novel, alignment-free algorithm for the estimation of
+ isoform abundances directly from a set of reference sequences and RNA-seq reads. """
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchainopts = {'pic': True, 'cstd': 'gnu++11'}
+
+source_urls = ['https://github.com/kingsfordgroup/%(namelower)s/archive/']
+sources = ['v%(version)s.tar.gz']
+patches = [
+    'Sailfish-%(version)s_RHEL8.patch',
+    'Sailfish-%(version)s-eb_rapmap-fix.patch',
+]
+checksums = [
+    {'v%(version)s.tar.gz':'a0d6d944382f2e07ffbfd0371132588e2f22bb846ecfc3d3435ff3d81b30d6c6'}, # v0.10.1.tar.gz
+    {'Sailfish-%(version)s_RHEL8.patch':'0df096a00f9272b6b824357795c7e46c785e203648183104e4d55a7b461fc620'},
+    {'Sailfish-%(version)s-eb_rapmap-fix.patch':'311099e617156fb636332a480000eac06b8c2892846211691de33e9e08265656'},
+]
+
+builddependencies = [
+    ('boost', '1.79.0'),
+]
+
+configopts = '-DTBB_INSTALL_DIR=${EBROOTONETBB} -DTBB_DIR=${EBROOTONETBB} '
+
+dependencies = [
+    ('onetbb', '4.4.6','',SYSTEM),
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': []
+}
+
+sanity_check_commands = [
+    "sailfish --version",
+]
+
+# build fails otherwise
+parallel = 1
+
+moduleclass = 'bio'

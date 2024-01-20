@@ -1,0 +1,14 @@
+--- sailfish/src/SailfishIndexer.cpp	2024-01-19 14:58:52.083181610 +0100
++++ sailfish.new/src/SailfishIndexer.cpp	2024-01-19 15:15:04.446471835 +0100
+@@ -202,9 +202,8 @@
+                 return 1;
+             }
+ 
+-            fmt::MemoryWriter optWriter;
+-            optWriter << merLen;
+-            argVec.push_back(optWriter.str().c_str());
++	     string s = std::to_string(merLen);
++            argVec.push_back(s.c_str());
+             argVec.push_back("-t");
+             argVec.push_back(transcriptFiles.front().c_str());
+             argVec.push_back("-i");
