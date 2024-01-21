@@ -1,0 +1,27 @@
+easyblock = 'CMakeMake'
+
+name = 'racon'
+version = '1.5.0'
+
+homepage = 'https://github.com/lbcb-sci/racon'
+description = """Ultrafast consensus module for raw de novo genome assembly of long uncorrected reads."""
+
+toolchain = SYSTEM
+
+github_account = 'lbcb-sci'
+source_urls = ['https://github.com/lbcb-sci/Racon/archive']
+sources = ['%(version)s.tar.gz']
+checksums = ['41e362f71cc03b934f17d6e2c0d626e1b2997258261b14551586de006666424a']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/racon'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['racon --help']
+
+moduleclass = 'bio'
