@@ -18,7 +18,7 @@ homepage = 'https://ccb.jhu.edu/software/%(namelower)s/index.shtml'
 description = """HISAT2 is a fast and sensitive alignment program for mapping next-generation sequencing reads
  (both DNA and RNA) against the general human population (as well as against a single reference genome)."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'openmp': True}
 
 sources = [{
@@ -33,7 +33,7 @@ dependencies = [
 #    ('ncbi-vdb', '2.10.7'),
 ]
 
-buildopts = 'CC="$CC" CPP="$CXX" RELEASE_FLAGS="$CFLAGS" '
+buildopts = 'CC="$CC" CPP="$CXX" '
 #buildopts += "USE_SRA=1 NCBI_NGS_DIR=$EBROOTNGS NCBI_VDB_DIR=$EBROOTNCBIMINVDB"
 
 local_executables = ['hisat2', 'hisat2-align-l', 'hisat2-align-s', 'hisat2-build', 'hisat2-build-l', 'hisat2-build-s',
