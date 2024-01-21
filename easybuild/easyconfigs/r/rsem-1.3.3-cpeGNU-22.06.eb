@@ -41,7 +41,7 @@ dependencies = [
     ('zlib', '1.2.11', '', SYSTEM),
     #('Perl', '5.34.1'),
     ('R', '4.3.0'),
-    ('hisat2', '2.2.1'),
+    ('hisat2', '2.2.1','',SYSTEM),
     ('rnastar', '2.7.11b'),
     ('bowtie2', '2.5.1'),
     ('bowtie', '1.5.1'),
