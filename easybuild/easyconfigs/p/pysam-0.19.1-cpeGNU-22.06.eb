@@ -1,0 +1,26 @@
+easyblock = 'PythonPackage'
+
+name = 'pysam'
+version = '0.19.1'
+versionsuffix = '-py39'
+
+homepage = 'https://github.com/pysam-developers/pysam'
+description = """Pysam is a python module for reading and manipulating Samfiles.
+ It's a lightweight wrapper of the samtools C-API. Pysam also includes an interface for tabix."""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+install_src = '%(name)s==%(version)s'
+
+dependencies = [
+    ('python', '3.9.6','',SYSTEM),
+    ('htslib', '1.15.1'),
+]
+
+preinstallopts = """export CFLAGS="-fPIC $CFLAGS" && """
+preinstallopts+="env HTSLIB_LIBRARY_DIR=${EBROOTHTSLIB}/lib HTSLIB_INCLUDE_DIR=${EBROOTHTSLIB}/include "
+use_pip = True
+
+sanity_pip_check = True
+
+moduleclass = 'bio'
