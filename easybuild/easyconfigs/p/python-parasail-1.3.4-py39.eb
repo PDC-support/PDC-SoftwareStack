@@ -1,0 +1,36 @@
+easyblock = 'PythonPackage'
+
+name = 'python-parasail'
+version = '1.3.4'
+versionsuffix = '-py39'
+
+homepage = 'https://github.com/jeffdaily/parasail-python'
+description = "Python Bindings for the Parasail C Library"
+
+#toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
+
+source_urls = ['https://pypi.python.org/packages/source/%(nameletter)s/parasail']
+sources = ['parasail-%(version)s.tar.gz']
+checksums = ['d6a7035dfae3ef5aafdd7e6915711214c22b572ea059fa69d9d7ecbfb9b61b0f']
+
+builddependencies = [
+    ('parasail', '2.6.2','',SYSTEM),
+]
+
+dependencies = [
+#    ('pdc-python', '3.9.6'),
+    ('python', '3.9.6','',SYSTEM),
+    ('pdc-python', EXTERNAL_MODULE),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+# make sure setup.py finds the parasail library
+preinstallopts = "ln -s $EBROOTPARASAIL/lib/libparasail.so parasail/libparasail.%s && " % SHLIB_EXT
+
+options = {'modulename': 'parasail'}
+
+moduleclass = 'bio'
