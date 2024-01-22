@@ -1,0 +1,29 @@
+easyblock = 'PythonPackage'
+
+name = 'isonclust'
+version = '0.0.4'
+versionsuffix = '-py39'
+
+homepage = 'https://github.com/ksahlin/isONclust'
+description = """isONclust is a tool for clustering either PacBio Iso-Seq reads, or Oxford Nanopore reads into clusters, where each cluster represents all reads that came from a gene. Output is a tsv file with each read assigned to a cluster-ID."""
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+source_urls = ['https://github.com/ksahlin/isONclust/archive']
+sources = ['%(version)s.tar.gz']
+checksums = ['9f71edcd1291cd5121ee3c41865ab63522ceaf4e4b854b65be2c8c4d2d50f8f2']
+
+install_src = '%(name)s==%(version)s'
+
+dependencies = [
+    ('pysam', '0.19.1','-py39'),
+    ('python-parasail', '1.3.4','-py39',SYSTEM),
+]
+
+download_dep_fail = False
+use_pip = True
+sanity_pip_check = False
+skipsteps = ['sanity_check','sanitycheck']
+sanity_check_commands = []
+
+moduleclass = 'bio'
