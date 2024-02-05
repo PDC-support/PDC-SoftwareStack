@@ -15,6 +15,7 @@ whatis([==[Description:
 add_property("lmod","sticky")
 prepend_path("PATH","/pdc/software/modules/systemdefault/bin")
 append_path("PATH","/pdc/software/tools")
+append_path("MODULEPATH","/pdc/software/eb/modules/all")
 
 -- Local paths
 local cfs = "/cfs/klemming/"
