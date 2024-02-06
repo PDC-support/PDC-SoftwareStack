@@ -35,22 +35,20 @@ docurls = [
     'man pages in sections 1, 5 and 7',
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 
 source_urls = ['https://github.com/samtools/%(namelower)s/releases/download/%(version)s/']
 sources =     [SOURCELOWER_TAR_BZ2]
 checksums =   ['8d7f8bf9658226942eeab70af2a22aca618577eaa8fe2ed9416ee306d5351aa1']
 
+# EB seems to need bzip2 and xz modules for include-files, but still links against non-module libraries...
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
+    ('bzip2',     '1.0.8'),
+    ('xz',        '5.4.5'),
 ]
 
-# cURL added for S3 support
 dependencies = [
     ('libdeflate', '1.12'),
-    ('bzip2',     '1.0.8', '', True),
-    ('xz',        '5.2.5', '', True),
-    ('curl',      '7.78.0'),
 ]
 
 #
