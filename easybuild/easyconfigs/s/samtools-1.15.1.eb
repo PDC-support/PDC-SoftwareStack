@@ -34,21 +34,17 @@ docurls = [
     "Manual page for the samtools and wgsim commands (section 1)",
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = ['https://github.com/samtools/%(namelower)s/releases/download/%(version)s']
 sources =     [SOURCELOWER_TAR_BZ2]
 checksums =   ['708c525ac76b0532b25f14aadea34a4d11df667bc19bf0a74dae617d80526c6e']
 
-builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
-
 # The htslib component of SAMtools >= 1.4 uses zlib, bzip2 and lzma compression.
 # The latter is currently provided by XZ.
 dependencies = [
-    ('ncurses',    '6.3', '', True),
+    ('ncurses',    '6.4'),
     ('htslib',     '1.15.1'),
 ]
 
