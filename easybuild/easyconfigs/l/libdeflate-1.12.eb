@@ -35,7 +35,7 @@ this library are also provided:
   * benchmark, a program for benchmarking in-memory compression and decompression
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 
 github_account = 'ebiggers'
 sources = {
@@ -44,10 +44,6 @@ sources = {
     'source_urls':       [GITHUB_SOURCE],
 }
 checksums = ['ba89fb167a5ab6bbdfa6ee3b1a71636e8140fa8471cce8a311697584948e4d06']
-
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
 
 skipsteps = ['configure']
 
