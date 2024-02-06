@@ -18,15 +18,20 @@ description = """Bowtie is an ultrafast, memory-efficient short read aligner.
  It aligns short DNA sequences (reads) to the human genome."""
 
 toolchain = SYSTEM
-toolchainopts = {'cstd': 'gnu++98'}
+toolchainopts = {'cstd': 'gnu++11'}
 
 source_urls = ['https://sourceforge.net/projects/bowtie-bio/files/bowtie/%(version)s/']
 sources = ['%(namelower)s-%(version)s-src.zip']
 checksums = ['e23517aa53846ef828172be911750cd05748522117efcbbe5a36f3241fb40761']
 
-dependencies = [
+buildopts = 'EXTRA_FLAGS="-DWITH_TBB"'
+
+builddependencies = [
     ('onetbb', '4.4.6','',SYSTEM),
-    ('zlib', '1.2.11','',SYSTEM),
+]
+
+dependencies = [
+#    ('zlib', '1.2.11','',SYSTEM),
 ]
 
 moduleclass = 'bio'
