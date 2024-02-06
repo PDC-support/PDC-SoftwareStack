@@ -12,7 +12,7 @@ version = '2.7.11a'
 homepage = 'https://github.com/alexdobin/STAR'
 description = "STAR aligns RNA-seq reads to a reference genome using uncompressed suffix arrays."
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'openmp': True}
 
 github_account = 'alexdobin'
@@ -26,7 +26,6 @@ checksums = [
 
 dependencies = [
     ('htslib', '1.15.1'),
-    ('zlib', '1.2.11', '', SYSTEM),
 ]
 
 start_dir = 'source'
