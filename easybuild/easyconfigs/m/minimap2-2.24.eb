@@ -20,17 +20,11 @@ test data sets, minimap2 is over 20 times faster than most other
 long-read aligners. It will replace BWA-MEM for long reads and contig
 alignment."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.04'}
+toolchain = SYSTEM
 
 source_urls = ['https://github.com/lh3/%(name)s/releases/download/v%(version)s/']
 sources = ['%(name)s-%(version)s.tar.bz2']
 checksums = ['9dd4c31ff082182948944bcdad6d328f64f09295d10547d72eba24189880a615']
-
-builddependencies = [('binutils', '2.37', '', ('system', ''))]
-
-dependencies = [('zlib', '1.2.11', '', ('system', ''))]
-
-buildopts = 'CC="${CC}" CFLAGS="${CFLAGS}" INCLUDES="${CPPFLAGS}"'
 
 files_to_copy = [
     (['%(name)s'], 'bin'),
