@@ -21,15 +21,15 @@ description = """ Bowtie 2 is an ultrafast and memory-efficient tool for alignin
  Bowtie 2 indexes the genome with an FM Index to keep its memory footprint small: for the human genome,
  its memory footprint is typically around 3.2 GB. Bowtie 2 supports gapped, local, and paired-end alignment modes."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
-toolchainopts = {'pic': True, 'cstd': 'gnu++98'}
+toolchain = SYSTEM
+toolchainopts = {'pic': True, 'cstd': 'gnu++11'}
 
 source_urls = [('https://sourceforge.net/projects/bowtie-bio/files/%(namelower)s/%(version)s', 'download')]
 sources = ['%(namelower)s-%(version)s-source.zip']
 checksums = ['cb6cbbbb5a7167a2f21a3d63cb9774336361f540e1ec3d8ff907f955c35f71b8']
 
 dependencies = [
-    ('zlib', '1.2.11', '', SYSTEM),
+    #('zlib', '1.2.11', '', SYSTEM),
     #('Perl', '5.34.0'),
     #('python', '3.9.6', '', SYSTEM),
 ]
