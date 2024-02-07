@@ -15,7 +15,7 @@ sources = ['v%(version)s.tar.gz']
 checksums = ['e1b663717850bed7cb560c0c540e9a05dd9448ec76978faaf853a6959fd5b1b3']
 
 dependencies = [
-    ('zlib', '1.2.11'),
+#    ('zlib', '1.2.11'),
 ]
 
 skipsteps = ['configure']
