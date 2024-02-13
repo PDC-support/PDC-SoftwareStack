@@ -3,7 +3,6 @@ easyblock = 'ConfigureMake'
 
 import os
 
-local_cpe_version =           os.environ['CRAY_PE_VERSION']
 local_zlib_version =         '1.3.1'           # https://zlib.net/
 local_libpng_version =       '1.6.40'        # http://www.libpng.org/pub/png/libpng.html
 
@@ -38,13 +37,11 @@ source_urls = [SOURCEFORGE_SOURCE]
 sources =     [SOURCELOWER_TAR_GZ]
 checksums =   ['8f720b363aa08683c9bf2a563236f45313af2c55d542b5481ae17dd8d183bb42']  #libpng-1.6.40.tar.gz
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version),
-]
-
 dependencies = [
     ('zlib', local_zlib_version),
 ]
+
+osdependencies = ['binutils']
 
 configopts = "--with-pic"
 
