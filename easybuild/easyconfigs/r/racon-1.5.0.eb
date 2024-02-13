@@ -13,9 +13,12 @@ source_urls = ['https://github.com/lbcb-sci/Racon/archive']
 sources = ['%(version)s.tar.gz']
 checksums = ['41e362f71cc03b934f17d6e2c0d626e1b2997258261b14551586de006666424a']
 
-builddependencies = [
-    ('binutils', '2.37'),
+dependencies = [
+    ('zlib', '1.3.1'),
 ]
+
+# Enable the two latter flags when/if there is cuda support...
+configopts = "-DCMAKE_BUILD_TYPE=Release"  # -Dracon_enable_cuda=ON -Dracon_build_wrapper=ON
 
 sanity_check_paths = {
     'files': ['bin/racon'],
