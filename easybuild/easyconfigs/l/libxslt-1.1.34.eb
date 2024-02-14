@@ -49,13 +49,11 @@ source_urls = [
 sources =   [SOURCELOWER_TAR_GZ]
 checksums = ['98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version),
-]
-
 dependencies = [
     ('libxml2', local_libxml2_version),
 ]
+
+osdependencies = ['binutils',('pkgconf','pkg-config')]
 
 sanity_check_paths = {
     'files': ['bin/xsltproc', 'include/libxslt/xslt.h', 'lib/%%(name)s.%s' % SHLIB_EXT],
