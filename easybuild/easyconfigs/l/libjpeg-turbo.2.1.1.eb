@@ -55,8 +55,13 @@ sources = {
     'source_urls':       ['https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/'],
 }
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'), # NASM and CMake
+builddependencies = [
+    ('nasm', '2.15.05'),
+]
+
+osdependencies = [
+    'binutils',
+    'cmake',
 ]
 
 # Note: In 2.0.14 with the CMake from the 2019b build set, 12-bit support causes a failure
