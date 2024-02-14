@@ -10,7 +10,7 @@ easyblock = 'ConfigureMake'
 
 import os
 
-local_cpe_version =           os.environ['CRAY_PE_VERSION']
+local_auto_version =         '20220317'
 local_ncurses_version =      '6.4'           # https://ftp.gnu.org/pub/gnu/ncurses/
 local_LAME_version =         '3.100'         # http://lame.sourceforge.net/
 
@@ -58,13 +58,15 @@ checksums = [
     '8bfb6a73f2db1511baf90fbd7174f11043ec4b592a4917edc30ccfb53bf37256',  # LAME-3.99.5_check-tgetent.patch
 ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version),   # For autoconf
+builddependencies = [
+    ('autotools', local_auto_version),
 ]
 
 dependencies = [
     ('ncurses',    local_ncurses_version)
 ]
+
+osdependencies = ['binutils']
 
 preconfigopts = "autoconf && "
 
