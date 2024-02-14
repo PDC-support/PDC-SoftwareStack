@@ -11,7 +11,6 @@ import os as local_os
 # it helps to make this EasyConfig indpendent of the LUMI software stack version as there is
 # no other reference to that version in the file that we can use since it relies on the
 # SYSTEM toolchain.
-local_CPE_version = local_os.environ['CRAY_PE_VERSION']
 local_Rust_version =   '1.60.0'        # https://www.rust-lang.org
 
 name =    'rust'
@@ -44,12 +43,11 @@ source_urls = ['https://static.rust-lang.org/dist/']
 sources =     ['rustc-%(version)s-src.tar.gz']
 checksums =   ['20ca826d1cf674daf8e22c4f8c4b9743af07973211c839b85839742314c838b7']
 
-builddependencies = [
-    ('buildtools', local_CPE_version),  # For CMake
-]
-
 osdependencies = [
     ('openssl-devel', 'libssl-dev', 'libopenssl-devel'), # For CMake
+    ('pkgconf','pkg-config'),
+    'bintools',
+    'cmake',
 ]
 
 #
