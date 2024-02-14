@@ -6,7 +6,7 @@ easyblock = 'ConfigureMake'
 
 import os
 
-local_cpe_version =           os.environ['CRAY_PE_VERSION']
+local_nasm_version =         '2.15.05'
 local_bzip2_version =        '1.0.8'         # http://www.bzip.org/downloads.html
 local_fontconfig_version =   '2.15.0'        # https://www.freedesktop.org/software/fontconfig/release/
 local_freetype_version =     '2.13.2'        # https://download.savannah.gnu.org/releases/freetype/
@@ -59,6 +59,10 @@ toolchain = SYSTEM
 source_urls = ['http://%(namelower)s.org/releases/']
 sources =     [SOURCE_TAR_BZ2]
 checksums =   ['28df33d400a1c1c1b20d07a99197809a3b88ef765f5f07dc1ff067fac64c59d6']
+
+builddependencies = [
+    ('nasm', local_nasm_version),
+]
 
 # it needs X11 too, using the one from the system here
 dependencies = [
