@@ -30,8 +30,8 @@ toolchainopts = {'pic': True}
 source_urls = ['http://www.freedesktop.org/software/fontconfig/release/']
 sources =     [SOURCE_TAR_GZ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('gperf', local_gperf_version), # for gperf
+builddependencies = [
+    ('gperf', local_gperf_version),
 ]
 
 dependencies = [
