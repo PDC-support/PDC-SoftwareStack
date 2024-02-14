@@ -2,7 +2,7 @@ easyblock = 'ConfigureMake'
 
 import os
 
-local_cpe_version =           os.environ['CRAY_PE_VERSION']
+local_gperf_version =        '3.1'
 local_expat_version =        '2.5.0'         # https://github.com/libexpat/libexpat/releases
 local_util_version =         '2.39.3'        # https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/
 local_freetype_version =     '2.13.2'        # https://download.savannah.gnu.org/releases/freetype/
@@ -31,7 +31,7 @@ source_urls = ['http://www.freedesktop.org/software/fontconfig/release/']
 sources =     [SOURCE_TAR_GZ]
 
 builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version), # for gperf
+    ('gperf', local_gperf_version), # for gperf
 ]
 
 dependencies = [
@@ -39,6 +39,8 @@ dependencies = [
     ('util-linux', local_util_version),
     ('freetype',   local_freetype_version),
 ]
+
+osdependencies = ['binutils',('pkgconf','pkg-config')]
 
 configopts = '--disable-docs '
 
