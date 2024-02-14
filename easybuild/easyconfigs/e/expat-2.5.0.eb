@@ -42,9 +42,7 @@ source_urls = ['https://github.com/libexpat/libexpat/releases/download/R_%s/' % 
 sources =     [SOURCE_TAR_BZ2]
 checksums =   ['6f0e6e01f7b30025fa05c85fdad1e5d0ec7fd35d9f61b22f34998de11969ff67']  #expat-2.5.0.tar.bz2
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version), # for gperf
-]
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': ['bin/xmlwf', 'include/expat.h', 'lib/libexpat.a', 'lib/libexpat.%s' % SHLIB_EXT],
