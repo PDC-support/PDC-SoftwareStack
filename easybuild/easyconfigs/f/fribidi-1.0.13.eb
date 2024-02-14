@@ -4,7 +4,7 @@ easyblock = 'ConfigureMake'
 
 import os
 
-local_cpe_version =           os.environ['CRAY_PE_VERSION']
+local_auto_version =         '20220317'
 local_fribidi_version =      '1.0.13'         # https://github.com/fribidi/fribidi/releases
 
 name =    'fribidi'
@@ -36,9 +36,11 @@ source_urls = ['https://github.com/%(namelower)s/%(namelower)s/releases/download
 sources =     [SOURCE_TAR_XZ]
 checksums =   ['7fa16c80c81bd622f7b198d31356da139cc318a63fc7761217af4130903f54a2']  #fribidi-1.0.13.tar.xz
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version),
+builddependencies = [
+    ('autotools', local_auto_version),
 ]
+
+osdependencies = ['binutils',('pkgconf','pkg-config')]
 
 configopts = '--disable-docs'
 
