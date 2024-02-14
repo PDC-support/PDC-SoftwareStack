@@ -60,10 +60,6 @@ source_urls = ['http://%(namelower)s.org/releases/']
 sources =     [SOURCE_TAR_BZ2]
 checksums =   ['28df33d400a1c1c1b20d07a99197809a3b88ef765f5f07dc1ff067fac64c59d6']
 
-builddependencies = [
-    ('buildtools', local_cpe_version),
-]
-
 # it needs X11 too, using the one from the system here
 dependencies = [
     ('zlib',       local_zlib_version),
@@ -75,6 +71,8 @@ dependencies = [
     ('freetype',   local_freetype_version),
     ('fribidi',    local_fribidi_version),
 ]
+
+osdependencies = ['binutils',('pkgconf','pkg-config')]
 
 configopts  = '--enable-pic --enable-shared --enable-gpl --enable-version3 --enable-nonfree --cc="$CC" --cxx="$CXX" '
 configopts += '--enable-libx264 --enable-libx265 --enable-libmp3lame --enable-libfreetype --enable-fontconfig '
