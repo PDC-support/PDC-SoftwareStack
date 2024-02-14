@@ -24,9 +24,7 @@ source_urls = ['https://github.com/unicode-org/icu/releases/download/release-%(v
 sources =     ['icu4c-%(version_major)s_%(version_minor)s-src.tgz']
 checksums =   ['86ce8e60681972e60e4dcb2490c697463fcec60dd400a5f9bffba26d0b52b8d0']  #icu4c-74_1-src.tgz
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '23.03'),
-]
+osdependencies = ['binutils','python3']
 
 start_dir = 'source'
 
