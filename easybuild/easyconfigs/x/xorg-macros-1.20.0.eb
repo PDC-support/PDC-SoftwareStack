@@ -27,9 +27,11 @@ toolchain = SYSTEM
 source_urls = ['https://gitlab.freedesktop.org/xorg/util/macros/-/archive/util-macros-%(version)s']
 sources =     ['macros-util-macros-%(version)s.tar.gz']
 
-builddependencies = [ # Create a reproducible build environment
-    ('buildtools', '23.03'), # Uses autotools
+builddependencies = [
+    ('autotools', '20220317'),
 ]
+
+osdependencies = ['binutils']
 
 preconfigopts = './autogen.sh && '
 
