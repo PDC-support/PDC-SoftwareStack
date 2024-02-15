@@ -11,14 +11,16 @@ version = '2.5.1'
 homepage = 'http://icebert.github.io/pblat/'
 description = """Parallel BLAT based on Jim Kent's BLAT"""
 
-toolchain = {'name': 'system', 'version': 'system'}
+toolchain = SYSTEM
 
 source_urls = ['https://github.com/icebert/%(namelower)s/archive/refs/tags']
 sources = [{'download_filename': '%(version)s.tar.gz', 'filename': SOURCE_TAR_GZ}]
-checksums = ['e85a4d752b8e159502d529f0f9e47579851a6b466b6c2f1f4d49f598642bc615']
+patches = ['PBlat-ext-hts.patch']
+checksums = ['e85a4d752b8e159502d529f0f9e47579851a6b466b6c2f1f4d49f598642bc615','2b42f5eb6aa198692858d82af544b100d85a5fd60e128587947d81c04fef327e']
 
 dependencies = [
-    ('zlib', '1.2.11'),
+    ('htslib', '1.15.1'),
+    ('zlib','1.3.1'),
 ]
 
 files_to_copy = [(['%(namelower)s'], 'bin')]
