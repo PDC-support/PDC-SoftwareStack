@@ -1,0 +1,51 @@
+# Author: Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+name = 'R'
+version = '4.3.0'
+
+homepage = 'http://www.r-project.org/'
+description = "R is a free software environment for statistical computing and graphics."
+
+toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+
+source_urls = ['http://cran.us.r-project.org/src/base/R-%(version_major)s']
+sources = [SOURCE_TAR_GZ]
+
+dependencies = [
+    ('libreadline', '8.1', '', True),
+    ('bzip2', '1.0.8', '', True),
+    ('libpng', '1.6.37', '', True),
+    ('libjpeg-turbo', '2.1.1', '', True),
+    ('pcre2','10.40'),
+    ('tcl', '8.6.12'),
+    ('tk', '8.6.12'),
+    ('curl', '7.78.0'),
+    ('libxml2', '2.9.12', '', True),
+]
+
+osdependencies = ['java', ('openssl-devel', 'libssl-dev', 'libopenssl-devel')]
+
+configopts = '--build=x86_64-suse-linux --enable-threads --with-readline --with-blas='-fopenmp -L${CRAY_LIBSCI_PREFIX_DIR}/lib -lsci_gnu_81_mp' --with-lapack='-Wl,-ydgetrf' --with-pcre1 --with-tcltk --with-tcl-config=$EBROOTTCL/lib/tclConfig.sh --with-tk-config=$EBROOTTK/lib/tkConfig.sh --with-recommended-packages=no'
+
+exts_list = [
+    'base',
+    'compiler',
+    'datasets',
+    'graphics',
+    'grDevices',
+    'grid',
+    'methods',
+    'parallel',
+    'splines',
+    'stats',
+    'stats4',
+    'tcltk',
+    'tools',
+    'utils',
+# Works with manual installation, but not in easybuild?
+#   'doParallel',
+#    'foreach',
+]
+
+moduleclass = 'lang'
+
