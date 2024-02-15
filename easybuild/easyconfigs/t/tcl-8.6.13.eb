@@ -22,13 +22,11 @@ toolchain = SYSTEM
 source_urls = ['http://prdownloads.sourceforge.net/%(namelower)s']
 sources =     ['%(name)s%(version)s-src.tar.gz']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',   '23.03'), # Use the latest CPE, but without depedency of it
-]
-
 dependencies = [
     ('zlib', '1.3.1'),
 ]
+
+osdependencies = ['binutils']
 
 configopts = '--enable-threads EXTRA_INSTALL="install-private-headers"'
 
