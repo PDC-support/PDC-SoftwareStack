@@ -27,20 +27,18 @@ docurls = [
     "http://www.pcre.org/current/doc/html/",
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = ['https://github.com/PCRE2Project/%(namelower)s/releases/download/%(namelower)s-%(version)s']
 sources =     [SOURCELOWER_TAR_BZ2]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
+osdependencies = ['binutils']
 
 dependencies = [
-    ('libreadline', local_libreadline_version, '', True),
-    ('zlib',        local_zlib_version, '', True),
-    ('bzip2',       local_bzip2_version, '', True),
+    ('libreadline', local_libreadline_version),
+    ('zlib',        local_zlib_version),
+    ('bzip2',       local_bzip2_version),
 ]
 
 configopts  = "--with-pic --disable-cpp --enable-newline-is-any "
