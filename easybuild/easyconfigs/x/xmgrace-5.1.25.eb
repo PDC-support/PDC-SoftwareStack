@@ -8,7 +8,7 @@ homepage = 'https://plasma-gate.weizmann.ac.il/Grace'
 
 description = """Grace is a WYSIWYG 2D plotting tool for the X Window System"""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'optarch': True, 'pic': True}
 
 sources = ['grace-5.1.25.tar.gz']
@@ -16,8 +16,7 @@ source_urls = ['https://plasma-gate.weizmann.ac.il/pub/grace/src/grace5']
 
 dependencies = [
     ('libjpeg-turbo','2.1.1'),
-    ('libpng','1.6.37','',True),
-    ('x11', '22.06'),
+    ('libpng','1.6.40'),
     ('motif','2.3.8')
 ]
 
