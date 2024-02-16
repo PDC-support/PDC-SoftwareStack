@@ -34,23 +34,20 @@ docurls = [
     'Man pages for the curl and curl-config commands (section 1) and the library functions (section 3)',
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 sources =     [SOURCE_TAR_XZ]
 source_urls = ['http://curl.haxx.se/download/']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
-
 dependencies = [
-    ('zlib', '1.3.1', '', True),
+    ('zlib', '1.3.1'),
     ('brotli', '1.1.0'),
 ]
 
 osdependencies = [
     ('openssl-devel', 'libssl-dev', 'libopenssl-devel'),
+    ('binutils'),
 #    ('libssh2-devel'),
 ]
 
