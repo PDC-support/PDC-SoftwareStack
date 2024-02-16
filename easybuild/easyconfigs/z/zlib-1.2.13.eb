@@ -14,7 +14,7 @@ description = """
 toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
-source_urls = ['https://zlib.net/']
+source_urls = ['https://zlib.net/fossils']
 sources =     [SOURCE_TAR_GZ]
 
 # need to take care of $CFLAGS ourselves with dummy toolchain
