@@ -1,3 +1,5 @@
+import os
+
 name =    'perl'
 version = '5.34.0'
 easyblock = 'EB_Perl'
@@ -15,31 +17,36 @@ This module already contains a lot of packages based on the default
 EasyBuild perl configuration.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = ['https://www.cpan.org/src/%(version_major)s.0']
 sources = ['perl-%(version)s.tar.gz']
 checksums = ['551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
+builddependencies = [
+    ('autotools', '20220317'),
+    ('bison', '3.8.2'),
 ]
 
 dependencies = [
-    ('zlib', '1.3.1', '', True),         # for Net::SSLeay
-    ('expat', '2.5.0', '', True),        # for XML::Parser
-    ('ncurses', '6.4', '', True),      # for Term::ReadLine::Gnu
-    ('libreadline', '8.2', '', True),  # for Term::ReadLine::Gnu
+    ('zlib', '1.3.1'),         # for Net::SSLeay
+    ('expat', '2.5.0'),        # for XML::Parser
+    ('ncurses', '6.4'),      # for Term::ReadLine::Gnu
+    ('libreadline', '8.2'),  # for Term::ReadLine::Gnu
     ('db', '18.1.40'),           # for DB_File
     ('termcap', '1.3.1'),      # for Term::ReadLine::Gnu
-    ('libxml2', '2.12.3', '', True),      # for XML::LibXML
+    ('libxml2', '2.12.3'),      # for XML::LibXML
 ]
 
 osdependencies = [
     ('openssl-devel', 'libssl-dev', 'libopenssl-devel'), # required for Net::SSLeay
     ('groff'),                                           # build dependency only
+    ('binutils'),
 ]
+
+os.environ['CC'] = 'gcc'
+os.environ['CFLAGS'] = '-O2 -ftree-vectorize -fno-math-errno -fPIC'
 
 # !! order of extensions is important !!
 # extensions updated on Aug 3rd 2021
@@ -604,7 +611,8 @@ exts_list = [
     ('XML::Bare', '0.53', {
         'source_tmpl': 'XML-Bare-%(version)s.tar.gz',
         'source_urls': ['https://cpan.metacpan.org/authors/id/C/CO/CODECHILD'],
-        'checksums': ['865e198e98d904be1683ef5a53a4948f02dabdacde59fc554a082ffbcc5baefd'],
+        'patches': ['Perl-XML-Bare-CC-fix.patch'],
+        'checksums': ['865e198e98d904be1683ef5a53a4948f02dabdacde59fc554a082ffbcc5baefd','d7df22a8912508c16de44f53fc7d444e03bf22bc1b421a9a0405d2d6c4899753'],
     }),
     ('Dist::CheckConflicts', '0.11', {
         'source_tmpl': 'Dist-CheckConflicts-%(version)s.tar.gz',

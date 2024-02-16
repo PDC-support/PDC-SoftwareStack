@@ -1,0 +1,13 @@
+diff -ruN XML-Bare-0.53.old/Makefile.PL XML-Bare-0.53/Makefile.PL
+--- XML-Bare-0.53.old/Makefile.PL	2013-04-30 04:00:00.000000000 +0200
++++ XML-Bare-0.53/Makefile.PL	2024-02-16 13:18:44.579255805 +0100
+@@ -91,6 +91,9 @@
+   );
+ }
+ sub getcc {
++  if ( defined $ENV{'CC'} ) {
++    return $ENV{'CC'}
++  }
+   my $div = (substr($ENV{'PATH'},0,1) eq '/') ? ':' : ';';
+   my @path = split($div,$ENV{'PATH'});
+   foreach my $dir ( @path ) {
