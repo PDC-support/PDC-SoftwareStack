@@ -7,9 +7,15 @@ local_intltool_version =     '0.51.0'        # https://launchpad.net/intltool/+d
 local_libpciaccess_version = '0.17'          # https://cgit.freedesktop.org/xorg/lib/libpciaccess/
 local_xorg_macros_version =  '1.20.0'        # https://cgit.freedesktop.org/xorg/util/macros
 local_zlib_version =         '1.3.1'        # https://zlib.net/
+local_autotools_version =    '20220317'
+local_bison_version =        '3.8.2'
+local_gettext_version =      '0.22.4'
+local_ninja_version =        '1.11.1'
+local_meson_version =        '0.61.5'
+local_doxygen_version =      '1.9.5'
 
 name =    'x11'
-version = '%(toolchain_version)s'
+version = '20220504'
 
 homepage = 'https://www.x.org'
 
@@ -47,7 +53,7 @@ EasyBuild X11 modules:
 * xdpyinfo and x11perf to quickly test if remote X is working.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 
 source_urls = [
     XORG_LIB_SOURCE,
@@ -59,18 +65,25 @@ source_urls = [
 ]
 
 dependencies = [
-    ('bzip2',        local_bzip2_version, '', True),
-    ('fontconfig',   local_fontconfig_version, '', True),
-    ('freetype',     local_freetype_version, '', True),
-    ('zlib',         local_zlib_version, '', True),
+    ('bzip2',        local_bzip2_version),
+    ('fontconfig',   local_fontconfig_version),
+    ('freetype',     local_freetype_version),
+    ('zlib',         local_zlib_version),
     ('libpciaccess', local_libpciaccess_version),
-    ('xorg-macros',  local_xorg_macros_version, '', True),  # Why here? To not have to add it as a build dependency in other packages???
+    ('xorg-macros',  local_xorg_macros_version),  # Why here? To not have to add it as a build dependency in other packages???
 ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',   '%(toolchain_version)s',   '', True),
+builddependencies = [
+    ('autotools',    local_autotools_version),
+    ('bison',        local_bison_version),
+    ('gettext',      local_gettext_version),
+    ('ninja',        local_ninja_version),
+    ('meson',        local_meson_version),
+    ('doxygen',      local_doxygen_version),
     ('intltool',     local_intltool_version),
 ]
+
+osdependencies = ['binutils',('pkg-config','pkgconf')]
 
 default_easyblock = 'ConfigureMake'
 
