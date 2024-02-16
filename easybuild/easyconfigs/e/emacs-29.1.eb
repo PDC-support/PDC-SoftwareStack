@@ -15,9 +15,10 @@ source_urls = ['https://ftp.gnu.org/gnu/emacs/']
 
 dependencies = [
     ('ncurses', '6.4'),
+    ('x11', '20220504'),
 ]
 
-configopts = '--without-x --with-x-toolkit=no --with-gnutls=ifavailable --with-gif=no --with-tiff=no --with-xpm=no --with-jpeg=no'
+configopts = '--with-x-toolkit=athena --without-xaw3d --with-gnutls=ifavailable --with-gif=no --with-tiff=no --with-xpm=no --with-jpeg=no'
 
 sanity_check_paths = {
     'files': ["bin/emacs", "bin/emacs-%(version)s", "bin/emacsclient", "bin/etags"],
