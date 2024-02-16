@@ -1,7 +1,7 @@
 # Contributed by Johan Hellsvik (PDC)
 easyblock = 'ConfigureMake'
 
-name = 'Motif'
+name = 'motif'
 version = '2.3.8'
 
 homepage = 'https://sourceforge.net/projects/motif/'
@@ -11,14 +11,14 @@ Motif is a freely available source code distribution for the Motif user interfac
 Motif 2.3.8 is an updated version of Open Motif 2.3 and is a major bug fix release.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
-source_urls = ['https://downloads.sourceforge.net/project/motif/%(name)s%202.3.8%20Source%20Code/']
+source_urls = ['https://downloads.sourceforge.net/project/motif/Motif%202.3.8%20Source%20Code/']
 sources = [SOURCELOWER_TAR_GZ]
 
 dependencies = [
-    ('X11', '21.11')
+    ('x11', '20220504')
 ]
 
 sanity_check_paths = {
