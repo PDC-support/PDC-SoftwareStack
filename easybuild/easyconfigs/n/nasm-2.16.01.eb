@@ -17,7 +17,7 @@ version = '2.16.01'
 homepage = 'http://www.nasm.us/'
 description = "NASM: General-purpose x86 assembler"
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 
 source_urls = ['http://www.%(name)s.us/pub/%(name)s/releasebuilds/%(version)s']
 sources = [SOURCE_TAR_BZ2]
