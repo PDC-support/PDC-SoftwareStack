@@ -1,0 +1,28 @@
+easyblock = 'ConfigureMake'
+
+name = 'libtool'
+version = '2.4.6'
+
+homepage = 'https://www.gnu.org/software/libtool'
+
+description = """
+ GNU libtool is a generic library support script. Libtool hides the complexity
+ of using shared libraries behind a consistent, portable interface.
+"""
+
+toolchain = SYSTEM
+
+source_urls = [GNU_SOURCE]
+sources = [SOURCELOWER_TAR_XZ]
+checksums = ['7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f']
+
+dependencies = [
+    ('m4', '1.4.19'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/libtool', 'bin/libtoolize', 'lib/libltdl.%s' % SHLIB_EXT],
+    'dirs': ['include/libltdl', 'share/libtool/loaders', 'share/man/man1'],
+}
+
+moduleclass = 'lib'
