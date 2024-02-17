@@ -8,16 +8,17 @@ description = """GNU Emacs is an extensible, customizable text editor—and more
  At its core is an interpreter for Emacs Lisp, a dialect of the Lisp programming language
  with extensions to support text editing."""
 
-toolchain = SYSTEM 
+toolchain = SYSTEM
 
 sources = ['%(name)s-%(version)s.tar.gz']
 source_urls = ['https://ftp.gnu.org/gnu/emacs/']
 
 dependencies = [
     ('ncurses', '6.3'),
+    ('x11', '20220504'),
 ]
 
-configopts = '--without-x --with-x-toolkit=no --with-gnutls=ifavailable --with-gif=no --with-tiff=no --with-xpm=no --with-jpeg=no'
+configopts = '--with-x-toolkit=athena --with-gnutls=ifavailable --with-gif=no --with-tiff=no --with-xpm=no --with-jpeg=no'
 
 sanity_check_paths = {
     'files': ["bin/emacs", "bin/emacs-%(version)s", "bin/emacsclient", "bin/etags"],
