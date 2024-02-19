@@ -9,16 +9,14 @@ description = """
  Szip compression software, providing lossless compression of scientific data
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = ['https://www.hdfgroup.org/ftp/lib-external/szip/%(version)s/src']
 sources = [SOURCELOWER_TAR_GZ]
 checksums = ['21ee958b4f2d4be2c9cabfa5e1a94877043609ce86fde5f286f105f7ff84d412']
 
-builddependencies = [
-    ('binutils', '2.37','',SYSTEM),
-]
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': ["lib/libsz.a", "lib/libsz.%s" % SHLIB_EXT] +
