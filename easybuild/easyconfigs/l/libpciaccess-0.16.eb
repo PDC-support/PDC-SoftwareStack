@@ -13,16 +13,20 @@ description = """
 Generic PCI access library.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 
 source_urls = ['https://www.x.org/releases/individual/lib/']
 sources =     [SOURCE_TAR_GZ]
 checksums =   ['84413553994aef0070cf420050aa5c0a51b1956b404920e21b81e96db6a61a27']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',  '%(toolchain_version)s',   '', True),
-    ('xorg-macros', '1.19.3', '', True),
+builddependencies = [
+    ('autoconf', '2.71'),
+    ('automake', '1.16.5'),
+    ('libtool', '2.4.6'),
+    ('xorg-macros', '1.19.3'),
 ]
+
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': [ 'lib/libpciaccess.%s' % x for x in ['a', 'la', SHLIB_EXT]] +
