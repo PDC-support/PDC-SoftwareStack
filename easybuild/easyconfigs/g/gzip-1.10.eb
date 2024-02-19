@@ -22,9 +22,7 @@ source_urls = [GNU_SOURCE]
 sources =     [SOURCE_TAR_XZ]
 checksums =   ['8425ccac99872d544d4310305f915f5ea81e04d0f437ef1a230dc9d1c819d7c0']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11', '', True),
-]
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': ["bin/gunzip", "bin/gzip", "bin/uncompress"],
