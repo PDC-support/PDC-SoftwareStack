@@ -21,9 +21,7 @@ toolchainopts = {'pic': True}
 source_urls = [GNU_SOURCE]
 sources =     [SOURCE_TAR_XZ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06', '', True),
-]
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': ["bin/gunzip", "bin/gzip", "bin/uncompress"],
