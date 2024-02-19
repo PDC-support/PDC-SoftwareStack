@@ -40,15 +40,13 @@ source_urls = [GNU_SAVANNAH_SOURCE]
 sources =     [SOURCE_TAR_GZ]
 checksums =   ['5eab795ebb23ac77001cfb68b7d4d50b5d6c7469247b0b01b2c953269f658dac']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'),
-]
-
 dependencies = [
     ('libpng', local_libpng_version),
     ('bzip2',  local_bzip2_version),
     ('zlib',   local_zlib_version),
 ]
+
+osdependencies = ['binutils']
 
 configopts = '--enable-freetype-config --with-harfbuzz=no'
 
