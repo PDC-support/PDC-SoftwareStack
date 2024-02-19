@@ -40,9 +40,7 @@ source_urls = ['https://github.com/libexpat/libexpat/releases/download/R_%s/' % 
 sources =     [SOURCE_TAR_BZ2]
 checksums =   ['a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06', '', True),
-]
+osdependencies = ['binutils']
 
 sanity_check_paths = {
     'files': ['bin/xmlwf', 'include/expat.h', 'lib/libexpat.a', 'lib/libexpat.%s' % SHLIB_EXT],
