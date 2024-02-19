@@ -88,9 +88,7 @@ source_urls = ['https://download.osgeo.org/libtiff/']
 sources =     ['tiff-%(version)s.tar.gz']
 checksums =   ['0e46e5acb087ce7d1ac53cf4f56a09b221537fc86dfc5daaad1c2e89e1b37ac8']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06', '', True),
-]
+osdependencies = ['binutils']
 
 dependencies = [
     ('zlib',          local_zlib_version),
