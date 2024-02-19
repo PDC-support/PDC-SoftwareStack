@@ -41,16 +41,14 @@ sources =   [ {
 source_urls = []
 checksums =   ['0d9ade222c64e912d6957b11c923e214e2e010a18f39bec102f572e693ba2867']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', local_cpe_version),
-]
-
 dependencies = [
     ('zlib', local_zlib_version),
     ('gzip', local_gzip_version),
     ('xz',   local_XZ_version),
     ('lz4',  local_lz4_version),
 ]
+
+osdependencies = ['binutils']
 
 skipsteps = ['configure']
 
