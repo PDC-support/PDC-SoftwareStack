@@ -21,7 +21,7 @@ The specification of the Brotli Compressed Data Format is defined in RFC 7932.
 Brotli is open-sourced under the MIT License, see the LICENSE file.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 sources = [ {
@@ -32,9 +32,7 @@ sources = [ {
 source_urls = []
 checksums =   ['f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
+osdependencies = ['binutils','cmake']
 
 sanity_check_paths = {
     'files': ['bin/brotli', 'lib64/libbrotlicommon-static.a', 'lib64/libbrotlicommon.%s' % SHLIB_EXT],
