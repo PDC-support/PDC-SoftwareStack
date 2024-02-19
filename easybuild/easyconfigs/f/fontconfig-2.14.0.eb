@@ -1,9 +1,12 @@
 easyblock = 'ConfigureMake'
 
+import os
+
+local_gperf_version =        '3.1'
 local_expat_version =        '2.4.8'         # https://github.com/libexpat/libexpat/releases
 local_util_version =         '2.37.1'        # https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/
 local_freetype_version =     '2.12.1'        # https://download.savannah.gnu.org/releases/freetype/
-local_fontconfig_version =   '2.14.0'       # https://www.freedesktop.org/software/fontconfig/release/
+local_fontconfig_version =   '2.14.0'        # https://www.freedesktop.org/software/fontconfig/release/
 
 name =    'fontconfig'
 version = local_fontconfig_version
@@ -27,8 +30,8 @@ toolchainopts = {'pic': True}
 source_urls = ['http://www.freedesktop.org/software/fontconfig/release/']
 sources =     [SOURCE_TAR_GZ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06'), # for gperf
+builddependencies = [
+    ('gperf', local_gperf_version),
 ]
 
 dependencies = [
@@ -36,6 +39,8 @@ dependencies = [
     ('util-linux', local_util_version),
     ('freetype',   local_freetype_version),
 ]
+
+osdependencies = ['binutils',('pkgconf','pkg-config')]
 
 configopts = '--disable-docs '
 
