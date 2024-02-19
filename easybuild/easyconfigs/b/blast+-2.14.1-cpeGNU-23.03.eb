@@ -14,7 +14,7 @@ source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/']
 sources = ['ncbi-blast-%(version)s+-src.tar.gz']
 
 dependencies = [
-    ('glib', '2.78.0'),
+    ('glib', '2.78.0','',SYSTEM),
 ]
 
 moduleclass = 'bio'
