@@ -13,15 +13,13 @@ representation ("LLVM IR"). The LLVM Core libraries are well documented, and it
 is particularly easy to invent your own language (or port an existing compiler)
 to use LLVM as an optimizer and code generator."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'dynamic': True}
 
 source_urls = ['https://github.com/%(namelower)s/%(namelower)s-project/archive/refs/tags/%(namelower)sorg-%(version)s']
 sources = ['%(namelower)sorg-%(version)s.tar.gz']
 
-builddependencies = [
-    ('cmake', '3.23.0', '', True),
-]
+osdependencies = ['cmake']
 
 srcdir="/tmp/$USER/%(namelower)s/%(version)s/cpeGNU-22.06/%(namelower)s-project-%(namelower)sorg-%(version)s/llvm"
 
