@@ -1,8 +1,24 @@
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'Bundle'
 
+local_bzip2_version =        '1.0.8'         # http://www.bzip.org/downloads.html
+local_fontconfig_version =   '2.13.94'       # https://www.freedesktop.org/software/fontconfig/release
+local_freetype_version =     '2.10.4'        # https://download.savannah.gnu.org/releases/freetype/
+local_intltool_version =     '0.51.0'        # https://launchpad.net/intltool/+download
+local_libpciaccess_version = '0.16'          # https://cgit.freedesktop.org/xorg/lib/libpciaccess/
+local_xorg_macros_version =  '1.19.3'        # https://cgit.freedesktop.org/xorg/util/macros
+local_zlib_version =         '1.2.11'        # https://zlib.net/
+local_autoconf_version =     '2.71'
+local_automake_version =     '1.16.4'
+local_libtool_version =      '2.4.6'
+local_bison_version =        '3.8.1'
+local_gettext_version =      '0.21'
+local_ninja_version =        '1.10.2'
+local_meson_version =        '0.60.1'
+local_doxygen_version =      '1.9.2'
+
 name =    'X11'
-version = '%(toolchain_version)s'
+version = '20210802'
 
 homepage = 'https://www.x.org'
 
@@ -40,7 +56,7 @@ EasyBuild X11 modules:
 * xdpyinfo and x11perf to quickly test if remote X is working.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 
 source_urls = [
     XORG_LIB_SOURCE,
@@ -52,21 +68,24 @@ source_urls = [
 ]
 
 dependencies = [
-    ('bzip2', '1.0.8', '', True),
-    ('fontconfig', '2.13.94', '', True),
-    ('freetype', '2.10.4', '', True),
-    ('zlib', '1.2.11', '', True),
-    ('libpciaccess', '0.16'),
-    ('Meson', '0.60.1', '', True),
-    ('Ninja', '1.10.2', '', True),
-    ('Anaconda3', '2021.05', '', True),
-    ('xorg-macros', '1.19.3', '', True),  # Why here? To not have to add it as a build dependency in other packages???
+    ('bzip2',        local_bzip2_version),
+    ('fontconfig',   local_fontconfig_version),
+    ('freetype',     local_freetype_version),
+    ('zlib',         local_zlib_version),
+    ('libpciaccess', local_libpciaccess_version),
+    ('xorg-macros',  local_xorg_macros_version),  # Why here? To not have to add it as a build dependency in other packages???
 ]
 
-
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-    ('intltool', '0.51.0'),
+builddependencies = [
+    ('autoconf',     local_autoconf_version),
+    ('automake',     local_automake_version),
+    ('libtool',      local_libtool_version),
+    ('bison',        local_bison_version),
+    ('gettext',      local_gettext_version),
+    ('ninja',        local_ninja_version),
+    ('meson',        local_meson_version),
+    ('doxygen',      local_doxygen_version),
+    ('intltool',     local_intltool_version),
 ]
 
 default_easyblock = 'ConfigureMake'
