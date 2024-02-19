@@ -29,10 +29,6 @@ source_urls = ['%s/v%%(version_major_minor)s' % homepage]
 sources =     [SOURCELOWER_TAR_XZ]
 checksums =   ['8e4bd42053b726cf86eb4d13a73bc1d9225a2c2e1a2e0d2a891f1020f83e6b76']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '22.06', '', True),
-]
-
 dependencies = [
     ('ncurses',     local_ncurses_version),
     ('libreadline', local_libreadline_version),
@@ -41,6 +37,8 @@ dependencies = [
     ('gettext',     local_gettext_version),
     ('file',        local_file_version,),    # For libmagic.
 ]
+
+osdependencies = ['binutils']
 
 # disable account related utilities (they need OS dependent pam-devel files)
 # disable wall and friends (requires group changing permissions for install user)
