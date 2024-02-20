@@ -3,7 +3,7 @@ easyblock = 'ConfigureMake'
 
 local_Tcl_version =          '8.6.12'        # https://tcl.tk/
 local_zlib_version =         '1.2.13'        # https://zlib.net/
-
+local_x11_version =          '20220504'
 local_Tk_version =           '8.6.12'        # https://tcl.tk/
 
 name =    'tk'
@@ -23,20 +23,18 @@ can produce rich, native applications that run unchanged across Windows,
 Mac OS X, Linux and more.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 
 source_urls = ["https://prdownloads.sourceforge.net/tcl"]
 sources =     ['%(namelower)s%(version)s-src.tar.gz']
 patches =     ['tk-8.6.7_different-prefix-with-tcl.patch']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',   '%(toolchain_version)s',   '', True),
-]
+osdependencies = ['binutils']
 
 dependencies = [
-    ('tcl', '8.6.12'),
-    ('x11',  '%(toolchain_version)s'),
-    ('zlib', '1.2.13', '', True),
+    ('tcl', local_Tcl_version),
+    ('x11',  local_x11_version),
+    ('zlib', local_zlib_version),
 ]
 
 configopts = '--enable-threads --with-tcl=$EBROOTTCL/lib CFLAGS="-I$EBROOTTCL/include"'
