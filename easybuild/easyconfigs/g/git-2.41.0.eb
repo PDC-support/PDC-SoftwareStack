@@ -15,9 +15,11 @@ toolchain = SYSTEM
 source_urls = ['https://github.com/git/git/archive']
 sources = ['v%(version)s.tar.gz']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',   '22.06'), # Use the latest CPE, but without depedency of it
+builddependencies = [
+    ('autotools',   '20220317'),
 ]
+
+osdependencies = ['binutils']
 
 preconfigopts = 'make configure && '
 
