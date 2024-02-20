@@ -17,7 +17,7 @@ local_ninja_version =        '1.10.2'
 local_meson_version =        '0.60.1'
 local_doxygen_version =      '1.9.2'
 
-name =    'X11'
+name =    'x11'
 version = '20210802'
 
 homepage = 'https://www.x.org'
@@ -87,6 +87,8 @@ builddependencies = [
     ('doxygen',      local_doxygen_version),
     ('intltool',     local_intltool_version),
 ]
+
+osdependencies = ['binutils',('pkg-config','pkgconf')]
 
 default_easyblock = 'ConfigureMake'
 
