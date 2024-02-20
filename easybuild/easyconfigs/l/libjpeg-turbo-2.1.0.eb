@@ -56,8 +56,13 @@ sources = {
 }
 checksums = ['d6b7790927d658108dfd3bee2f0c66a2924c51ee7f9dc930f62c452f4a638c52']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '21.11'), # NASM and CMake
+builddependencies = [
+    ('nasm', '2.15.05'),
+]
+
+osdependencies = [
+    'binutils',
+    'cmake',
 ]
 
 # Note: In 2.0.14 with the CMake from the 2019b build set, 12-bit support causes a failure
