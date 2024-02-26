@@ -8,7 +8,7 @@ homepage = 'https://atztogo.github.io/spglib/'
 description = "Spglib is a library for finding and handling crystal symmetries written in C."
 
 toolchain = SYSTEM
-toolchainopts = {'usempi': False, 'openmp': True}
+toolchainopts = {'openmp': True}
 
 source_urls = ['https://github.com/atztogo/%(name)s/archive/']
 sources = ['v%(version)s.tar.gz']
