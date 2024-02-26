@@ -14,7 +14,7 @@ toolchain = SYSTEM
 
 source_urls = [SOURCEFORGE_SOURCE]
 sources = ['%(namelower)s-%(version)s.src.tar.gz']
-checksums = ['55b454b35d998229a96f3d5485d57a0a517ce2b78d025efb79d57b5a2e4b2eec']
+checksums = ['060f254bcef48673cc7ccf542736b7455b67c110b30fdaa33512a5b09bbecee5']
 
 builddependencies = [
     ('bison', '3.8.1'),
