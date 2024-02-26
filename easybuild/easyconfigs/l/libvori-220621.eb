@@ -14,7 +14,7 @@ toolchainopts = {'usempi': False, 'openmp': False}
 source_urls = ['https://brehm-research.de/files']
 sources = [SOURCE_TAR_GZ]
 
-osependencies = ['cmake']
+osdependencies = ['cmake']
 
 sanity_check_paths = {
     'files': ['lib/%(name)s.a'],
