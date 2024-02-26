@@ -14,7 +14,9 @@ toolchainopts = {'openmp': True}
 source_urls = ['https://github.com/%(name)s/%(name)s/archive/']
 sources = ['v%(version)s.tar.gz']
 
-osdependencies = ['cmake']
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
 
 configopts = "-DSPGLIB_WITH_Fortran=1"
 
