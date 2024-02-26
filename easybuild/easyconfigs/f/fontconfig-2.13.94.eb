@@ -1,0 +1,55 @@
+easyblock = 'ConfigureMake'
+
+name = 'fontconfig'
+version = '2.13.94'
+
+homepage = 'http://www.freedesktop.org/software/fontconfig'
+description = """
+Fontconfig is a library designed to provide system-wide font configuration,
+customization and application access.
+The module contains a number of command line tools and a shared library.
+"""
+
+toolchain = {'name': 'system', 'version': 'system'}
+toolchainopts = {'pic': True}
+
+source_urls = ['http://www.freedesktop.org/software/%(name)s/release/']
+sources = [SOURCE_TAR_GZ]
+checksums = ['246d1640a7e54fba697b28e4445f4d9eb63dda1b511d19986249368ee7191882']
+
+builddependencies = [
+    ('gperf', '3.1'),
+]
+
+dependencies = [
+    ('expat', '2.4.6'),
+    ('util-linux', '2.37.1'),
+    ('freetype', '2.10.4'),
+]
+
+configopts = "--disable-docs "
+
+whatis = [
+    "Description: A library for %(toolchain_name)s-wide font configuration",
+    "The module contains a number of command line tools and a shared library",
+]
+
+sanity_check_paths = {
+    'files': ['lib/libfontconfig.la', 'lib/libfontconfig.so', 'include/%(name)s/fcfreetype.h', 'include/%(name)s/fcprivate.h', 'include/%(name)s/%(name)s.h', 'bin/fc-cache', 'bin/fc-cat', 'bin/fc-conflist', 'bin/fc-list', 'bin/fc-match', 'bin/fc-pattern', 'bin/fc-query', 'bin/fc-scan', 'bin/fc-validate', 'lib/pkgconfig/%(name)s.pc'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "pkg-config --libs %(name)s",
+    "fc-cache -V",
+    "fc-cat -V",
+    "fc-conflist -V",
+    "fc-list -V",
+    "fc-match -V",
+    "fc-pattern -V",
+    "fc-query -V",
+    "fc-scan -V",
+    "fc-validate -V",
+]
+
+moduleclass = 'vis'
