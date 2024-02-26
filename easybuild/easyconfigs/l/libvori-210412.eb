@@ -8,7 +8,7 @@ homepage = 'https://brehm-research.de/libvori.php'
 description = "libvori stands for 'Library for Voronoi Integration': currently libvori is working with the CP2K program package"
 
 toolchain = SYSTEM
-toolchainopts = {'usempi': False, 'openmp': False}
+toolchainopts = {'openmp': False}
 
 source_urls = ['https://brehm-research.de/files']
 sources = [SOURCE_TAR_GZ]
