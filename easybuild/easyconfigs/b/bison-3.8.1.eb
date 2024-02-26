@@ -2,7 +2,7 @@
 easyblock = 'ConfigureMake'
 
 name = 'bison'
-version = '3.8.1
+version = '3.8.1'
 
 homepage = 'http://www.gnu.org/software/bison'
 description = """Bison is a general-purpose parser generator that converts an annotated context-free grammar
