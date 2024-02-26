@@ -19,7 +19,7 @@ dependencies = [
     ('zstd', '1.5.0'),
     ('libjpeg-turbo', '2.1.1'),
 ]
-configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L/pdc/software/22.06/eb/software/libjpeg-turbo/2.1.1/lib -L/pdc/software/22.06/eb/software/zstd/1.5.0/lib' "
+configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L${EBROOTLIBJPEGMINTURBO}/lib -L${EBROOTZLIB}/lib' "
 
 sanity_check_paths = {
     'files': [],
