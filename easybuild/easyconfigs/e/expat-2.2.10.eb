@@ -12,7 +12,7 @@ toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 # http://downloads.sourceforge.net/project/expat/expat/2.2.10/expat-2.2.10.tar.xz
-source_urls = [ 'http://downloads.sourceforge.net/project/%(name)s/%(name)s/%(version)s' ]
-sources = [SOURCELOWER_TAR_XZ]
+source_urls = ['https://github.com/libexpat/libexpat/releases/download/R_%s/' % version.replace('.', '_')]
+sources =     [SOURCE_TAR_BZ2]
 
 moduleclass = 'tools'
