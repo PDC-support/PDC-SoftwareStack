@@ -4,7 +4,7 @@
 easyblock = 'ConfigureMake'
 
 name =    'curl'
-version = '7.78.0'
+version = '7.76.1'
 
 homepage = 'http://curl.haxx.se/'
 
