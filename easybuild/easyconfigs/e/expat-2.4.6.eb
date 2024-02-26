@@ -1,0 +1,46 @@
+easyblock = 'ConfigureMake'
+
+name = 'expat'
+version = '2.4.6'
+
+homepage = 'https://libexpat.github.io/'
+description = """
+Expat is an XML parser library written in C. It is a stream-oriented parser in
+which an application registers handlers for things the parser might find in the
+XML document (like start tags).
+The module contains the command line tool xmlwf and static and shared libraries.
+"""
+
+toolchain = {'name': 'system', 'version': 'system'}
+toolchainopts = {'pic': True}
+
+source_urls = ['https://github.com/libexpat/libexpat/releases/download/R_%s/' % version.replace('.', '_')]
+sources =     [SOURCE_TAR_BZ2]
+
+osdependencies = ['binutils']
+
+docurls = [
+    "Web-based documentation: https://libexpat.github.io/doc/",
+    "Man page for xmlwf",
+]
+usage = """
+The command line utility xmlwf checks whether a XML document is well-formed.
+Help for this command is available through a man page.
+The library is documented on the %(name)s web page.
+"""
+whatis = [
+    "Description: Stream-oriented XML parser library",
+    "This module contains the tool xmlwf and static and shared libraries",
+]
+
+sanity_check_paths = {
+    'files': ['bin/xmlwf', 'include/%(name)s.h', 'lib/libexpat.a', 'lib/libexpat.so'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "xmlwf -h",
+    "pkg-config --libs %(namelower)s",
+]
+
+moduleclass = 'tools'
