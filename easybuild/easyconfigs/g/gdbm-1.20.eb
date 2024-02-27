@@ -44,9 +44,8 @@ docurls = [
     'man pages for gdbmtool. gdbm_dump and gdbm_load in section 1 and for the API as gdbm in section 3',
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
-#toolchainopts = {'pic': True, 'precise': True}
 
 # ftp://ftp.gnu.org/gnu/gdbm/gdbm-1.18.1.tar.gz
 sources =     [SOURCELOWER_TAR_GZ]
@@ -54,7 +53,6 @@ source_urls = [GNU_SOURCE]
 checksums =   ['3aeac05648b3482a10a2da986b9f3a380a29ad650be80b9817a435fb8114a292']
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
     ('libiconv',   local_libiconv_version),
     ('gettext',    local_gettext_version), # Really a build dependency? It doesn't seem to link to it.
 ]
@@ -63,6 +61,8 @@ dependencies = [
     ('ncurses',     local_ncurses_version),
     ('libreadline', local_libreadline_version),
 ]
+
+osdependencies = ['binutils']
 
 # Note there is also libintl but that is part of the GNU C library so we son\'t use our own.
 configopts = '--enable-libgdbm-compat --with-libiconv-prefix=$EBROOTLIBICONV'
