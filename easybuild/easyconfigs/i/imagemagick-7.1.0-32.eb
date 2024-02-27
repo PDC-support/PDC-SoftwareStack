@@ -1,7 +1,7 @@
 # contributed by Luca Marsella (CSCS)
 easyblock = 'ConfigureMake'
 
-name = 'ImageMagick'
+name = 'imagemagick'
 version = '7.1.0-32'
 
 homepage = 'http://www.imagemagick.org/'
@@ -10,20 +10,20 @@ description = """ImageMagick is a software suite to create, edit, compose, or co
 toolchain = SYSTEM 
 toolchainopts = {'pic': True, 'verbose': False}
 
-sources = [SOURCE_TAR_GZ]
-source_urls = ['http://www.imagemagick.org/download/']
+sources = ['ImageMagick-%(version)s.tar.xz']
+source_urls = ['https://download.imagemagick.org/archive/releases/']
 
 dependencies = [
-    ('x11', '22.06-cpeGNU-22.06'),
+    ('x11', '20220504'),
     ('ghostscript', '9.55.0'),
     ('zstd', '1.5.0'),
     ('libjpeg-turbo', '2.1.1'),
 ]
-configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L${EBROOTLIBJPEGMINTURBO}/lib -L${EBROOTZLIB}/lib' "
+configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L${EBROOTLIBJPEGMINTURBO}/lib -L${EBROOTZSTD}/lib' "
 
 sanity_check_paths = {
     'files': [],
-    'dirs': ['bin', 'etc/%(name)s-%(version_major)s', 'include/%(name)s-%(version_major)s', 'lib', 'share'],
+    'dirs': ['bin', 'etc/ImageMagick-%(version_major)s', 'include/ImageMagick-%(version_major)s', 'lib', 'share'],
 }
 
 modextravars = {'MAGICK_HOME': '%(installdir)s'}
