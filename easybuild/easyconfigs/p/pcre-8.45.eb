@@ -1,6 +1,6 @@
 easyblock = 'ConfigureMake'
 
-name =    'PCRE'
+name =    'pcre'
 version = '8.45'
 
 homepage = 'http://www.pcre.org/'
@@ -34,22 +34,20 @@ docurls = [
     'Man pages for the commands (section 1) and API (section 3, starting point man pcre)',
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = [SOURCEFORGE_SOURCE]
 sources =     [SOURCELOWER_TAR_GZ]
 checksums =   ['4e6ce03e0336e8b4a3d6c2b70b1c5e18590a5673a98186da90d4f33c23defc09']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
+osdependencies = ['binutils']
 
 dependencies = [
-    ('libreadline', '8.1', '', True),
-    ('ncurses', '6.2', '', True),
-    ('zlib', '1.2.11', '', True),
-    ('bzip2', '1.0.8', '', True),
+    ('libreadline', '8.1'),
+    ('ncurses', '6.2'),
+    ('zlib', '1.2.11'),
+    ('bzip2', '1.0.8'),
 ]
 
 configopts  = "--with-pic --disable-cpp --enable-utf --enable-unicode-properties --enable-newline-is-any "
