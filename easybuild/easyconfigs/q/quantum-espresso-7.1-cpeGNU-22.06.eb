@@ -33,7 +33,7 @@ sources = ['https://gitlab.com/QEF/q-e/-/archive/qe-%(version_major)s.%(version_
 checksums = ['d56dea096635808843bd5a9be2dee3d1f60407c01dbeeda03f8256a3bcfc4eb6']
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True)
+    ('m4', '1.4.19', '', True)
 ]
 
 dependencies = [
