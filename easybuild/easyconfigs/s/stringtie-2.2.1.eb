@@ -32,7 +32,6 @@ buildopts = 'release'
 
 # the test script downloads some test data from the internet
 runtest = 'test'
-testopts = local_libs
 
 files_to_copy = [
     (['%(namelower)s', 'prepDE.py3'], 'bin'),
