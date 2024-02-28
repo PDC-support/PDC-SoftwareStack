@@ -1,0 +1,26 @@
+# contributed by Luca Marsella (CSCS)
+easyblock = 'ConfigureMake'
+
+name = 'cmake'
+version = '3.14.5'
+
+homepage = 'http://www.cmake.org'
+description = """CMake, the cross-platform, open-source build system. CMake is
+a family of tools designed to build, test and package software.  """
+
+toolchain = {'name': 'system', 'version': 'system'}
+
+source_urls = ['http://www.%(namelower)s.org/files/v%(version_major_minor)s']
+sources = [SOURCELOWER_TAR_GZ]
+
+# use system cURL to avoid the undefined reference to `DH_get_nid@OPENSSL_1_1_0i' 
+# when building cURL on dom101 (see https://jira.cscs.ch/browse/SD-52103)
+configopts = " --%(toolchain_name)s-curl "
+
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s', 'bin/cpack', 'bin/ctest'],
+    'dirs': [],
+}
+
+moduleclass = 'devel'
