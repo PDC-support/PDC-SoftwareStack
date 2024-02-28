@@ -1,0 +1,28 @@
+# jgp@cscs
+easyblock = 'ConfigureMake'
+
+name = 'gnuplot'
+version = '5.4.rc1'
+
+homepage = 'http://gnuplot.sourceforge.net/'
+description = "Portable interactive, function plotting utility"
+
+toolchain = {'name': 'system', 'version': 'system'}
+
+source_urls = ['https://github.com/%(name)s/%(name)s/archive']
+sources = ['%(version)s.tar.gz']
+
+dependencies = [
+    ('x11', '20220504'),
+]
+
+preconfigopts = "./prepare && "
+configopts = "--with-qt=no  --with-x --with-x-dcop"
+
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': [],
+}
+
+moduleclass = 'vis'
