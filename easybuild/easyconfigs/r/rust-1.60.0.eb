@@ -46,7 +46,7 @@ checksums =   ['20ca826d1cf674daf8e22c4f8c4b9743af07973211c839b85839742314c838b7
 osdependencies = [
     ('openssl-devel', 'libssl-dev', 'libopenssl-devel'), # For CMake
     ('pkgconf','pkg-config'),
-    'bintools',
+    'binutils',
     'cmake',
 ]
 
