@@ -1,0 +1,540 @@
+diff -ruN RSEM.orig/Makefile RSEM/Makefile
+--- RSEM.orig/Makefile	2024-03-01 22:19:44.080964473 +0100
++++ RSEM/Makefile	2024-03-01 22:21:09.597627315 +0100
+@@ -45,8 +45,8 @@
+ PROGRAMS = $(PROGS1) $(PROGS2) $(PROGS3)
+ 
+ # Auxiliary variables for installation
+-SCRIPTS = rsem-prepare-reference rsem-calculate-expression rsem-refseq-extract-primary-assembly rsem-gff3-to-gtf rsem-plot-model \
+-	  rsem-plot-transcript-wiggles rsem-gen-transcript-plots rsem-generate-data-matrix \
++SCRIPTS = rsem-prepare-reference rsem-calculate-expression rsem-refseq-extract-primary-assembly rsem-gff3-to-gtf \
++	  rsem-generate-data-matrix \
+ 	  extract-transcript-to-gene-map-from-trinity convert-sam-for-rsem    
+ 
+ 
+diff -ruN RSEM.orig/rsem-gen-transcript-plots RSEM/rsem-gen-transcript-plots
+--- RSEM.orig/rsem-gen-transcript-plots	2024-03-01 22:19:44.187631134 +0100
++++ RSEM/rsem-gen-transcript-plots	1970-01-01 01:00:00.000000000 +0100
+@@ -1,173 +0,0 @@
+-#!/usr/bin/env Rscript
+-
+-### Some constants
+-
+-
+-nrow_per_page = 3 # if input_list is composed of transcript ids
+-ncol_per_page = 2 # if input_list is composed of transcript ids
+-num_plots_per_page = nrow_per_page * ncol_per_page # if input_list is composed of transcript/allele ids
+-
+-
+-### Load program arguments
+-
+-
+-assert = function(expr, errmsg) {
+-  if (!expr) {      
+-    cat(errmsg, "\n", sep = "", file = stderr())
+-    quit(save = "no", status = 1)
+-  }
+-}
+-
+-args = commandArgs(TRUE)
+-assert(length(args) == 6, "Usage: rsem-gen-transcript-plots sample_name input_list is_allele_specific id_type<0,allele;1,isoform;2,gene> show_uniq output_plot_file")
+-
+-sample_name = args[1]
+-input_list = args[2]
+-alleleS = as.numeric(args[3])
+-id_type = as.numeric(args[4])
+-show_uniq = as.numeric(args[5])
+-output_plot_file = args[6]
+-
+-
+-### Load read depth files
+-
+-
+-load_read_depth = function(file) {
+-  depth = read.table(file, sep = "\t", stringsAsFactors = FALSE)
+-  rownames(depth) = depth[,1]
+-  return (depth)
+-}
+-
+-readdepth = load_read_depth(sprintf("%s.transcript.readdepth", sample_name))
+-M = dim(readdepth)[1]
+-ord_depth = order(readdepth[,1])
+-
+-all2uniq = c()
+-if (show_uniq) {
+-  readdepth_uniq = load_read_depth(sprintf("%s.uniq.transcript.readdepth", sample_name))
+-  ord_uniq_depth = order(readdepth_uniq[,1])
+-  assert(sum(readdepth[ord_depth,1] != readdepth_uniq[ord_uniq_depth,1]) == 0, "transcript/allele IDS in read depth and unique read depth files are not the same!")
+-  assert(sum(readdepth[ord_depth,2] != readdepth_uniq[ord_uniq_depth,2]) == 0, "transcript lengths in read depth and unique read depth files are not the same!")
+-  all2uniq[ord_depth] = ord_uniq_depth
+-}
+-
+-cat("Loading read depth files is done!\n")
+-
+-
+-### Build Gene-Isoform/Gene-Allele map and maps between IDs and ID_NAMEs
+-
+-
+-id_equal = function(a, b) {
+-  a == substr(b, 1, nchar(a))
+-}
+-
+-
+-expr_data = read.delim(sprintf("%s.%s.results", sample_name, ifelse(alleleS, "alleles", "isoforms")), stringsAsFactors = FALSE)
+-assert(M == dim(expr_data)[1], "The number of transcripts/alleles contained in the expression file is not equal to the number in the readdepth file!")
+-ord_expr = order(expr_data[,1])
+-
+-assert(sum(sapply(1:M, function(i) { !id_equal(readdepth[ord_depth[i], 1], expr_data[ord_expr[i], 1]) })) == 0, "Transcript/Allele IDs in the expression file is not exactly the same as the ones in the readdepth file!")
+-
+-expr2depth = c() # from id_name to pos
+-expr2depth[ord_expr] = ord_depth
+-names(expr2depth) = expr_data[,1]
+-
+-is_composite = (!alleleS && (id_type == 2)) || (alleleS && (id_type > 0))
+-
+-if (is_composite) {
+-   tmp_df = data.frame(expr2depth, expr_data[,ifelse(alleleS && id_type == 2, 3, 2)], stringsAsFactors = F)
+-   tmp_agg = aggregate(tmp_df[1], tmp_df[2], function(x) { x })
+-}
+-
+-cat("Building transcript to gene map is done!\n")
+-
+-  
+-### Load and transfer IDs
+-
+-
+-ids = scan(file = input_list, what = "", sep = "\n", strip.white = T)
+-assert(length(ids) > 0, "You should provide at least one ID.")
+-poses = c()
+-
+-if (is_composite) {
+-  poses = charmatch(ids, tmp_agg[,1], nomatch = -1)
+-} else {
+-  poses = match(ids, expr_data[,1])
+-  idx = !is.na(poses)
+-  poses[idx] = expr2depth[poses[idx]]
+-  poses[!idx] = match(ids[!idx], readdepth[,1], nomatch = -1)
+-}
+-
+-err_idx = poses < 1
+-if (sum(err_idx) > 0) {
+-   cat("Warning: The following IDs are not in the RSEM indices and thus ignored: ")
+-   cat(ids[err_idx], sep = ", ")
+-   cat("\n")
+-}
+-
+-ids = ids[!err_idx]
+-poses = poses[!err_idx]
+-
+-assert(length(poses) > 0, "There is no valid ID. Stopped.")
+-
+-
+-### Generate plots
+-
+-# pos is a number indexing the position in readdepth/readdepth_uniq
+-make_a_plot = function(pos) {
+-  len = readdepth[pos, 2]
+-  depths = readdepth[pos, 3]
+-
+-  if (is.na(depths)) wiggle = rep(0, len) else wiggle = as.numeric(unlist(strsplit(depths, split = " ")))
+-
+-  if (!show_uniq) {
+-    plot(wiggle, type = "h")
+-  } else {
+-    depths = readdepth_uniq[all2uniq[pos], 3]
+-    if (is.na(depths)) wiggle_uniq = rep(0, len) else wiggle_uniq = as.numeric(unlist(strsplit(depths, split = " ")))
+-    if (len != sum(wiggle >= wiggle_uniq)) {
+-      cat("Warning: ", ifelse(alleleS, "allele-specific transcript", "transcript"), " ", id, " has position(s) that read covarege with multireads is smaller than read covarge without multireads.\n", "         The 1-based position(s) is(are) : ", which(wiggle < wiggle_uniq), ".\n", "         This may be due to floating point arithmetics.\n", sep = "") 
+-    }
+-    heights = rbind(wiggle_uniq, wiggle - wiggle_uniq)	
+-    barplot(heights, space = 0, border = NA, names.arg = 1:len, col = c("black", "red")) 
+-  }
+-  title(main = readdepth[pos, 1])
+-}
+-
+-# poses is a vector of numbers
+-generate_a_page = function(poses, title = NULL) {
+-  n = length(poses)
+-  ncol = ifelse(is_composite, floor(sqrt(n)), ncol_per_page)
+-  nrow = ifelse(is_composite, ceiling(n / ncol), nrow_per_page)
+-
+-  par(mfrow = c(nrow, ncol), mar = c(2, 2, 2, 2))
+-  if (is_composite) par(oma = c(0, 0, 3, 0)) 
+-  sapply(poses, make_a_plot)
+-  if (is_composite) mtext(title, outer = TRUE, line = 1)
+-}
+-
+-plot_individual = function(i) {
+-  fr = (i - 1) * num_plots_per_page + 1
+-  to = min(i * num_plots_per_page, n)
+-  generate_a_page(poses[fr:to])
+-}
+-
+-# cid, composite id, can be either a gene id or transcript id (for allele-specific expression only)
+-plot_composite = function(pos) {
+-  generate_a_page(tmp_agg[pos, 2][[1]], tmp_agg[pos, 1])
+-}
+-
+-
+-pdf(output_plot_file)
+-
+-if (!is_composite) {	
+-  n = length(ids)
+-  ub = (n - 1) %/% num_plots_per_page + 1
+-  dumbvar = sapply(1:ub, plot_individual)
+-} else {
+-  dumbvar = sapply(poses, plot_composite)
+-}
+-
+-cat("Plots are generated!\n")
+-
+-dev.off.output = dev.off()
+diff -ruN RSEM.orig/rsem-plot-model RSEM/rsem-plot-model
+--- RSEM.orig/rsem-plot-model	2024-03-01 22:19:44.187631134 +0100
++++ RSEM/rsem-plot-model	1970-01-01 01:00:00.000000000 +0100
+@@ -1,169 +0,0 @@
+-#!/usr/bin/env Rscript
+-
+-argv <- commandArgs(TRUE)
+-if (length(argv) != 2) {
+-  cat("Usage: rsem-plot-model sample_name output_plot_file\n")
+-  q(status = 1)
+-}
+-
+-strvec <- strsplit(argv[1], split = "/")[[1]]
+-token <- strvec[length(strvec)]
+-
+-stat.dir <- paste(argv[1], ".stat", sep = "")
+-if (!file.exists(stat.dir)) {
+-  cat("Error: directory does not exist: ", stat.dir, "\n", sep = "")
+-  q(status = 1)
+-}
+-modelF <- paste(stat.dir, "/", token, ".model", sep = "")
+-cntF <- paste(stat.dir, "/", token, ".cnt", sep = "")
+-
+-pdf(argv[2])
+-
+-con <- file(modelF, open = "r")	
+-
+-# model type and forward probability
+-model_type <- as.numeric(readLines(con, n = 4)[1])  
+-
+-# fragment length distribution
+-strvec <- readLines(con, n = 3)
+-vec <- as.numeric(strsplit(strvec[1], split = " ")[[1]])
+-maxL <- vec[2] # maxL used for Profile
+-x <- (vec[1] + 1) : vec[2]
+-y <- as.numeric(strsplit(strvec[2], split = " ")[[1]])
+-mode_len = which(y == max(y)) + vec[1]
+-mean <- weighted.mean(x, y)
+-std <- sqrt(weighted.mean((x - mean)^2, y))
+-plot(x, y, type = "h",
+-     main = "Fragment Length Distribution",
+-     sub = sprintf("Mode = %d, Mean = %.1f, and Std = %.1f", mode_len, mean, std),
+-     xlab = "Fragment Length",
+-     ylab = "Probability")
+-abline(v = mode_len, col = "red", lty = "dashed")
+-
+-# mate length distribution
+-if (model_type == 0 || model_type == 1) bval <- as.numeric(readLines(con, n = 1)[1]) else bval <- 1
+-
+-if (bval == 1) {
+-  list <- strsplit(readLines(con, n = 2), split = " ")
+-  vec <- as.numeric(list[[1]])
+-  maxL <- vec[2]
+-  x <- (vec[1] + 1) : vec[2]
+-  y <- as.numeric(list[[2]])
+-  mode_len = which(y == max(y)) + vec[1]
+-  mean <- weighted.mean(x, y)
+-  std <- sqrt(weighted.mean((x - mean)^2, y))
+-  plot(x, y, type = "h",
+-       main = "Read Length Distribution",
+-       sub = sprintf("Mode = %d, Mean = %.1f, and Std = %.1f", mode_len, mean, std),
+-       xlab = "Read Length",
+-       ylab = "Probability")
+-}
+-strvec <- readLines(con, n = 1)
+-
+-# RSPD
+-bval <- as.numeric(readLines(con, n = 1)[1])
+-if (bval == 1) {
+-  bin_size <- as.numeric(readLines(con, n = 1)[1])
+-  y <- as.numeric(strsplit(readLines(con, n = 1), split = " ")[[1]])
+-  par(cex.axis = 0.7)
+-  barplot(y, space = 0, names.arg = 1:bin_size, main = "Read Start Position Distribution", xlab = "Bin #", ylab = "Probability")
+-  par(cex.axis = 1.0)
+-}
+-strvec <- readLines(con, n = 1)
+-
+-# plot sequencing errors
+-if (model_type == 1 || model_type == 3) {
+-  # skip QD
+-  N <- as.numeric(readLines(con, n = 1)[1])
+-  readLines(con, n = N + 1)
+-  readLines(con, n = 1) # for the blank line
+-  
+-  # QProfile
+-  readLines(con, n = 1)
+-
+-  x <- c()
+-  peA <- c() # probability of sequencing error given reference base is A
+-  peC <- c()
+-  peG <- c()
+-  peT <- c()
+-  
+-  for (i in 1 : N) {
+-    strvec <- readLines(con, n = 6)
+-    list <- strsplit(strvec[1:4], split = " ")
+-
+-    vecA <- as.numeric(list[[1]])
+-    vecC <- as.numeric(list[[2]])
+-    vecG <- as.numeric(list[[3]])
+-    vecT <- as.numeric(list[[4]])
+-
+-    if (sum(c(vecA, vecC, vecG, vecT)) < 1e-8) next
+-    x <- c(x, (i - 1))
+-    peA <- c(peA, ifelse(sum(vecA) < 1e-8, NA, -10 * log10(1.0 - vecA[1])))
+-    peC <- c(peC, ifelse(sum(vecC) < 1e-8, NA, -10 * log10(1.0 - vecC[2])))
+-    peG <- c(peG, ifelse(sum(vecG) < 1e-8, NA, -10 * log10(1.0 - vecG[3])))
+-    peT <- c(peT, ifelse(sum(vecT) < 1e-8, NA, -10 * log10(1.0 - vecT[4])))
+-  }
+-
+-  matplot(x, cbind(peA, peC, peG, peT), type = "b", lty = 1:4, pch = 0:3, col = 1:4,
+-          main = "Observed Quality vs. Phred Quality Score",
+-          xlab = "Phred Quality Score",
+-          ylab = "Observed Quality")
+-  legend("topleft", c("A", "C", "G", "T"), lty = 1:4, pch = 0:3, col = 1:4)
+-} else {
+-  # Profile
+-  readLines(con, n = 1)
+-
+-  x <- c()  
+-  peA <- c() # probability of sequencing error given reference base is A
+-  peC <- c()
+-  peG <- c()
+-  peT <- c()
+-
+-  for (i in 1: maxL) {
+-    strvec <- readLines(con, n = 6)
+-    list <- strsplit(strvec[1:4], split = " ")
+-
+-    vecA <- as.numeric(list[[1]])
+-    vecC <- as.numeric(list[[2]])
+-    vecG <- as.numeric(list[[3]])
+-    vecT <- as.numeric(list[[4]])
+-
+-    if (sum(c(vecA, vecC, vecG, vecT)) < 1e-8) next
+-    x <- c(x, i)
+-    peA <- c(peA, ifelse(sum(vecA) < 1e-8, NA, (1.0 - vecA[1]) * 100))
+-    peC <- c(peC, ifelse(sum(vecC) < 1e-8, NA, (1.0 - vecC[2]) * 100))
+-    peG <- c(peG, ifelse(sum(vecG) < 1e-8, NA, (1.0 - vecG[3]) * 100))
+-    peT <- c(peT, ifelse(sum(vecT) < 1e-8, NA, (1.0 - vecT[4]) * 100))
+-  }
+-
+-  matplot(x, cbind(peA, peC, peG, peT), type = "b", lty = 1:4, pch = 0:3, col = 1:4, main = "Position vs. Percentage Sequence Error", xlab = "Position", ylab = "Percentage of Sequencing Error")
+-  legend("topleft", c("A", "C", "G", "T"), lty = 1:4, pch = 0:3, col = 1:4)       
+-}
+-
+-close(con)
+-
+-# Alignment statistics
+-pair <- read.table(file = cntF, skip = 3, sep = "\t")
+-
+-stat_len = dim(pair)[1]
+-upper_bound = pair[stat_len - 1, 1]
+-my_labels = append(0:upper_bound, pair[stat_len, 1])
+-my_heights = rep(0, upper_bound + 2)
+-dummy = sapply(1:(stat_len - 1), function(id) { my_heights[pair[id, 1] + 1] <<- pair[id, 2] })
+-my_heights[upper_bound + 2] = pair[stat_len, 2]
+-my_colors = c("green", "blue", rep("dimgrey", upper_bound - 1), "red")
+-
+-barplot(my_heights, names.arg = my_labels,
+-        col = my_colors, border = NA,
+-        xlab = "Number of alignments per read",
+-        ylab = "Number of reads",
+-        main = "Alignment statistics")
+-
+-pie_values = c(my_heights[1], my_heights[2], sum(my_heights[3:(upper_bound  + 1)]), my_heights[upper_bound + 2])
+-pie_names = c("Unalignable", "Unique", "Multi", "Filtered")
+-pie_labels = sprintf("%s %.0f%%", pie_names, pie_values * 100.0 / sum(pie_values))
+-par(fig = c(0.4, 1, 0.35, 0.95), new = T)
+-pie(pie_values, labels = pie_labels, col = c("green", "blue", "dimgrey", "red"), clockwise = T, init.angle = 270, cex = 0.8)
+-par(fig = c(0, 1, 0, 1))
+-
+-dev.off.output <- dev.off()
+diff -ruN RSEM.orig/rsem-plot-transcript-wiggles RSEM/rsem-plot-transcript-wiggles
+--- RSEM.orig/rsem-plot-transcript-wiggles	2024-03-01 22:19:44.187631134 +0100
++++ RSEM/rsem-plot-transcript-wiggles	1970-01-01 01:00:00.000000000 +0100
+@@ -1,172 +0,0 @@
+-#!/usr/bin/env perl
+-
+-use Getopt::Long;
+-use Pod::Usage;
+-
+-use FindBin;
+-use lib $FindBin::RealBin;
+-use rsem_perl_utils qw(runCommand getSAMTOOLS);
+-
+-use Env qw(@PATH);
+-@PATH = ($FindBin::RealBin, "$FindBin::RealBin/" . getSAMTOOLS(), @PATH);
+-
+-use strict;
+-
+-
+-my $gene_list = 0; # default is 0, means input is not a gene list
+-my $transcript_list = 0; # default is 0, this option can only be turned on if allele-specific expression is calculated
+-my $show_unique = 0; # 0, default value, means do not show unique transcript wiggles; 1 means show unique transcript wiggles
+-my $p = 1;
+-my $mem = "1G";
+-my $help = 0;
+-
+-GetOptions("gene-list" => \$gene_list,
+-	   "transcript-list" => \$transcript_list,
+-	   "show-unique" => \$show_unique,
+-	   "p|num-threads=i" => \$p,
+-	   "memory-per-thread=s" => \$mem,
+-	   "h|help" => \$help) or pod2usage(-exitval => 2, -verbose => 2);
+-
+-pod2usage(-verbose => 2) if ($help == 1);
+-pod2usage(-msg => "Invalid number of arguments!", -exitval => 2, -verbose => 2) if (scalar(@ARGV) != 3);
+-
+-my $alleleS = 0;
+-if (-e "$ARGV[0].alleles.results") { $alleleS = 1; }
+-
+-pod2usage(-msg => "--transcript-list cannot be set if allele-specific reference is not built!", -exitval => 2, -verbose => 2) if (!$alleleS && $transcript_list);
+-pod2usage(-msg => "--gene-list and --transcript-list cannot be set at the same time!", -exitval => 2, -verbose => 2) if ($gene_list && $transcript_list);
+-
+-my $command = "";
+-
+-unless (-e "$ARGV[0].transcript.sorted.bam") {
+-    $command = "samtools sort -@ $p -m $mem -o $ARGV[0].transcript.sorted.bam $ARGV[0].transcript.bam";
+-    &runCommand($command);
+-}
+-unless (-e "$ARGV[0].transcript.readdepth") {
+-    $command = "rsem-bam2readdepth $ARGV[0].transcript.sorted.bam $ARGV[0].transcript.readdepth";
+-    &runCommand($command);
+-}
+-
+-if ($show_unique) {
+-    unless (-e "$ARGV[0].uniq.transcript.bam") {
+-	$command = "rsem-get-unique $p $ARGV[0].transcript.bam $ARGV[0].uniq.transcript.bam";
+-	&runCommand($command);
+-    }
+-    unless (-e "$ARGV[0].uniq.transcript.sorted.bam") {
+-	$command = "samtools sort -@ $p -m $mem -o $ARGV[0].uniq.transcript.sorted.bam $ARGV[0].uniq.transcript.bam";
+-	&runCommand($command);
+-    }
+-    unless (-e "$ARGV[0].uniq.transcript.readdepth") {
+-	$command = "rsem-bam2readdepth $ARGV[0].uniq.transcript.sorted.bam $ARGV[0].uniq.transcript.readdepth";
+-	&runCommand($command);
+-    }
+-}
+-
+-my $id_type;
+-
+-if ($alleleS) {
+-    $id_type = 0;
+-    if ($transcript_list) { $id_type = 1; }
+-    if ($gene_list) { $id_type = 2; }
+-} 
+-else {
+-    $id_type = 1;
+-    if ($gene_list) { $id_type = 2; }
+-}
+-
+-$command = "rsem-gen-transcript-plots $ARGV[0] $ARGV[1] $alleleS $id_type $show_unique $ARGV[2]";
+-&runCommand($command);
+-
+-__END__
+-
+-=head1 NAME
+-
+-rsem-plot-transcript-wiggles - Generate PDF wiggle plots from transcript or gene ids
+-
+-=head1 SYNOPSIS
+-
+- rsem-plot-transcript-wiggles [options] sample_name input_list output_plot_file
+-
+-=head1 ARGUMENTS
+-
+-=over
+-
+-=item B<sample_name>
+-
+-The name of the sample analyzed.
+-
+-=item B<input_list>
+-
+-A list of transcript ids or gene ids. But it cannot be a mixture of transcript & gene ids. Each id occupies one line without extra spaces.
+-
+-=item B<output_plot_file>
+-
+-The file name of the pdf file which contains all plots.
+-
+-=back
+-
+-=head1 OPTIONS
+-
+-=over
+-
+-=item B<--gene-list>
+-
+-The input-list is a list of gene ids. (Default: off)
+-
+-=item B<--transcript-list>
+-
+-The input-list is a list of transcript ids. This option can only be turned on if allele-specific expression is calculated. (Default: off)
+-
+-=item B<--show-unique>
+-
+-Show the wiggle plots as stacked bar plots. See description section for details. (Default: off)
+-
+-=item B<-p/--num-threads> <int>
+-
+-Set the number of threads we can use. (Default: 1)
+-
+-=item B<--memory-per-thread> <string>
+-
+-Set the maximum allowable memory per thread. <string> represents the memory and accepts suffices 'K/M/G'. (Default: 1G)
+-
+-=item B<-h/--help>
+-
+-Show help information.
+-
+-=back
+-
+-=head1 DESCRIPTION
+-
+-This program generates transcript wiggle plots and outputs them in a pdf file. This program can accept either a list of transcript ids or gene ids (if transcript to gene mapping information is provided) and has two modes of showing wiggle plots. If '--show-unique' is not specified, the wiggle plot for each transcript is a histogram where each position has the expected read depth at this position as its height. If '--show-unique' is specified, for each transcript a stacked bar plot is generated. For each position, the read depth of unique reads, which have only one alignment, is showed in black. The read depth of multi-reads, which align to more than one places, is showed in red on top of the read depth of unique reads.This program will use some files RSEM generated previouslly. So please do not delete/move any file 'rsem-calculate-expression' generated. If allele-specific expression is calculated, the basic unit for plotting is an allele-specific transcript and plots can be grouped by either transcript ids (--transcript-list) or gene ids (--gene-list). 
+-
+-=head1 OUTPUT
+-
+-=over
+-
+-=item B<output_plot_file>
+-
+-This is a pdf file containing all plots generated. If a list of transcript ids is provided, each page display at most 6 plots in 3 rows and 2 columns. If gene ids are provided, each page display a gene. The gene's id is showed at the top and all its transcripts' wiggle plots are showed in this page. The arrangement of plots is determined automatically. For each transcript wiggle plot, the transcript id is displayed as title. x-axis is position in the transcript and y-axis is read depth. If allele-specific expression is calculated, the basin unit becomes an allele-specific transcript and transcript ids and gene ids can be used to group allele-specific transcripts.
+-
+-=item B<sample_name.transcript.sorted.bam and sample_name.transcript.readdepth>
+-
+-If these files do not exist, 'rsem-plot-transcript-wiggles' will automatically generate them.
+-
+-=item B<sample_name.uniq.transcript.bam, sample_name.uniq.transcript.sorted.bam and sample_name.uniq.transcript.readdepth>
+-
+-If '--show-unique' option is specified and these files do not exist, 'rsem-plot-transcript-wiggles' will automatically generate them. 
+-
+-=back
+-
+-=head1 EXAMPLES
+-
+-Suppose sample_name and output_plot_file are set to 'mmliver_single_quals' and 'output.pdf' respectively. input_list is set to 'transcript_ids.txt' if transcript ids are provided, and is set to 'gene_ids.txt' if gene ids are provided.
+-
+-1) Transcript ids are provided and we just want normal wiggle plots:
+-
+- rsem-plot-transcript-wiggles mmliver_single_quals transcript_ids.txt output.pdf
+-
+-2) Gene ids are provided and we want to show stacked bar plots:
+-
+- rsem-plot-transcript-wiggles --gene-list --show-unique mmliver_single_quals gene_ids.txt output.pdf 
+-
+-=cut
