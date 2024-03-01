@@ -1,0 +1,53 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage: 	https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::	Robert Qiao <rob.qiao@flinders.edu.au>
+# License::	GPLv3.0
+#
+# Notes::
+##
+
+easyblock = 'MakeCp'
+
+name = 'rsem-plots'
+version = '1.3.3'
+
+homepage = 'https://deweylab.github.io/RSEM/'
+whatis = [
+    'Description: Plot scripts for RNA-Seq by Expectation-Maximization',
+    'This module provides a few scripts.',
+]
+
+description = """
+RSEM also has its own scripts to generate transcript read depth plots in
+pdf format. The unique feature of RSEM is, the read depth plots can be stacked,
+with read depth contributed to unique reads shown in black and contributed to
+multi-reads shown in red. In addition, models learned from data can also
+be visualized. Last but not least, RSEM contains a simulator.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+
+source_urls = ['https://github.com/deweylab/RSEM/archive/']
+sources = ['v%(version)s.tar.gz']
+checksums = [
+    {'v%(version)s.tar.gz':'90e784dd9df8346caa2a7e3ad2ad07649608a51df1c69bfb6e16f45e611a40dc'},
+]
+
+skipsteps = ['configure','build']
+
+dependencies = [
+    ('rsem', '%(version)s','',SYSTEM),
+    ('R/4.3.2',EXTERNAL_MODULE),
+]
+
+plot_files = ['rsem-plot-transcript-wiggles','rsem-gen-transcript-plots','rsem-plot-model']
+files_to_copy = [(plot_files, 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in plot_files],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
