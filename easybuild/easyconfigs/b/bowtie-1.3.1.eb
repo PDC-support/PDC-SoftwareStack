@@ -24,14 +24,8 @@ source_urls = ['https://sourceforge.net/projects/bowtie-bio/files/bowtie/%(versi
 sources = ['%(namelower)s-%(version)s-src.zip']
 checksums = ['e23517aa53846ef828172be911750cd05748522117efcbbe5a36f3241fb40761']
 
-buildopts = 'EXTRA_FLAGS="-DWITH_TBB"'
-
-builddependencies = [
-    ('onetbb', '4.4.6','',SYSTEM),
-]
-
 dependencies = [
-#    ('zlib', '1.2.11','',SYSTEM),
+    ('zlib', '1.3.1','',SYSTEM),
 ]
 
 moduleclass = 'bio'
