@@ -22,7 +22,7 @@ homepage = 'https://github.com/COMBINE-lab/salmon'
 description = """Salmon is a wicked-fast program to produce a highly-accurate,
  transcript-level quantification estimates from RNA-seq data."""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 github_account = 'COMBINE-lab'
@@ -35,20 +35,30 @@ checksums = [
 ]
 
 builddependencies = [
-    ('boost', '1.79.0'),
+    ('pkgconf', '1.9.3'),
+    ('cereal', '1.3.2'),
+    ('jemalloc', '5.3.0'),
+    ('boost', '1.79.0','-nompi'),
+    ('zlib', '1.3.1'),
+    ('bzip2', '1.0.8'),
+    ('curl','7.78.0'),
+    ('xz', '5.2.8'),
 ]
 
 dependencies = [
     ('onetbb', '2021.5.0'),
-    ('xz', '5.2.8','',SYSTEM),
-    ('libiconv', '1.16'),
+    ('libiconv', '1.17'),
 ]
+
+osdependencies = ['binutils','cmake']
 
 # Disable link-time optimizations (-flto) because it triggers a segfault/internal compiler error (ICE)
 # this issue might magically disappear in future versions of Salmon or GCC
 # see https://github.com/COMBINE-lab/salmon/issues/778
 configopts = '-DUSE_SHARED_LIBS=OFF -DNO_IPO=1'
-configopts+= ' -DTBB_ROOT_SEARCH=$EBROOTONETBB'
+configopts+= ' -DTBB_ROOT_SEARCH=$EBROOTONETBB -DJEMALLOC_ROOT=$EBROOTJEMALLOC -DFETCH_BOOST=FALSE'
+#-DBOOST_BUILD_THREADS=32
+#-DCMAKE_C_COMPILER_FORCED=1 -DCMAKE_CXX_COMPILER_FORCED=1 ' 
 
 skipsteps = ['test']
 #runtest = 'test'
