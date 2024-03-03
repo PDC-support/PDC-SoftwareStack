@@ -1,0 +1,32 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+# Author: Pablo Escobar Lopez
+# Swiss Institute of Bioinformatics
+# Biozentrum - University of Basel
+
+easyblock = 'Tarball'
+
+name = 'trimmomatic'
+version = '0.39'
+
+homepage = 'http://www.usadellab.org/cms/?page=trimmomatic'
+description = """Trimmomatic performs a variety of useful trimming tasks for illumina 
+ paired-end and single ended data.The selection of trimming steps and their associated 
+ parameters are supplied on the command line. """
+
+toolchain = SYSTEM
+
+source_urls = ['http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/']
+sources = ['Trimmomatic-%(version)s.zip']
+checksums = ['2f97e3a237378d55c221abfc38e4b11ea232c8a41d511b8b4871f00c0476abca']
+
+osdependencies = ['java']
+
+modextrapaths = {'PATH': ''}
+
+postinstallcmds = ['echo "#!/bin/bash"> %(installdir)s/trimmomatic', 'echo -ne "java -jar %(installdir)s/trimmomatic-%(version)s.jar" >> %(installdir)s/trimmomatic', 'echo " ${@}" >> %(installdir)s/trimmomatic', 'chmod +x %(installdir)s/trimmomatic']
+sanity_check_paths = {
+    'files': ["trimmomatic-%(version)s.jar","trimmomatic"],
+    'dirs': [""],
+}
+
+moduleclass = 'bio'
