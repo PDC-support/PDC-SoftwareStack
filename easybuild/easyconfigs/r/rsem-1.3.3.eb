@@ -33,7 +33,7 @@ Genomic-coordinate files can be visualized by both UCSC Genome browser and
 Broad Institute's Integrative Genomics Viewer (IGV). Transcript-coordinate files
 can be visualized by IGV.
 
-NOTE: RSEM\'s plot tools, which require R, are provided by the module "rsem-plots".'
+NOTE: RSEM\'s plot tools, which require R, are provided by the module "rsem-plots".
 """
 
 toolchain = SYSTEM
