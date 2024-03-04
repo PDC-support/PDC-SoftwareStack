@@ -23,9 +23,9 @@ osdependencies = ['java']
 
 modextrapaths = {'PATH': ''}
 
-postinstallcmds = ['echo "#!/bin/bash"> %(installdir)s/trimmomatic', 'echo -ne "java -jar %(installdir)s/trimmomatic-%(version)s.jar" >> %(installdir)s/trimmomatic', 'echo " ${@}" >> %(installdir)s/trimmomatic', 'chmod +x %(installdir)s/trimmomatic']
+postinstallcmds = ['mv %(installdir)s/trimmomatic-%(version)s.jar %(installdir)s/trimmomatic.jar','echo "#!/bin/bash"> %(installdir)s/trimmomatic', 'echo -ne "java -jar %(installdir)s/trimmomatic.jar" >> %(installdir)s/trimmomatic', 'echo " ${@}" >> %(installdir)s/trimmomatic', 'chmod +x %(installdir)s/trimmomatic']
 sanity_check_paths = {
-    'files': ["trimmomatic-%(version)s.jar","trimmomatic"],
+    'files': ["trimmomatic.jar","trimmomatic"],
     'dirs': [""],
 }
 
