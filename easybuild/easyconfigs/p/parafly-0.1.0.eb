@@ -1,0 +1,35 @@
+easyblock = 'ConfigureMake'
+
+name = 'parafly'
+version = '0.1.0'
+
+homepage = 'https://nbisweden.github.io/MrBayes/'
+description = """
+ParaFly provides a simple mechanism for running a predefined list of unix commands
+in parallel using multithreading. Failed processes are captured and reported.
+Successfully executed processes are noted. If the process is rerun, only those
+previously incompleted or failed processes will be executed.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'openmp': True}
+
+source_urls = ['https://github.com/ParaFly/ParaFly/archive/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['662e8bc2d7f5dae2cb63804bba13b4790eeda9f4e40126e1d947005c89134c4d']
+
+builddependencies = [
+    ('pkg-config', '0.29.2'),
+    ('autotools','20220317'),
+]
+
+dependencies = []
+
+configopts = 'CFLAGS="-fopenmp" CXXFLAGS="-fopenmp"'
+
+sanity_check_paths = {
+    'files': ['bin/ParaFly'],
+    'dirs': []
+}
+
+moduleclass = 'bio'
