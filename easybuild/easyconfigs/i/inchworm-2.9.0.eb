@@ -1,0 +1,34 @@
+easyblock = 'CMakeMake'
+
+name = 'inchworm'
+version = '2.9.0'
+
+homepage = 'https://github.com/trinityrnaseq/Inchworm'
+description = """
+Inchworm assembles the RNA-seq data into the unique sequences of transcripts,
+often generating full-length transcripts for a dominant isoform, but then
+reports just the unique portions of alternatively spliced transcripts.
+"""
+
+whatis = [
+    'Description: Inchworm is part of the Trinity RNA-Seq pipeline.',
+    'This module provides a number of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+github_account = 'trinityrnaseq'
+source_urls = ['https://github.com/trinityrnaseq/Inchworm/archive/']
+sources = ['c985c90.tar.gz']
+checksums = ['27f9ca39dbbbf85e2cd4dc16a0093aebc9d1ac86f98f32ecaa3f4ebf4252e6b2']
+
+#builddependencies = []
+
+local_files_to_be_installed = ['FastaToDeBruijn','fastaToKmerCoverageStats','inchworm']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_files_to_be_installed],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
