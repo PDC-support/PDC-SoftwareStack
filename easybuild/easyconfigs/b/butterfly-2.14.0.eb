@@ -1,0 +1,36 @@
+easyblock = 'Tarball'
+
+name = 'butterfly'
+version = '2.14.0'
+
+homepage = 'https://github.com/trinityrnaseq/Butterfly'
+description = """
+Butterfly then processes the individual graphs in parallel, tracing the paths
+that reads and pairs of reads take within the graph, ultimately reporting
+full-length transcripts for alternatively spliced isoforms, and teasing apart
+transcripts that corresponds to paralogous genes.
+"""
+
+whatis = [
+    'Description: Butterfly is part of the Trinity RNA-Seq pipeline.',
+    'This module provides a number of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+github_account = 'trinityrnaseq'
+source_urls = ['https://github.com/trinityrnaseq/Butterfly/archive/']
+sources = ['d3cb730.tar.gz']
+checksums = ['144c823106e837a273b43d9418d4859df7f95b3e62dbad4ce397e26d9b83ec77']
+
+osdependencies = ['java']
+
+modextrapaths = {'PATH': ''}
+
+postinstallcmds = ['echo "#!/bin/bash"> %(installdir)s/butterfly', 'echo -ne "java -jar %(installdir)s/Butterfly.jar" >> %(installdir)s/butterfly', 'echo " ${@}" >> %(installdir)s/butterfly', 'chmod +x %(installdir)s/butterfly']
+sanity_check_paths = {
+    'files': ["Butterfly.jar","butterfly"],
+    'dirs': [""],
+}
+
+moduleclass = 'bio'
