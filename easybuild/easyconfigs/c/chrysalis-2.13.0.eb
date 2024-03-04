@@ -1,0 +1,35 @@
+easyblock = 'CMakeMake'
+
+name = 'chrysalis'
+version = '2.13.0'
+
+homepage = 'https://github.com/trinityrnaseq/Chrysalis'
+description = """
+Chrysalis clusters the Inchworm contigs into clusters and constructs complete
+de Bruijn graphs for each cluster. Each cluster represents the full transcriptonal
+complexity for a given gene (or sets of genes that share sequences in common).
+Chrysalis then partitions the full read set among these disjoint graphs.
+"""
+
+whatis = [
+    'Description: Chrysalis is part of the Trinity RNA-Seq pipeline.',
+    'This module provides a number of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+github_account = 'trinityrnaseq'
+source_urls = ['https://github.com/trinityrnaseq/Chrysalis/archive/']
+sources = ['6aa7524.tar.gz']
+checksums = ['067d0efedaf14910bc9cc8a93fe4dc599c499126808409e0975bef4cf60c3ccb']
+
+#builddependencies = []
+
+local_files_to_be_installed = ['BubbleUpClustering','Chrysalis','CreateIwormFastaBundle','GraphFromFasta','QuantifyGraph','ReadsToTranscripts']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_files_to_be_installed],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
