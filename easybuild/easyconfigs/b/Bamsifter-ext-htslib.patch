@@ -1,0 +1,47 @@
+diff -ruN bamsifter.orig/bamsifter bamsifter/bamsifter
+--- bamsifter.orig/bamsifter	2024-03-04 15:08:18.501576422 +0100
++++ bamsifter/bamsifter	2024-03-04 15:14:04.084894501 +0100
+@@ -4,8 +4,6 @@
+ 
+ BAMSIFTERDIR=`dirname $0`
+ 
+-export LD_LIBRARY_PATH=${BAMSIFTERDIR}//htslib:${LD_LIBRARY_PATH}
+-
+ exec ${BAMSIFTERDIR}/_sift_bam_max_cov $*
+ 
+ 
+diff -ruN bamsifter.orig/build_htslib.sh bamsifter/build_htslib.sh
+--- bamsifter.orig/build_htslib.sh	2024-03-04 15:08:18.501576422 +0100
++++ bamsifter/build_htslib.sh	1970-01-01 01:00:00.000000000 +0100
+@@ -1,14 +0,0 @@
+-#!/usr/bin/env bash
+-
+-set -e -v
+-
+-cd htslib
+-git submodule init && git submodule update
+-mkdir -p build
+-autoheader
+-autoconf
+-./configure --prefix=`pwd`/build/
+-make
+-make install
+-
+-
+diff -ruN bamsifter.orig/Makefile bamsifter/Makefile
+--- bamsifter.orig/Makefile	2024-03-04 15:08:18.501576422 +0100
++++ bamsifter/Makefile	2024-03-04 15:11:03.101569145 +0100
+@@ -2,11 +2,7 @@
+ 
+ cwd = $(shell pwd)
+ 
+-sift_bam_max_cov: sift_bam_max_cov.cpp htslib/version.h
+-	g++ -std=c++11 -o _sift_bam_max_cov sift_bam_max_cov.cpp -Wall -O2 -L./htslib/build/lib/ -I./htslib/build/include -lhts
+-
+-
+-htslib/version.h :
+-	./build_htslib.sh
++sift_bam_max_cov: sift_bam_max_cov.cpp
++	g++ -std=c++11 -o _sift_bam_max_cov sift_bam_max_cov.cpp -Wall -O2 -I${EBROOTHTSLIB}/include -lhts
+ 
+ 

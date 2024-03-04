@@ -1,0 +1,39 @@
+# easybuild easyconfig
+easyblock = 'MakeCp'
+
+name = 'bamsifter'
+version = '2.15.0'
+
+homepage = 'https://github.com/trinintyrnaseq/%(namelower)s'
+description = """
+Bamsifter normalizes coverage depth by position-specific
+read sampling in a bam file to give a target max depth.
+"""
+
+whatis = [
+    'Description: Bamsifter is part of the Trinity RNA-Seq pipeline.',
+    'This module provides a pair of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/trinityrnaseq/%(namelower)s/archive']
+sources = ['348150f.tar.gz']
+patches = ['Bamsifter-ext-htslib.patch']
+checksums = ['a7b4213709bf116e462f36ead2cce0dea103316fe5fe7b2b779e5a35c7c6e329','45980a73d8e236d8c680f9dbaa138dbb4f188526e636aea474396a7c142ee234']
+
+dependencies = [
+    ('htslib', '1.15.1'),
+#    ('zlib','1.3.1'),
+]
+
+files_to_copy = [(['%(namelower)s','_sift_bam_max_cov'], 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s','bin/_sift_bam_max_cov'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["%(namelower)s 2>&1 | grep -i usage:"]
+
+moduleclass = 'bio'
