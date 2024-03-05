@@ -23,7 +23,7 @@ source_urls = ['https://github.com/trinityrnaseq/Chrysalis/archive/']
 sources = ['6aa7524.tar.gz']
 checksums = ['067d0efedaf14910bc9cc8a93fe4dc599c499126808409e0975bef4cf60c3ccb']
 
-#builddependencies = []
+osdependencies = ['cmake']
 
 local_files_to_be_installed = ['BubbleUpClustering','Chrysalis','CreateIwormFastaBundle','GraphFromFasta','QuantifyGraph','ReadsToTranscripts']
 
