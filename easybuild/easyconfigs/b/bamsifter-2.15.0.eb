@@ -24,7 +24,6 @@ checksums = ['a7b4213709bf116e462f36ead2cce0dea103316fe5fe7b2b779e5a35c7c6e329',
 
 dependencies = [
     ('htslib', '1.15.1'),
-#    ('zlib','1.3.1'),
 ]
 
 files_to_copy = [(['%(namelower)s','_sift_bam_max_cov'], 'bin')]
