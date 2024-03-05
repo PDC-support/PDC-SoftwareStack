@@ -22,7 +22,7 @@ source_urls = ['https://github.com/trinityrnaseq/Inchworm/archive/']
 sources = ['c985c90.tar.gz']
 checksums = ['27f9ca39dbbbf85e2cd4dc16a0093aebc9d1ac86f98f32ecaa3f4ebf4252e6b2']
 
-#builddependencies = []
+osdependencies = ['cmake']
 
 local_files_to_be_installed = ['FastaToDeBruijn','fastaToKmerCoverageStats','inchworm']
 
