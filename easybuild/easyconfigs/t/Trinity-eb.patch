@@ -1,0 +1,430 @@
+diff -ruN trinityrnaseq-v2.15.1.orig/Analysis/FL_reconstruction_analysis/compute_oracle.pl trinityrnaseq-v2.15.1/Analysis/FL_reconstruction_analysis/compute_oracle.pl
+--- trinityrnaseq-v2.15.1.orig/Analysis/FL_reconstruction_analysis/compute_oracle.pl	2023-02-05 19:46:15.000000000 +0100
++++ trinityrnaseq-v2.15.1/Analysis/FL_reconstruction_analysis/compute_oracle.pl	2024-03-04 21:41:28.731246075 +0100
+@@ -12,7 +12,7 @@
+ my $SS_flag = $ARGV[2] || 0;
+ 
+ 
+-my $cmd = "$FindBin::RealBin/../../Inchworm/bin/inchworm "
++my $cmd = "inchworm "
+     . " --reads $reads_file "
+     . " --checkFastaPath $ref_transcripts_fasta ";
+ 
+diff -ruN trinityrnaseq-v2.15.1.orig/Makefile trinityrnaseq-v2.15.1/Makefile
+--- trinityrnaseq-v2.15.1.orig/Makefile	2023-02-05 19:46:16.000000000 +0100
++++ trinityrnaseq-v2.15.1/Makefile	2024-03-04 20:46:22.708059689 +0100
+@@ -17,49 +17,24 @@
+ endif
+ 
+ 
+-all: inchworm_target chrysalis_target trinity_essentials
++all: plugins
+ 	sh ./util/support_scripts/trinity_install_tests.sh
+ 
+ 
+-no_bamsifter: inchworm_target chrysalis_target
+-	cd trinity-plugins && $(MAKE) no_bamsifter
+-
+ install:
+ 	util/support_scripts/trinity_installer.py
+ 
+-inchworm_target:
+-	@echo Using $(TRINITY_COMPILER) compiler for Inchworm and Chrysalis
+-	cd Inchworm && $(MAKE)
+-
+-chrysalis_target:
+-	cd Chrysalis && $(MAKE)
+-
+-
+-trinity_essentials:
+-	cd trinity-plugins && $(MAKE) trinity_essentials
+-
+ 
+ plugins:
+ 	cd trinity-plugins && $(MAKE) plugins
+ 	sh ./util/support_scripts/plugin_install_tests.sh
+ 
+-test:
+-	@echo
+-	@echo "Checking for Trinity essentials (built from 'make all'):"
+-	sh ./util/support_scripts/trinity_install_tests.sh
+-	@echo
+-	@echo "Checking for plugins (built from 'make plugins'):"
+-	sh ./util/support_scripts/plugin_install_tests.sh
+-	@echo "Run 'make test_trinity' if you want to test Trinity execution on a small data set"
+-
+ clean:
+-	cd Inchworm && $(MAKE) clean
+-	cd Chrysalis && $(MAKE) clean 
+ 	cd trinity-plugins && $(MAKE) clean 
+ 	cd sample_data/ && $(MAKE) clean
+ 
+ 
+-test_trinity:
++test:
+ 	cd sample_data/test_Trinity_Assembly && $(MAKE) test
+ 
+ 
+diff -ruN trinityrnaseq-v2.15.1.orig/Trinity trinityrnaseq-v2.15.1/Trinity
+--- trinityrnaseq-v2.15.1.orig/Trinity	2023-02-05 19:46:16.000000000 +0100
++++ trinityrnaseq-v2.15.1/Trinity	2024-03-04 21:17:00.767977982 +0100
+@@ -42,25 +42,16 @@
+ my $ROOTDIR = "$FindBin::RealBin";
+ my $UTILDIR = "$ROOTDIR/util";
+ my $MISCDIR = "$UTILDIR/misc";
+-my $INCHWORM_DIR = "$ROOTDIR/Inchworm/bin/";
+-my $CHRYSALIS_DIR = "$ROOTDIR/Chrysalis";
+-my $BUTTERFLY_DIR = "$ROOTDIR/Butterfly";
++my $BUTTERFLY_DIR = $ENV{EBROOTBUTTERFLY};
+ my $COLLECTL_DIR = "$ROOTDIR/trinity-plugins/COLLECTL/collectl";
+-my $TRINITY_PLUGINS_DIR = "$ROOTDIR/trinity-plugins";
+-my $TRINITY_BIN_DIR = "$TRINITY_PLUGINS_DIR/BIN";
+-my $PARAFLY = "$TRINITY_BIN_DIR/ParaFly";
+-my $HTSLIB_DIR = "$ROOTDIR/trinity-plugins/htslib";
+-
+-$ENV{LD_LIBRARY_PATH} .= ":${HTSLIB_DIR}";
++my $PARAFLY = "ParaFly";
+ 
+ if ($ENV{TRINITY_NO_RETRIES}) {
+     $PARAFLY .= " -max_retry 1 ";
+ }
+ 
+-my $TRIMMOMATIC = "$ROOTDIR/trinity-plugins/Trimmomatic/trimmomatic.jar";
+-my $TRIMMOMATIC_DIR = "$ROOTDIR/trinity-plugins/Trimmomatic";
+-
+-$ENV{PATH} = "$ROOTDIR/trinity-plugins/BIN:$ENV{PATH}";
++my $TRIMMOMATIC = "$ENV{EBROOTTRIMMOMATIC}/trimmomatic.jar";
++my $TRIMMOMATIC_DIR = $ENV{EBROOTTRIMMOMATIC};
+ 
+ my $JAVA_VERSION_REQUIRED = 8;
+ 
+@@ -2177,7 +2168,7 @@
+         
+         my $welds_to_cluster_file = "$chrysalis_output_dir/iworm_cluster_welds_graph.txt";
+         
+-        my $graphFromFasta_cmd = "$CHRYSALIS_DIR/bin/GraphFromFasta -i $inchworm_file -r $inchworm_target_fa -min_contig_length $min_contig_length -min_glue $min_glue -glue_factor $glue_factor -min_iso_ratio $min_iso_ratio -t $CPU -k " . ($KMER_SIZE-1) . " -kk $GRAPH_FROM_FASTA_KK $GRAPH_FROM_FASTA_CUSTOM_PARAMS";
++        my $graphFromFasta_cmd = "GraphFromFasta -i $inchworm_file -r $inchworm_target_fa -min_contig_length $min_contig_length -min_glue $min_glue -glue_factor $glue_factor -min_iso_ratio $min_iso_ratio -t $CPU -k " . ($KMER_SIZE-1) . " -kk $GRAPH_FROM_FASTA_KK $GRAPH_FROM_FASTA_CUSTOM_PARAMS";
+        
+         if ($SS_lib_type) {
+             $graphFromFasta_cmd .= " -strand ";
+@@ -2206,7 +2197,7 @@
+         
+         ## now cluster into chrysalis components:
+         
+-        my $bubble_cluster_cmd = "$CHRYSALIS_DIR/bin/BubbleUpClustering -i $inchworm_file  -weld_graph $welds_to_cluster_file_sorted -min_contig_length $min_contig_length -max_cluster_size $MAX_CHRYSALIS_CLUSTER_SIZE ";
++        my $bubble_cluster_cmd = "BubbleUpClustering -i $inchworm_file  -weld_graph $welds_to_cluster_file_sorted -min_contig_length $min_contig_length -max_cluster_size $MAX_CHRYSALIS_CLUSTER_SIZE ";
+ 
+         if ($CHRYSALIS_DEBUG_WELD_ALL) {
+             $bubble_cluster_cmd .= " -debug_weld_all ";
+@@ -2226,7 +2217,7 @@
+         ## create iworm bundles
+         
+         
+-        my $cmd = "$CHRYSALIS_DIR/bin/CreateIwormFastaBundle -i $graphFromFasta_outfile -o $iworm_bundles_fasta_file -min $min_contig_length";
++        my $cmd = "CreateIwormFastaBundle -i $graphFromFasta_outfile -o $iworm_bundles_fasta_file -min $min_contig_length";
+         
+         
+         $chrysalis_pipeliner->add_commands( new Command($cmd, "$iworm_bundles_fasta_file.ok"));
+@@ -2238,7 +2229,7 @@
+     { 
+         ## map reads to chrysalis components:
+                         
+-        my $cmd .= "$CHRYSALIS_DIR/bin/ReadsToTranscripts -i $chrysalis_reads_fa -f $iworm_bundles_fasta_file -o $reads_to_components_output_file -t $CPU -max_mem_reads $max_reads_per_loop ";
++        my $cmd .= "ReadsToTranscripts -i $chrysalis_reads_fa -f $iworm_bundles_fasta_file -o $reads_to_components_output_file -t $CPU -max_mem_reads $max_reads_per_loop ";
+         if ($SS_lib_type) {
+             $cmd .= " -strand ";
+         }
+@@ -2297,7 +2288,7 @@
+     {
+         ## write the deBruijn graphs:
+ 
+-        my $cmd = "$INCHWORM_DIR/FastaToDeBruijn --fasta $iworm_bundles_fasta_file -K " . ($KMER_SIZE-1) . " --graph_per_record --threads $CPU";
++        my $cmd = "FastaToDeBruijn --fasta $iworm_bundles_fasta_file -K " . ($KMER_SIZE-1) . " --graph_per_record --threads $CPU";
+         if ($SS_lib_type) {
+             $cmd .= " --SS ";
+         }
+@@ -2349,7 +2340,7 @@
+ 
+             { # quantify graph command
+                 
+-                my $quantify_graph_cmd = "$CHRYSALIS_DIR/bin/QuantifyGraph -g $base_filename.graph.tmp "
++                my $quantify_graph_cmd = "QuantifyGraph -g $base_filename.graph.tmp "
+                     . " -i $base_filename.reads.tmp "
+                     . " -o $base_filename.graph.out "
+                     . " -max_reads $max_reads_per_graph "
+@@ -2640,7 +2631,7 @@
+         
+         #if ($STOMP_SNPS) {
+         #    print STDERR "-stomping snps out of kmers before inchworm assembly\n";
+-         #   my $cmd = "$INCHWORM_DIR/SNP_stomper --reads $jelly_kmer_fa_file --kmers $jelly_kmer_fa_file -0kmer_size $KMER_SIZE"; 
++         #   my $cmd = "SNP_stomper --reads $jelly_kmer_fa_file --kmers $jelly_kmer_fa_file -0kmer_size $KMER_SIZE"; 
+          #   if ($strand_specific_flag) {
+          #       $cmd .= " --SS";
+          #   }
+@@ -2651,7 +2642,7 @@
+         #}
+         
+         
+-        $inchworm_cmd = "$INCHWORM_DIR/inchworm --kmers $jelly_kmer_fa_file --run_inchworm -K $kmer_size --monitor 1 $iworm_opts ";
++        $inchworm_cmd = "inchworm --kmers $jelly_kmer_fa_file --run_inchworm -K $kmer_size --monitor 1 $iworm_opts ";
+             
+         # hold on to the jellyfish file - we might use it for other applications.
+         #push (@tmp_files, $jelly_finished_checkpoint_file, $jelly_kmer_fa_file) unless $NO_CLEANUP;
+@@ -2666,7 +2657,7 @@
+         ## Using Inchworm kmer method (original, slow w/ large data)
+         ######################################################
+         
+-        $inchworm_cmd = "$INCHWORM_DIR/inchworm --reads $reads --run_inchworm -K $kmer_size --monitor 1 $iworm_opts ";
++        $inchworm_cmd = "inchworm --reads $reads --run_inchworm -K $kmer_size --monitor 1 $iworm_opts ";
+         if ($min_kmer_cov > 1) {
+             $inchworm_cmd .= " --minKmerCount $min_kmer_cov ";
+         }
+@@ -3037,7 +3028,7 @@
+ 
+     my $extracted_reads_file = "$trinity_target_fa." . $min_percent_read_containing_kmers . "pcnt.iworm_extracted";
+ 
+-    my $cmd = "$INCHWORM_DIR/pull_reads_with_kmers "
++    my $cmd = "pull_reads_with_kmers "
+         . "--target $inchworm_file "
+         . "--reads $trinity_target_fa "
+         . "--min_percent_read_containing_kmers $min_percent_read_containing_kmers ";
+@@ -3153,7 +3144,7 @@
+     print FILE "===========\n";
+     print FILE     "Trinity Version:      $VERSION\n";
+     my $tempp="";
+-    $tempp=`ldd $INCHWORM_DIR/inchworm 2>/dev/null | grep "libgomp"`;
++    $tempp=`ldd inchworm 2>/dev/null | grep "libgomp"`;
+     if  ($tempp eq "") {
+         print FILE "Compiler:             Intel\n";
+     } else {
+@@ -3508,7 +3499,7 @@
+     
+         ## run bam sifter to normalize for coverage:
+         my $normalized_cov_bam = "$output_directory/" . basename($genome_guided_bam) . ".norm_${normalize_max_read_cov}.bam";
+-        my $cmd = "$TRINITY_PLUGINS_DIR/bamsifter/bamsifter -c $normalize_max_read_cov -o $normalized_cov_bam --keep_secondary $genome_guided_bam"; 
++        my $cmd = "bamsifter -c $normalize_max_read_cov -o $normalized_cov_bam --keep_secondary $genome_guided_bam"; 
+         &process_cmd($cmd) if ! -e "$normalized_cov_bam.ok";
+         &process_cmd("touch $normalized_cov_bam.ok") if ! -e "$normalized_cov_bam.ok";
+         
+@@ -3927,7 +3918,7 @@
+ 
+     ## determine avg kmer abundances
+     my $LR_kmer_abundances_file = "$long_reads_fa.kmer_cov";
+-    my $cmd = "$INCHWORM_DIR/fastaToKmerCoverageStats  --kmers_from_reads $reads_fa_file --reads $long_reads_fa  --num_threads 1 > $LR_kmer_abundances_file 2>/dev/null";
++    my $cmd = "fastaToKmerCoverageStats  --kmers_from_reads $reads_fa_file --reads $long_reads_fa  --num_threads 1 > $LR_kmer_abundances_file 2>/dev/null";
+     my $LR_kmer_checkpoint_file = "$LR_kmer_abundances_file.ok";
+     unless (-s $LR_kmer_abundances_file && -e $LR_kmer_checkpoint_file) {
+         &process_cmd($cmd);
+diff -ruN trinityrnaseq-v2.15.1.orig/trinity-plugins/Makefile trinityrnaseq-v2.15.1/trinity-plugins/Makefile
+--- trinityrnaseq-v2.15.1.orig/trinity-plugins/Makefile	2023-02-05 19:46:16.000000000 +0100
++++ trinityrnaseq-v2.15.1/trinity-plugins/Makefile	2024-03-04 21:03:13.374681445 +0100
+@@ -4,31 +4,6 @@
+ CXX = g++
+ CC = gcc
+ COLLECTL_CODE="collectl-4.1.0"
+-PARAFLY_CODE="ParaFly"
+-TRIMMOMATIC_CODE=Trimmomatic-0.36
+-
+-
+-
+-trinity_essentials: seqtk_target parafly_target trimmomatic_target bamsifter_target
+-
+-no_bamsifter: seqtk_target parafly_target trimmomatic_target
+-
+-
+-trimmomatic_target:
+-	ln -sf ${TRIMMOMATIC_CODE} Trimmomatic
+-
+-
+-seqtk_target:
+-	cd seqtk-trinity && $(MAKE) CXX=$(CXX) CC=$(CC)
+-	mv seqtk-trinity/seqtk-trinity ./BIN/.
+-
+-parafly_target:
+-	cd ${PARAFLY_CODE} && sh ./configure --prefix=`pwd` CXX=$(CXX) CC=$(CC) CFLAGS="-fopenmp" CXXFLAGS="-fopenmp" && $(MAKE) install && \
+-	cp bin/ParaFly ../BIN/
+-
+-
+-bamsifter_target:
+-	cd bamsifter && make
+ 
+ ##################################
+ ### Needed for downstream analyses
+@@ -45,18 +20,9 @@
+ 	cd COLLECTL && tar xvf ${COLLECTL_CODE}.src.tar.gz && ln -sf ${COLLECTL_CODE} collectl
+ 
+ clean:
+-	cd seqtk-trinity && $(MAKE) clean
+-	cd scaffold_iworm_contigs && $(MAKE) clean
+-	cd ${PARAFLY_CODE} && $(MAKE) clean
+-	rm -f ./Trimmomatic # rm symlink
+ 	cd slclust && $(MAKE) clean
+ 	cd COLLECTL && rm -rf ${COLLECTL_CODE} && rm -f collectl
+-	cd htslib && $(MAKE) clean
+-	cd bamsifter && $(MAKE) clean
+-	rm -f ./htslib.ok
+ 	@echo "\n\n** Done cleaning plugins area **"
+ 
+ 
+ ###################################################################
+-
+-
+diff -ruN trinityrnaseq-v2.15.1.orig/util/PBS/trinity_pbs.p4b trinityrnaseq-v2.15.1/util/PBS/trinity_pbs.p4b
+--- trinityrnaseq-v2.15.1.orig/util/PBS/trinity_pbs.p4b	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/PBS/trinity_pbs.p4b	2024-03-04 21:39:02.167919241 +0100
+@@ -24,12 +24,12 @@
+ 	JOB_COMPLETED_FILESIZE=\$(stat -c%s \"\$MYJOBQ.completed\")
+ 	if [ \"\$JOB_FILESIZE\" != \"\$JOB_COMPLETED_FILESIZE\" ] ; then
+         	trap \" echo \\\"Please check \$MYJOBQ Chrysalis QuantifyGraph processes had enough walltime.\\\"; exit 255 \" INT TERM
+-	        "$TRINITYPATH"/trinity-plugins/parafly/bin/ParaFly  -CPU "$NCPU_P4" -v -failed_cmds \$MYJOBQ.failed -c \$MYJOBQ
++	        ParaFly  -CPU "$NCPU_P4" -v -failed_cmds \$MYJOBQ.failed -c \$MYJOBQ
+         	trap - INT TERM EXIT
+ 	fi
+  else
+         	trap \" echo \\\"Please check \$MYJOBQ Chrysalis QuantifyGraph processes had enough walltime.\\\"; exit 255 \" INT TERM
+-	        "$TRINITYPATH"/trinity-plugins/parafly/bin/ParaFly -CPU "$NCPU_P4" -v -failed_cmds \$MYJOBQ.failed -c \$MYJOBQ
++	        ParaFly -CPU "$NCPU_P4" -v -failed_cmds \$MYJOBQ.failed -c \$MYJOBQ
+         	trap - INT TERM EXIT
+  fi
+ 
+diff -ruN trinityrnaseq-v2.15.1.orig/util/PBS/trinity_pbs.p5b trinityrnaseq-v2.15.1/util/PBS/trinity_pbs.p5b
+--- trinityrnaseq-v2.15.1.orig/util/PBS/trinity_pbs.p5b	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/PBS/trinity_pbs.p5b	2024-03-04 21:39:02.167919241 +0100
+@@ -24,12 +24,12 @@
+ 	 JOB_COMPLETED_FILESIZE=\$(stat -c%s \"\$MYJOBB.completed\")
+ 	 if [ \"$JOB_FILESIZE\" != \"\$JOB_COMPLETED_FILESIZE\" ] ; then
+         	trap \" echo \\\"Please check \$MYJOBB Butterfly processes had enough walltime.\\\"; exit 255 \" INT TERM
+-	        "$TRINITYPATH"/trinity-plugins/parafly/bin/ParaFly -CPU "$NCPU_P5" -v -failed_cmds \$MYJOBB.failed -c \$MYJOBB
++	        ParaFly -CPU "$NCPU_P5" -v -failed_cmds \$MYJOBB.failed -c \$MYJOBB
+         	trap - INT TERM EXIT
+ 	 fi
+  else
+         	trap \" echo \\\"Please check \$MYJOBB Butterfly processes had enough walltime.\\\"; exit 255 \" INT TERM
+-	        "$TRINITYPATH"/trinity-plugins/parafly/bin/ParaFly -CPU "$NCPU_P5" -v -failed_cmds \$MYJOBB.failed -c \$MYJOBB
++	        ParaFly -CPU "$NCPU_P5" -v -failed_cmds \$MYJOBB.failed -c \$MYJOBB
+         	trap - INT TERM EXIT
+  fi
+ exit
+diff -ruN trinityrnaseq-v2.15.1.orig/util/insilico_read_normalization.pl trinityrnaseq-v2.15.1/util/insilico_read_normalization.pl
+--- trinityrnaseq-v2.15.1.orig/util/insilico_read_normalization.pl	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/insilico_read_normalization.pl	2024-03-04 21:34:20.301265121 +0100
+@@ -18,9 +18,6 @@
+ use COMMON;
+ use DB_File;
+ 
+-$ENV{PATH} = "$FindBin::Bin/../trinity-plugins/BIN:$ENV{PATH}";
+-
+-
+ open (STDERR, ">&STDOUT");  ## capturing stderr and stdout in a single stdout stream
+ 
+ 
+@@ -120,7 +117,6 @@
+ 
+ my $ROOTDIR = "$FindBin::RealBin/../";
+ my $UTILDIR = "$ROOTDIR/util/support_scripts/";
+-my $INCHWORM_DIR = "$ROOTDIR/Inchworm";
+ 
+ unless (@ARGV) {
+     die "$usage\n";
+@@ -834,7 +830,7 @@
+         my $stats_filename = "$converted_fa_file.K$KMER_SIZE.stats";
+         push (@$info_aref, $stats_filename);
+         
+-        my $cmd = "$INCHWORM_DIR/bin/fastaToKmerCoverageStats --reads $converted_fa_file --kmers $kmer_file --kmer_size $KMER_SIZE  --num_threads $CPU_ADJ ";
++        my $cmd = "fastaToKmerCoverageStats --reads $converted_fa_file --kmers $kmer_file --kmer_size $KMER_SIZE  --num_threads $CPU_ADJ ";
+         unless ($SS_lib_type) {
+             $cmd .= " --DS ";
+         }
+diff -ruN trinityrnaseq-v2.15.1.orig/util/misc/run_trimmomatic_qual_trimming.pl trinityrnaseq-v2.15.1/util/misc/run_trimmomatic_qual_trimming.pl
+--- trinityrnaseq-v2.15.1.orig/util/misc/run_trimmomatic_qual_trimming.pl	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/misc/run_trimmomatic_qual_trimming.pl	2024-03-04 21:36:42.281258805 +0100
+@@ -52,7 +52,7 @@
+ 
+ =trimmomatic
+ 
+-java -jar /seq/regev_genome_portal/SOFTWARE/BIN/trimmomatic.jar PE -threads {__THREADS__} -phred33 \
++java -jar $ENV{EBROOTTRIMMOMATIC}/trimmomatic.jar PE -threads {__THREADS__} -phred33 \
+ {__LEFT_FQ__} {__RIGHT_FQ__} \
+ {__LEFT_FQ__}.P.qtrim.fq {__LEFT_FQ__}.U.qtrim.fq  \
+ {__RIGHT_FQ__}.P.qtrim.fq {__RIGHT_FQ__}.U.qtrim.fq \
+@@ -72,7 +72,7 @@
+ 
+     if ($left && $right) {
+     
+-        $cmd = "java -jar $FindBin::RealBin/../../trinity-plugins/Trimmomatic/trimmomatic.jar PE -threads $threads -phred33 "
++        $cmd = "java -jar $ENV{EBROOTTRIMMOMATIC}/trimmomatic.jar PE -threads $threads -phred33 "
+             . " $left $right "
+             . " $left.P.qtrim.fq $left.U.qtrim.fq "
+             . " $right.P.qtrim.fq $right.U.qtrim.fq "
+@@ -80,7 +80,7 @@
+     }
+     else {
+         
+-        $cmd = "java -jar $FindBin::RealBin/../../trinity-plugins/Trimmomatic/trimmomatic.jar SE -threads $threads -phred33 "
++        $cmd = "java -jar $ENV{EBROOTTRIMMOMATIC}/trimmomatic.jar SE -threads $threads -phred33 "
+             . " $single "
+             . " $single.qtrim.fq "
+             . " $trim_params ";
+diff -ruN trinityrnaseq-v2.15.1.orig/util/support_scripts/tests/tests.py trinityrnaseq-v2.15.1/util/support_scripts/tests/tests.py
+--- trinityrnaseq-v2.15.1.orig/util/support_scripts/tests/tests.py	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/support_scripts/tests/tests.py	2024-03-04 21:25:06.914623046 +0100
+@@ -145,7 +145,7 @@
+         self.assertTrue(2850 <= num_lines <= 3100, msg='Found %s lines' % num_lines)
+ 
+     def test_QuantifyGraph_works(self):
+-        exe = "../src/Chrysalis/QuantifyGraph"
++        exe = "QuantifyGraph"
+         args = " -g Cbin0/c0.graph.tmp -i Cbin0/c0.reads.tmp -o c0.graph.out -max_reads 200000 -k 24"
+         result = subprocess.call(exe + args,shell=True)
+         self.assertEquals(0, result, "QuantifyGraph failed")
+diff -ruN trinityrnaseq-v2.15.1.orig/util/support_scripts/trinity_install_tests.sh trinityrnaseq-v2.15.1/util/support_scripts/trinity_install_tests.sh
+--- trinityrnaseq-v2.15.1.orig/util/support_scripts/trinity_install_tests.sh	2023-02-05 19:46:17.000000000 +0100
++++ trinityrnaseq-v2.15.1/util/support_scripts/trinity_install_tests.sh	2024-03-04 20:56:49.358031862 +0100
+@@ -7,33 +7,33 @@
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+ 
+ 
+-if [ -e "Inchworm/bin/inchworm" ]
++if [ -e "Inchworm/bin/inchworm" ] || command -v inchworm >& /dev/null
+ then
+ 	echo "Inchworm:                has been Installed Properly"
+ else
+ 	echo "Inchworm Installation appears to have FAILED"
+ fi
+-if [ -e "Chrysalis/bin/Chrysalis" ]
++if [ -e "Chrysalis/bin/Chrysalis" ] || command -v Chrysalis >& /dev/null
+ then
+ 	echo "Chrysalis:               has been Installed Properly"
+ else
+ 	echo "Chrysalis Installation appears to have FAILED"
+ fi
+-if [ -e "Chrysalis/bin/QuantifyGraph" ]
++if [ -e "Chrysalis/bin/QuantifyGraph" ] || command -v QuantifyGraph >& /dev/null
+ then
+ 	echo "QuantifyGraph:           has been Installed Properly"
+ else
+ 	echo "QuantifyGraph Installation appears to have FAILED"
+ fi
+ 
+-if [ -e "Chrysalis/bin/GraphFromFasta" ]
++if [ -e "Chrysalis/bin/GraphFromFasta" ] || command -v GraphFromFasta >& /dev/null
+ then
+ 	echo "GraphFromFasta:          has been Installed Properly"
+ else
+ 	echo "GraphFromFasta Installation appears to have FAILED"
+ fi
+ 
+-if [ -e "Chrysalis/bin/ReadsToTranscripts" ]
++if [ -e "Chrysalis/bin/ReadsToTranscripts" ] || command -v ReadsToTranscripts >& /dev/null
+ then
+ 	echo "ReadsToTranscripts:      has been Installed Properly"
+ else
+@@ -41,7 +41,7 @@
+ fi
+ 
+ 
+-if [ -e "trinity-plugins/BIN/ParaFly" ]
++if [ -e "trinity-plugins/BIN/ParaFly" ] || command -v ParaFly >& /dev/null
+ then
+ 	echo "parafly:                 has been Installed Properly"
+ else
