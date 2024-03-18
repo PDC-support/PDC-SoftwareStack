@@ -1,5 +1,6 @@
 # contributed by Luca Marsella (CSCS)
 # adapted for LUMI-G by Peter Larsson
+# adapted for Dardel by Johan Hellsvik (PDC)
 
 easyblock = 'CMakeMake'
 
@@ -46,13 +47,16 @@ source_urls = ['https://github.com/eth-cscs/%(name)s/archive']
 sources = ['v1.0.6.tar.gz']
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
+    ('cmake', '3.27.7', '', ('system', '')),
+]
+
+dependencies = [
     ('cray-fftw', EXTERNAL_MODULE),
 ]
 
 preconfigopts = "CXX=CC CC=cc FC=ftn &&"
 configopts  = ' -DCMAKE_BUILD_TYPE=RELEASE -DSPFFT_FFTW_LIB=FFTW '
-configopts += ' -DSPFFT_SINGLE_PRECISION=ON  -DSPFFT_MPI=ON -DSPFFT_OMP=ON '
+configopts += ' -DSPFFT_SINGLE_PRECISION=ON -DSPFFT_MPI=ON -DSPFFT_OMP=ON '
 
 sanity_check_paths = {
     'files': [
