@@ -33,7 +33,7 @@ sources = ['https://gitlab.com/QEF/q-e/-/archive/qe-%(version_major)s.%(version_
 checksums = ['b348a4a7348b66a73545d9ca317a2645755c98d343c1cfe8def475ad030808c0']   # q-e-qe-7.2.tar.gz
 
 builddependencies = [
-    ('m4', '1.4.19', '', True)
+    ('cmake', '3.27.7', '', ('system', '')),
 ]
 
 dependencies = [
