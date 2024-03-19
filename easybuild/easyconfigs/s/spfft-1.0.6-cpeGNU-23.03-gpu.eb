@@ -6,6 +6,7 @@ easyblock = 'CMakeMake'
 
 name = 'spfft'
 version = '1.0.6'
+versionsuffix = '-gpu'
 
 homepage = 'https://github.com/eth-cscs/SpFFT'
 
@@ -52,11 +53,16 @@ builddependencies = [
 
 dependencies = [
     ('cray-fftw', EXTERNAL_MODULE),
+    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
+    ('rocm/5.3.3', EXTERNAL_MODULE),
 ]
 
-preconfigopts = "CXX=CC CC=cc FC=ftn &&"
-configopts  = ' -DCMAKE_BUILD_TYPE=RELEASE -DSPFFT_FFTW_LIB=FFTW '
-configopts += ' -DSPFFT_SINGLE_PRECISION=ON -DSPFFT_MPI=ON -DSPFFT_OMP=ON '
+# PL not enabling SPFFT_GPU_DIRECT for GPU aware MPI because I think it is only tested with Nvidia?
+prebuildopts = "CXX=CC CC=cc FC=ftn && module load craype-accel-amd-gfx90a && module load rocm/5.3.3 &&" 
+parallel = 16
+
+configopts  = ' -DCMAKE_BUILD_TYPE=RELEASE -DSPFFT_FFTW_LIB=FFTW -DSPFFT_GPU_BACKEND=ROCM'
+configopts += ' -DSPFFT_SINGLE_PRECISION=ON  -DSPFFT_MPI=ON -DSPFFT_OMP=ON -DHIP_HCC_FLAGS=\"--amdgpu-target=gfx90a\"'
 
 sanity_check_paths = {
     'files': [
