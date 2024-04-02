@@ -1,0 +1,35 @@
+# Author: Juan de Gracia (PDC)
+
+easyblock = 'ConfigureMake'
+
+name = 'gromosXX'
+version = '1.6.0'
+versionsuffix = '-mpi'
+
+homepage = 'http://www.gromos.net/'
+description = """ GROMOS™ is an acronym of the GROningen MOlecular Simulation
+computer program package, which has been developed since 1978 for the dynamic
+modelling of (bio)molecules, until 1990 at the University of Groningen, The
+Netherlands, and since then at the ETH, the Swiss Federal Institute of
+Technology, in Zürich, Switzerland. """ 
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'openmp': False, 'usempi': True}
+
+sources = ['/pdc/software/eb_repo/sources/gromosXX_%(version)s_Source.tar.gz']
+dependencies = [('gsl', '2.7.1'),
+		('cray-fftw', EXTERNAL_MODULE),
+		('automake','1.16.5', '',('system', '')),
+		('libtool','2.4.7', '',('system', ''))
+]
+
+prebuildopts = 'cd md++ && '
+preinstallopts = 'cd md++ && '
+preconfigopts = 'cd md++ && bash Config.sh && '
+configopts = 'CC=cc CXX=CC'
+sanity_check_paths = {
+    'files': ["bin/md", "bin/md_mpi", "lib/libmdpp.a"],
+    'dirs': ['include/md++'],
+}
+
+moduleclass = 'bio'
