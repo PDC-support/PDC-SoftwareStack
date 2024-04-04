@@ -1,0 +1,38 @@
+# Author: Juan de Gracia (PDC)
+
+easyblock = 'ConfigureMake'
+
+name = 'gromosXX'
+version = '1.6.0'
+versionsuffix = '-omp'
+
+homepage = 'http://www.gromos.net/'
+description = """ GROMOS™ is an acronym of the GROningen MOlecular Simulation
+computer program package, which has been developed since 1978 for the dynamic
+modelling of (bio)molecules, until 1990 at the University of Groningen, The
+Netherlands, and since then at the ETH, the Swiss Federal Institute of
+Technology, in Zürich, Switzerland. """ 
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'openmp': True, 'usempi': False}
+
+sources = ['/pdc/software/eb_repo/sources/gromosXX_%(version)s_Source.tar.gz']
+dependencies = [('gsl', '2.7.1'),
+		('cray-fftw', EXTERNAL_MODULE),
+		('automake','1.16.5', '',('system', '')),
+		('libtool','2.4.7', '',('system', '')),
+		('autoconf','2.71', '',('system', ''))
+]
+
+prebuildopts = 'cd md++ && '
+preinstallopts = 'cd md++ && '
+preconfigopts = 'cd md++ && bash Config.sh && export LD_LIBRARY_PATH=/pdc/software/23.03/eb/software/gsl/2.7.1-cpeGNU-23.03/lib:$LD_LIBRARY_PATH && '
+#configopts = 'CC=cc CXX=CC --enable-mpi --disable-shared --with-gsl --with-fftw=/opt/cray/pe/fftw/3.3.10.1/x86_milan'
+configopts = 'CC=cc CXX=CC --enable-openmp --with-gsl --with-fftw=/opt/cray/pe/fftw/3.3.10.3/x86_rome/'
+
+#sanity_check_paths = {
+#    'files': ["bin/md", "bin/md_mpi", "lib/libmdpp.a"],
+#    'dirs': ['include/md++'],
+#}
+
+moduleclass = 'bio'
