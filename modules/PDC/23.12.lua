@@ -16,7 +16,6 @@ conflict("PDC")
 local root = "/pdc/software"
 
 setenv("CRAY_PE_VERSION", cpe_version)
-setenv("CRAY_LIBSCI_PREFIX_DIR", os.getenv("CRAY_PE_LIBSCI_PREFIX_DIR"))
 prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "other"))
 prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "spack"))
 prepend_path("MODULEPATH", pathJoin(root, "PDC", cpe_version, "spack_zen2"))

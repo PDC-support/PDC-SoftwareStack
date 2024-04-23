@@ -34,3 +34,18 @@ setenv("PDC_RESOURCE", "dardel")
 setenv("PDC_REFRAME", "/pdc/software/resources/reframe")
 setenv("PDC_SHUB", "/pdc/software/resources/sing_hub")
 setenv("BLASTDB", "/pdc/software/resources/blastdb")
+
+--- Temporary fix for CPE/23.12
+if os.getenv("CRAY_LIBSCI_PREFIX_DIR") == nil then
+  setenv("CRAY_LIBSCI_PREFIX_DIR", os.getenv("CRAY_PE_LIBSCI_PREFIX_DIR"))
+  end
+if os.getenv("CRAY_LIBSCI_VERSION") == nil then
+  setenv("CRAY_LIBSCI_VERSION", os.getenv("CRAY_PE_LIBSCI_VERSION"))
+  end   
+if os.getenv("CRAY_LIBSCI_BASE_DIR") == nil then
+  setenv("CRAY_LIBSCI_BASE_DIR", os.getenv("CRAY_PE_LIBSCI_BASE_DIR"))
+  end   
+if os.getenv("CRAY_LIBSCI_PREFIX") == nil then
+  setenv("CRAY_LIBSCI_PREFIX", os.getenv("CRAY_PE_LIBSCI_PREFIX"))
+  end   
+
