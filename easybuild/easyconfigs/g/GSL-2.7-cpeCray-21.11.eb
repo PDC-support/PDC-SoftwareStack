@@ -26,10 +26,6 @@ toolchainopts = {'opt': True, 'optarch': True, 'unroll': True, 'pic': True, 'ver
 source_urls = [GNU_SOURCE]
 sources =     [SOURCELOWER_TAR_GZ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
-
 configopts = "--with-pic"
 
 sanity_check_paths = {

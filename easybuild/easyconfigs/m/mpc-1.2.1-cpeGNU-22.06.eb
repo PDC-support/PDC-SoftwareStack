@@ -35,10 +35,6 @@ source_urls = ['http://ftpmirror.gnu.org/gnu/mpc/']
 sources =     [SOURCELOWER_TAR_GZ]
 checksums =   ['17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459']
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools', '%(toolchain_version)s', '', True),
-]
-
 dependencies = [
     ('gmp',  local_GMP_version),
     ('mpfr', local_MPFR_version),

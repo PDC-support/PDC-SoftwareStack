@@ -57,7 +57,7 @@ sources =     ['v%(version)s.tar.gz']
 checksums =   ['612d2387416b5f82dd8545709921440370e144fd46cef633654cf0ee43bac5f8']
 
 builddependencies = [
-    ('buildtools',         '%(toolchain_version)s', '', True), # For CMake
+    ('xxd',                '8.2.5172', '', True),
     ('craype-hugepages8M', EXTERNAL_MODULE),
     ('cray-python',        EXTERNAL_MODULE),
 ]

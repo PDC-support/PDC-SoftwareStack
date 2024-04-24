@@ -19,7 +19,6 @@ sources = ['/cfs/klemming/home/x/xhamst/myEB/sources/%(namelower)s-%(version)s.t
 # No MPI support, OpenMP support for compute intensive operators (https://code.mpimet.mpg.de/projects/cdo/wiki/OpenMP_support)
 builddependencies = [
     ('cURL', '7.76.1'),
-    ('buildtools', '21.11', '', ('system', '')),
 ]
 dependencies = [
     ('cray-hdf5', EXTERNAL_MODULE),

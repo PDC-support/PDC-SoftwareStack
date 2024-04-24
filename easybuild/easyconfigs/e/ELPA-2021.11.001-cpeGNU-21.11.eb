@@ -37,7 +37,7 @@ sources =     ['elpa-new_release_%s.tar.bz2' % version]
 checksums =   ['5d958dfb34e45082fb9ba52edba6178698b2f17491b1a6a634dbfebfbc324940'] # elpa-new_release_2021.11.001.tar.bz2
 
 builddependencies = [ # We use the system Python and Perl.
-    ('buildtools', '%(toolchain_version)s', '', True), # For Autotools and others.
+    ('autotools', '20220317', '', True), # For Autotools and others.
 ]
 
 preconfigopts  = './autogen.sh && '

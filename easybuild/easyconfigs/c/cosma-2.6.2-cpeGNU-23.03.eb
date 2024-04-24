@@ -31,7 +31,7 @@ source_urls = ['https://github.com/eth-cscs/%(name)s/releases/download/v%(versio
 sources =     ['cosma.tar.gz']
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True), # For CMake
+    ('cmake', '3.23.2', '', True),
     ('bzip2', '1.0.8', '', ('system', '')),
 ]
 

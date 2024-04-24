@@ -52,8 +52,9 @@ checksums =   [
     '39052f59ff474a4a69cefc25cf3caf8429400889deba010ee6403ca188f8b311' # scotch_6.1.1.tar.gz
 ]
 
-builddependencies = [ # Create a reproducible build environment.
-    ('buildtools',   '%(toolchain_version)s',   '', True), # For CMake
+builddependencies = [
+	('flex', '2.6.4', '', True),
+	('bison', '3.8.2', '', True),
 ]
 
 dependencies = [

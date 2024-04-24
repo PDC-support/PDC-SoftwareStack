@@ -36,7 +36,7 @@ source_urls = ['https://gitlab.mpcdf.mpg.de/elpa/elpa/-/archive/new_release_%(ve
 sources =     ['elpa-new_release_%(version)s.tar.gz']
 
 builddependencies = [ # We use the system Python and Perl.
-    ('buildtools', '%(toolchain_version)s', '', True), # For Autotools and others.
+    ('autotools', '20220317', '', True), # For Autotools and others.
 ]
 
 preconfigopts  = './autogen.sh && '

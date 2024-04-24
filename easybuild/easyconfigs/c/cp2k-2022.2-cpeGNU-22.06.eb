@@ -30,7 +30,10 @@ patches = [
     ('%(name)s-%(version_major_minor)s-%(toolchain_name)s.psmp', '%(builddir)s/%(namelower)s-%(version)s/arch')
 ]
 
-builddependencies = [('buildtools', '%(toolchain_version)s', '', True)]
+builddependencies = [
+	('flex', '2.6.4', '', True),
+	('bison', '3.8.2', '', True),
+]
 
 dependencies = [
     ('elpa', '2021.11.001'),

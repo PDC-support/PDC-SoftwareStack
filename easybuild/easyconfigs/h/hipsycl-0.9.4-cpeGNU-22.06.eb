@@ -33,7 +33,7 @@ dependencies = [
 ]
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
+    ('cmake', '3.23.2', '', True),
 ]
 
 configopts  = '-DROCM_PATH=$ROCM_PATH '
