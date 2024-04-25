@@ -1,0 +1,66 @@
+# contributed by Luca Marsella (CSCS)
+# modified for LUMI by Peter Larsson
+# modified for Dardel by Johan Hellsvik (PDC)
+easyblock = 'MakeCp'
+
+name = 'cp2k'
+version = '2024.1'
+
+homepage = 'http://www.cp2k.org/'
+
+whatis = [
+    'Description: CP2K is a program to perform atomistic and molecular simulations of solid state, liquid, molecular and biological systems.'
+]
+
+description = """
+CP2K is a freely available (GPL) program, written in Fortran 95, to
+perform atomistic and molecular simulations of solid state, liquid,
+molecular and biological systems. It provides a general framework for
+different methods such as e.g. density functional theory (DFT) using a
+mixed Gaussian and plane waves approach (GPW), and classical pair and
+many-body potentials.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+source_urls = ['https://github.com/%(namelower)s/%(namelower)s/releases/download/v%(version)s']
+sources = [SOURCELOWER_TAR_BZ2]
+patches = [
+    ('%(name)s-%(version_major_minor)s-%(toolchain_name)s.psmp', '%(builddir)s/%(namelower)s-%(version)s/arch')
+]
+
+dependencies = [
+    ('elpa', '2023.05.001'),
+    ('libint-cp2k', '2.6.0'),
+    ('libvori', '220621', '', True),
+    ('libxc', '6.1.0'),
+    ('libxsmm', '1.17'),
+    ('plumed', '2.9.0'),
+    ('spglib', '2.3.1'),
+    ('gsl','2.7.1'),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5', EXTERNAL_MODULE),
+]
+
+# build type
+buildopts = "ARCH=%(name)s-%(version_major_minor)s-%(toolchain_name)s VERSION=psmp"
+parallel = 16
+
+files_to_copy = [
+    (['./arch/%(name)s-%(version_major_minor)s-%(toolchain_name)s.psmp'], 'arch'),
+    (['./exe/%(name)s-%(version_major_minor)s-%(toolchain_name)s/*'], 'bin'),
+    (['./data'], '.'),
+    (['./tests'], '.'),
+    (['./tools'], '.')
+]
+
+sanity_check_paths = {
+    'files': ['arch/%(name)s-%(version_major_minor)s-%(toolchain_name)s.psmp', 'bin/%(namelower)s.psmp'],
+    'dirs': ['data', 'tests'],
+}
+
+# set custom CP2K_DATA_DIR
+modextravars = {'CP2K_DATA_DIR': '%(installdir)s/data'}
+
+moduleclass = 'chem'
