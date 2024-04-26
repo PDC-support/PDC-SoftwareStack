@@ -20,9 +20,9 @@ CFLAGS  += -I$(EBROOTLIBXSMM)/include
 CFLAGS  += -I$(EBROOTSPGLIB)/include
 CXXFLAGS = $(CFLAGS) -std=c++11
 FCFLAGS  = $(CFLAGS)
-ifeq ($(shell (( $(shell gcc -dumpversion | cut -d. -f1) > 9 )) && echo yes), yes)
+#ifeq ($(shell (( $(shell gcc -dumpversion | cut -d. -f1) > 9 )) && echo yes), yes)
  FCFLAGS += -fallow-argument-mismatch
-endif
+#endif
 FCFLAGS  += -fbacktrace -ffree-form -ffree-line-length-none -fno-omit-frame-pointer -std=f2008 
 LDFLAGS  = $(FCFLAGS)
 LIBS     += -L$(EBROOTELPA)/lib -lelpa_openmp
