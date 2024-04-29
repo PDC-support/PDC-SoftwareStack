@@ -7,7 +7,6 @@ versionsuffix = '-py39'
 homepage = 'https://github.com/jeffdaily/parasail-python'
 description = "Python Bindings for the Parasail C Library"
 
-#toolchain = {'name': 'cpeGNU', 'version': '22.06'}
 toolchain = SYSTEM
 
 source_urls = ['https://pypi.python.org/packages/source/%(nameletter)s/parasail']
@@ -15,13 +14,11 @@ sources = ['parasail-%(version)s.tar.gz']
 checksums = ['d6a7035dfae3ef5aafdd7e6915711214c22b572ea059fa69d9d7ecbfb9b61b0f']
 
 builddependencies = [
-    ('parasail', '2.6.2','',SYSTEM),
+    ('parasail', '2.6.2'),
 ]
 
 dependencies = [
-#    ('pdc-python', '3.9.6'),
-    ('python', '3.9.6','',SYSTEM),
-    ('pdc-python', EXTERNAL_MODULE),
+    ('cray-python', '3.9.13.1'),
 ]
 
 download_dep_fail = True
