@@ -1,0 +1,29 @@
+easyblock = 'MakeCp'
+
+name = 'Tree'
+version = '2.1.1'
+
+homepage = 'https://gitlab.com/OldManProgrammer/unix-tree'
+description = """Tree is a recursive directory listing command that produces a depth indented listing of files."""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+
+source_urls = ['https://gitlab.com/OldManProgrammer/unix-tree/-/archive/%(version)s']
+sources = ['unix-tree-%(version)s.tar.bz2']
+
+builddependencies = []
+
+prebuildopts = 'cd %(builddir)s/unix-tree-%(version)s/ && '
+buildopts = 'CFLAGS="$CFLAGS -O2 -Wall" LDFLAGS="$LDFLAGS"'
+install_cmd = 'make PREFIX=%(installdir)s MANDIR=%(installdir)s/share/man install'
+
+# Correct files to copy with the accurate man page filename
+files_to_copy = [(['tree'], 'bin'), (['doc/tree.1'], 'share/man/man1')]
+
+sanity_check_paths = {
+    'files': ['bin/tree'],  # Check for the tree executable
+    'dirs': ['share/man/man1'],  # Check for the man page directory
+}
+
+moduleclass = 'tools'
+
