@@ -1,0 +1,62 @@
+# Contributed by Luca Marsella and Victor Holanda Rusu (CSCS)
+# Adapted by Henric Zazzi (hzazzi@kth.se), Johan Hellsvik, and Joe Jordan for PDC, KTH, Stockholm
+#
+# This file is an EasyBuild reciPY as per https://github.com/hpcugent/easybuild
+#
+# Copyright:: Copyright 2012-2013 University of Luxembourg / LCSB, Cyprus Institute / CaSToRC, Ghent University
+# Authors::   Wiktor Jurkowski <wiktor.jurkowski@uni.lu>, Fotis Georgatos <fotis.georgatos@uni.lu>, \
+# George Tsouloupas <g.tsouloupas@cyi.ac.cy>, Kenneth Hoste
+# License::   MIT/GPL
+# $Id$
+#
+# This work implements a part of the HPCBIOS project and is a component of the policy:
+# http://hpcbios.readthedocs.org/en/latest/HPCBIOS_2012-93.html
+#
+easyblock = 'CMakeMake'
+
+name = 'gromacs'
+version = '2024.1'
+versionsuffix = '-gpu'
+
+homepage = 'http://www.gromacs.org'
+description = """GROMACS is a versatile package to perform molecular dynamics,
+ i.e. simulate the Newtonian equations of motion for systems with hundreds to millions of particles."""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchainopts = {'opt': True, 'usempi': True, 'verbose': False, 'pic': True, 'dynamic': False, 'openmp': True}
+
+source_urls = ['ftp://ftp.%(namelower)s.org/pub/%(namelower)s/']
+sources = [SOURCELOWER_TAR_GZ]
+
+# CMake dependency with SYSTEM toolchain
+builddependencies = [
+    ('cmake', '3.27.7', '', True),
+]
+dependencies = [
+    ('craype-hugepages8M', EXTERNAL_MODULE),
+    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
+    ('cray-fftw/3.3.10.1', EXTERNAL_MODULE),
+    ('rocm', '5.3.3', '', True),
+    ('adaptivecpp','23.10.0','-rocm-5.3.3-llvm'),
+    ('heffte','2.4.0'),
+]
+
+local_configopts = "-DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF \
+    -DGMX_SIMD=AVX2_256 -DGMX_OPENMP=ON -DGMXAPI=ON \
+    -DGMX_BLAS_USER=${CRAY_LIBSCI_PREFIX_DIR}/lib/libsci_gnu.so \
+    -DGMX_LAPACK_USER=${CRAY_LIBSCI_PREFIX_DIR}/lib/libsci_gnu.so \
+    -DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang \
+    -DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ \
+    -DGMX_GPU=SYCL -DGMX_SYCL_HIPSYCL=ON -DHIPSYCL_TARGETS='hip:gfx90a' " \
+    -DGMX_USE_HEFFTE=ON -DHeffte_ROOT=${EBROOTHEFFTE} \
+    -DHeffte_ENABLE_ROCM=ON -DHeffte_ROCM_ROOT=${ROCM_PATH}
+
+configopts = [
+    local_configopts + "-DGMX_MPI=OFF ",
+    local_configopts + "-DGMX_MPI=ON -DCMAKE_CXX_FLAGS=-fuse-ld=ld -DCMAKE_C_FLAGS=-fuse-ld=ld",
+]
+
+onlytcmod = True
+skipsteps = ['test']
+
+moduleclass = 'bio'
