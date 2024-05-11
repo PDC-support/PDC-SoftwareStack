@@ -1,12 +1,12 @@
 easyblock = 'MakeCp'
 
-name = 'Tree'
+name = 'tree'
 version = '2.1.1'
 
 homepage = 'https://gitlab.com/OldManProgrammer/unix-tree'
 description = """Tree is a recursive directory listing command that produces a depth indented listing of files."""
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 
 source_urls = ['https://gitlab.com/OldManProgrammer/unix-tree/-/archive/%(version)s']
 sources = ['unix-tree-%(version)s.tar.bz2']
