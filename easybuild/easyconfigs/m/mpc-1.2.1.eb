@@ -1,6 +1,6 @@
 easyblock = 'ConfigureMake'
 
-local_GMP_version =          '6.2.1'         # https://ftp.gnu.org/gnu/gmp/
+local_GMP_version =          '6.3.0'         # https://ftp.gnu.org/gnu/gmp/
 local_MPFR_version =         '4.1.0'         # https://ftp.gnu.org/gnu/mpfr/
 local_MPC_version =          '1.2.1'         # https://ftp.gnu.org/gnu/mpc/
 
@@ -28,7 +28,7 @@ docurls = [
     'Support for the info command (info mpc)'
 ]
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
 source_urls = ['http://ftpmirror.gnu.org/gnu/mpc/']
