@@ -10,7 +10,7 @@ description = """
     efficient and reliable geometric algorithms in the form of a C++ library.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = SYSTEM
 toolchainopts = {'strict': True}
 
 source_urls = ['https://github.com/%(name)s/%(name)s/archive/refs/tags/']
@@ -24,8 +24,8 @@ builddependencies = [
 ]
 dependencies = [
     ('zlib', '1.2.11', '', True),
-    ('boost', '1.79.0'),
-    ('gmp', '6.2.1'),
+    ('boost', '1.79.0','-nompi'),
+    ('gmp', '6.3.0'),
     ('mpfr', '4.1.0'),
 ]
 
