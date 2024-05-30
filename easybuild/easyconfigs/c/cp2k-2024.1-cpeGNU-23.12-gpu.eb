@@ -1,0 +1,74 @@
+# contributed by Luca Marsella (CSCS)
+# modified for LUMI-G by Peter Larsson
+# modified for Dardel GPU by Johan Hellsvik (PDC)
+easyblock = 'MakeCp'
+
+name = 'cp2k'
+version = '2024.1'
+versionsuffix = '-gpu'
+
+homepage = 'http://www.cp2k.org/'
+
+whatis = [
+    'Description: CP2K is a program to perform atomistic and molecular simulations of solid state, liquid, molecular and biological systems.'
+]
+
+description = """
+CP2K is a freely available (GPL) program, written in Fortran 95, to
+perform atomistic and molecular simulations of solid state, liquid,
+molecular and biological systems. It provides a general framework for
+different methods such as e.g. density functional theory (DFT) using a
+mixed Gaussian and plane waves approach (GPW), and classical pair and
+many-body potentials.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+source_urls = ['https://github.com/%(namelower)s/%(namelower)s/releases/download/v%(version)s']
+sources = [SOURCELOWER_TAR_BZ2]
+patches = [
+    ('dardel-20241.psmp', '%(builddir)s/%(namelower)s-%(version)s/arch')
+]
+
+dependencies = [
+    ('elpa', '2023.05.001'),
+    ('libint-cp2k', '2.6.0'),
+    ('libvori', '220621', '', True),
+    ('libxc', '6.2.2'),
+    ('libxsmm', '1.17'),
+    ('plumed', '2.9.0'),
+    ('spglib', '2.4.0', '', True),
+    ('gsl','2.7.1'),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5', EXTERNAL_MODULE),
+    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
+    ('rocm/5.7.0', EXTERNAL_MODULE),
+    ('cosma','2.6.6','-gpu'),
+    ('spla','1.5.5','-gpu'),
+    ('spfft','1.1.0','-gpu'),
+]
+
+# build type
+preconfigopts = 'module load craype-accel-amd-gfx90a && module load rocm/5.7.0 && '
+prebuildopts = 'module load craype-accel-amd-gfx90a && module load rocm/5.7.0 && '
+buildopts = "ARCH=dardel-20241 VERSION=psmp"
+parallel = 16
+
+files_to_copy = [
+    (['./arch/dardel-20241.psmp'], 'arch'),
+    (['./exe/dardel-20241/*'], 'bin'),
+    (['./data'], '.'),
+    (['./tests'], '.'),
+    (['./tools'], '.')
+]
+
+sanity_check_paths = {
+    'files': ['arch/dardel-20241.psmp', 'bin/%(namelower)s.psmp'],
+    'dirs': ['data', 'tests'],
+}
+
+# set custom CP2K_DATA_DIR
+modextravars = {'CP2K_DATA_DIR': '%(installdir)s/data'}
+
+moduleclass = 'chem'
