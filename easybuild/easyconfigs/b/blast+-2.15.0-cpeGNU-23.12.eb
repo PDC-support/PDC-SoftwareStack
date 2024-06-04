@@ -10,11 +10,17 @@ description = """Blast for searching sequences"""
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
 toolchainopts = {'usempi': True}
 
-source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/']
+source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/%(version)s/']
 sources = ['ncbi-blast-%(version)s+-src.tar.gz']
 
 dependencies = [
     ('glib', '2.78.0','',SYSTEM),
+    ('sqlite', '3.36.0','',SYSTEM),
 ]
+
+sanity_check_paths = {
+    'files': ['bin/blastn', 'bin/blastp', 'bin/blastx'],
+    'dirs': []
+}
 
 moduleclass = 'bio'
