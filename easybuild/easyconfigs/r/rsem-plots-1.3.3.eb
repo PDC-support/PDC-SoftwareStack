@@ -27,7 +27,7 @@ multi-reads shown in red. In addition, models learned from data can also
 be visualized. Last but not least, RSEM contains a simulator.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '23.03'}
+toolchain = SYSTEM
 
 source_urls = ['https://github.com/deweylab/RSEM/archive/']
 sources = ['v%(version)s.tar.gz']
@@ -39,7 +39,7 @@ skipsteps = ['configure','build']
 
 dependencies = [
     ('rsem', '%(version)s','',SYSTEM),
-    ('R/4.3.2',EXTERNAL_MODULE),
+    ('R',EXTERNAL_MODULE),
 ]
 
 plot_files = ['rsem-plot-transcript-wiggles','rsem-gen-transcript-plots','rsem-plot-model']
