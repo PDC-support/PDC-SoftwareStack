@@ -36,6 +36,8 @@ dependencies = [
 buildopts = 'CC="$CC" CPP="$CXX" '
 #buildopts += "USE_SRA=1 NCBI_NGS_DIR=$EBROOTNGS NCBI_VDB_DIR=$EBROOTNCBIMINVDB"
 
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/$/3/g" hisat2-* && '
+
 local_executables = ['hisat2', 'hisat2-align-l', 'hisat2-align-s', 'hisat2-build', 'hisat2-build-l', 'hisat2-build-s',
                      'hisat2-inspect', 'hisat2-inspect-s', 'hisat2-inspect-l', 'hisat2-repeat', 'extract_exons.py',
                      'extract_splice_sites.py', 'hisat2_extract_exons.py', 'hisat2_extract_snps_haplotypes_UCSC.py',
