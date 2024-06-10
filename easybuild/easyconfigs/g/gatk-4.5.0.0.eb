@@ -43,6 +43,8 @@ modextrapaths = {'PATH': ''}
 
 osdependencies = ['python']
 
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/python/python3/g" gatk && '
+
 sanity_check_paths = {
     'files': ['gatk'],
     'dirs': [],
