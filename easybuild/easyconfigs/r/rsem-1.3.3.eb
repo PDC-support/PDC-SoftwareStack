@@ -57,6 +57,7 @@ builddependencies = [
     ('boost','1.79.0','-nompi'),
 ]
 buildopts = "BOOST=${EBROOTBOOST}/include"
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/$/3/g" rsem-gff3-to-gtf rsem-refseq-extract-primary-assembly && '
 installopts = "prefix=%(installdir)s BOOST=${EBROOTBOOST}/include"
 
 dependencies = [
