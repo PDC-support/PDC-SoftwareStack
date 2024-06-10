@@ -30,6 +30,8 @@ dependencies = [
 
 configopts = "--with-htslib=$EBROOTHTSLIB --enable-libgsl"
 
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/python/python3/g" misc/guess-ploidy.py && '
+
 sanity_check_paths = {
     'files': ['bin/%s' % x for x in ['bcftools', 'plot-vcfstats', 'vcfutils.pl']],
     'dirs': ['libexec/bcftools']
