@@ -29,6 +29,8 @@ osdependencies = [
     ('openssl-devel', 'libssl-dev', 'libopenssl-devel'),
 ]
 
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/$/3/g" event_rpcgen.py'
+
 sanity_check_paths = {
     'files': ['bin/event_rpcgen.py', 'include/event.h', 'include/event2/event.h',
               'lib/libevent_core.%s' % SHLIB_EXT, 'lib/pkgconfig/libevent.pc'],
