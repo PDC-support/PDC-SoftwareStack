@@ -30,8 +30,11 @@ compilers:
       - craype-x86-milan
       - libfabric
       environment:
+        set:
+          CPATH: /opt/rocm-5.7.0/include
+          LIBRARY_PATH: /opt/rocm-5.7.0/lib
         prepend_path:
-          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.13/lib
+          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.13/lib:/opt/rocm-5.7.0/lib
           PKG_CONFIG_PATH: /usr/lib64/pkgconfig
       extra_rpaths: []
   - compiler:
@@ -52,11 +55,13 @@ compilers:
       environment:
         set:
           RFE_811452_DISABLE: '1'
+          LIBRARY_PATH: /opt/rocm-5.7.0/lib
+          CPATH: /opt/rocm-5.7.0/include
         append_path:
           LD_LIBRARY_PATH: /opt/cray/pe/gcc-libs:/opt/cray/libfabric/1.15.2.0/lib64
           PKG_CONFIG_PATH: /usr/lib64/pkgconfig
         prepend_path:
-          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.13/lib
+          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.13/lib:/opt/rocm-5.7.0/lib
       extra_rpaths:
       - /opt/cray/pe/gcc-libs
       - /opt/cray/gcc-libs
