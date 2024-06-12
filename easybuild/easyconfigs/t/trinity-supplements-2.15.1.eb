@@ -1,0 +1,57 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au>
+# License::     Custom
+#
+# Notes::
+##
+import os
+easyblock = 'Bundle'
+name = 'trinity-supplements'
+version = '2.15.1'
+
+homepage = 'https://trinityrnaseq.github.io'
+description = """
+Supplementary post-processing scripts to the Trinity RNA-Seq pipeline.
+"""
+
+whatis = [
+    'Description: Supplementary post-processing scripts to the Trinity RNA-Seq pipeline.',
+    'This module provides several scripts.',
+]
+
+toolchain = SYSTEM
+
+# for reference, list of dependencies in the container image used upstream:
+# https://github.com/trinityrnaseq/trinityrnaseq/blob/master/Docker/Dockerfile
+dependencies = [
+    ('trinity','2.15.1'),
+    ('gatk', '4.5.0.0'),
+    ('blast+', EXTERNAL_MODULE),
+    ('gmap-gsnap', EXTERNAL_MODULE),
+    ('blat', '35'),
+    ('kallisto', '0.48.0'),
+    ('rsem', '1.3.3'),
+    ('R', EXTERNAL_MODULE),
+    ('cray-python', EXTERNAL_MODULE),
+]
+
+osdependencies = ['python3']
+
+modluafooter = """
+prepend_path("PYTHONPATH", pathJoin(os.getenv('EBROOTTRINITY'), "/Analysis/SuperTranscripts/pylib"))
+prepend_path("PYTHONPATH", pathJoin(os.getenv('EBROOTTRINITY'), "/PyLib"))
+prepend_path("PERL5LIB", pathJoin(os.getenv('EBROOTTRINITY'), "/util/misc/PerlLib"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/Analysis/DifferentialExpression"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/Analysis/FL_reconstruction_analysis"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/Analysis/GenomeViewPlugin"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/Analysis/SuperTranscripts"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/util"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/util/misc"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/util/support_script"))
+prepend_path("PATH", pathJoin(os.getenv('EBROOTTRINITY'), "/trinity-plugins/slclust/bin"))
+"""
+#
+moduleclass = 'bio'
