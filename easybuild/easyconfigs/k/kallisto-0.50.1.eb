@@ -1,0 +1,50 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'CMakeMake'
+
+name = 'kallisto'
+version = '0.50.1'
+
+homepage = 'https://pachterlab.github.io/kallisto/'
+description = """kallisto is a program for quantifying abundances of transcripts from RNA-Seq data, or more generally
+ of target sequences using high-throughput sequencing reads."""
+
+toolchain = SYSTEM
+
+github_account = 'pachterlab'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Kallisto-%(version)s_use-external-htslib.patch']
+checksums = [
+    {'v%(version)s.tar.gz': '030752bab3b0e33cd3f23f6d8feddd74194e5513532ffbf23519e84db2a86d34'},
+    {'Kallisto-%(version)s_use-external-htslib.patch': 'b4f67932fa22e4682116242ec219c12fd950aaa5a1178ea390b463e4dd7faf2f'},
+]
+
+builddependencies = [
+    ('autotools','20220317'),
+    ('cmake','3.14.5'),
+]
+
+dependencies = [
+    ('htslib', '1.20'),
+    ('zlib', '1.3.1'),
+    ('cray-hdf5',EXTERNAL_MODULE),
+]
+
+prebuildopts = 'rm -rf ext/htslib &&'
+
+configopts = "-DUSE_HDF5=ON -DHDF5_INCLUDE_DIRS=${HDF5_DIR}/include -DHDF5_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so -DUSE_BAM=ON -DZLIBNG=ON"
+parallel = 1
+
+sanity_check_paths = {
+    'files': ['bin/kallisto'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "kallisto version",
+    "cd %(builddir)s/kallisto-%(version)s/test && kallisto index -i ts.idx transcripts.fasta.gz",
+    "cd %(builddir)s/kallisto-%(version)s/test && kallisto quant -i ts.idx -o out -b 100 reads_{1,2}.fastq.gz",
+]
+
+moduleclass = 'bio'
