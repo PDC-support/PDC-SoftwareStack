@@ -25,7 +25,7 @@ builddependencies = [
 
 dependencies = []
 
-configopts = 'CFLAGS="-fopenmp" CXXFLAGS="-fopenmp"'
+configopts = 'CFLAGS="$CFLAGS -O2" CXXFLAGS="$CXXFLAGS -O2"'
 
 sanity_check_paths = {
     'files': ['bin/ParaFly'],
