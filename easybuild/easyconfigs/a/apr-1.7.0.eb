@@ -1,0 +1,20 @@
+easyblock = 'ConfigureMake'
+
+name = 'apr'
+version = '1.7.0'
+
+homepage = 'http://apr.apache.org/'
+description = "Apache Portable Runtime (APR) libraries."
+
+toolchain = {'name': 'system', 'version': 'system'}
+
+source_urls = ['https://archive.apache.org/dist/%(namelower)s']
+sources = [SOURCELOWER_TAR_GZ]
+
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s-1-config', 'lib/libapr-1.so', 'lib/libapr-1.a'],
+    'dirs': ['include/%(namelower)s-1'],
+}
+
+moduleclass = 'tools'
