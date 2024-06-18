@@ -1,0 +1,72 @@
+# Contributed by Kurt Lust, University of Antwerpen and LUMI consortium, based on
+# the build recipe in the easybuilders repository.
+#
+# NOTE: This package is meant to be installed in partition/common on LUMI.
+#
+easyblock = 'ConfigureMake'
+
+name = 'rust'
+version = '1.78.0'
+
+homepage = 'https://www.rust-lang.org'
+description = """
+Rust is blazingly fast and memory-efficient: with no runtime or garbage collector,
+it can power performance-critical services, run on embedded devices, and easily
+integrate with other languages. Rust’s rich type system and ownership model
+guarantee memory-safety and thread-safety — enabling you to eliminate many
+classes of bugs at compile-time.
+
+Note that the Rust installation process is not exactly HPC-friendly and 
+downloads files on the fly, so installation will not work on nodes that do
+not have internet access. Moreover, because of this we cannot give any
+guarantee about reproducibility of the install or even our ability to 
+re-install Rust when needed, so this version may disappear without any
+warning.
+"""
+
+toolchain = {'name': 'system', 'version': 'system'}
+
+source_urls = ['https://static.%(name)s-lang.org/dist/']
+sources = ['rustc-%(version)s-src.tar.gz']
+
+osdependencies = [
+    ('openssl-devel', 'libssl-dev', 'libopenssl-devel'),  # For CMake
+    ('pkgconf', 'pkg-config'),
+    'binutils',
+    'cmake',
+]
+
+#
+# Configure phase
+#
+# TODO: Double-check if it makes sense to set CFLAGS, figure out how to see the compiler flags
+# in the log file which may not be trivial as we do not directly call Make.
+preconfigopts = 'module unload cce gcc aocc PrgEnv-gnu PrgEnv-cray PrgEnv-aocc ; module list ; CFLAGS="-macrch=znver1 -O2 -fpic" CXXFLAGS="-march=znver1 -O2 -fpic" '
+configopts = "--enable-extended --sysconfdir=%(installdir)s/etc --set=llvm.ninja=false "
+
+# avoid failure when home directory is an NFS mount,
+# see https://github.com/rust-lang/cargo/issues/6652
+prebuildopts = "module unload cce gcc aocc PrgEnv-gnu PrgEnv-cray PrgEnv-aocc ; module list ; export CARGO_HOME=%(builddir)s/cargo && "
+
+preinstallopts = "module unload cce gcc aocc PrgEnv-gnu PrgEnv-cray PrgEnv-aocc ; module list ; export CARGO_HOME=%(builddir)s/cargo && "
+
+whatis = [
+    "Description: Rust is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety",
+]
+# Use ./x.py to bootstrap so that options like -j N are correctly passed through
+# see: https://rustc-dev-guide.rust-lang.org/building/how-to-build-and-run.html#what-is-xpy
+# (ConfigureMake already adds `-j %(parallel)s` to the `build_cmd`)
+build_cmd = "./x.py build"
+install_cmd = "./x.py install -j %(parallel)s"
+
+sanity_check_paths = {
+    'files': ['bin/cargo', 'bin/rustc', 'bin/rustdoc'],
+    'dirs': ['lib/rustlib', 'share/doc', 'share/man'],
+}
+
+sanity_check_commands = [
+    "cargo --version",
+    "rustc --version",
+]
+
+moduleclass = 'lang'
