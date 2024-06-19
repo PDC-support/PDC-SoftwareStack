@@ -12,21 +12,24 @@
 #
 easyblock = 'ConfigureMake'
 
-name = 'UDUNITS'
+name = 'udunits'
 version = '2.2.28'
 
 homepage = 'http://www.unidata.ucar.edu/software/udunits/'
 description = """UDUNITS supports conversion of unit specifications between formatted and binary forms,
  arithmetic manipulation of units, and conversion of values between compatible scales of measurement."""
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 toolchainopts = {'opt': True, 'pic': True}
 
-source_urls = ['https://artifacts.unidata.ucar.edu/repository/downloads-%(namelower)s']
+source_urls = [
+    'https://artifacts.unidata.ucar.edu/repository/downloads-%(namelower)s',
+    'https://sources.easybuild.io/u/UDUNITS'
+]
 sources = [SOURCELOWER_TAR_GZ]
 
 dependencies = [
-    ('expat', '2.4.6', '', ('system', ''))
+    ('expat', '2.4.6'),
 ]
 
 parallel = 1
