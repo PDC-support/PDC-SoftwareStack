@@ -1,0 +1,18 @@
+# Arash Alizad Banaei (PDC)
+easyblock = 'PythonPackage'
+
+name = 'mako'
+version = '1.1.2'
+
+homepage = 'http://www.makotemplates.org'
+description = """A super-fast templating language that borrows the best ideas
+from the existing templating languages"""
+
+toolchain = SYSTEM
+
+sources = ['Mako-%(version)s.tar.gz']
+
+skipsteps = ['sanitycheck']
+
+moduleclass = 'devel'
+
