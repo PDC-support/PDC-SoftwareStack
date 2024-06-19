@@ -1,7 +1,7 @@
 # Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
 easyblock = 'CMakeMake'
 
-name = 'CGAL'
+name = 'cgal'
 version = "4.14.3"
 
 homepage = 'http://www.cgal.org/'
@@ -10,20 +10,20 @@ description = """
     efficient and reliable geometric algorithms in the form of a C++ library.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '21.11'}
+toolchain = SYSTEM
 toolchainopts = {'strict': True}
 
 source_urls = ['https://github.com/%(name)s/%(namelower)s/releases/download/releases%2FCGAL-%(version)s']
 sources = [SOURCE_TAR_XZ]
 
 builddependencies = [
-    ('CMake', '3.21.2', '', True),
+    ('cmake', '3.21.2', '', True),
 ]
 dependencies = [
     ('zlib', '1.2.11', '', True),
-    ('Boost', '1.75.0'),
-    ('GMP', '6.2.1'),
-    ('MPFR', '4.1.0'),
+    ('boost', '1.79.0','-nompi'),
+    ('gmp', '6.2.1'),
+    ('mpfr', '4.1.0'),
 ]
 
 configopts = "-DCMAKE_BUILD_TYPE=Release -DBoost_DIR=${EBROOTBOOST} -DWITH_ZLIB=ON -DWITH_MPFR=ON -DWITH_GMP=ON -DWITH_BLAS=ON -DWITH_CGAL_Qt5=OFF "
