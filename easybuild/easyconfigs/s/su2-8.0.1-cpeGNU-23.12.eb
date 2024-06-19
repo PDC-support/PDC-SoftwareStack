@@ -1,0 +1,39 @@
+# Arash Alizad Banaei (PDC)
+
+easyblock = 'ConfigureMake'
+
+name = 'su2'
+version = '8.0.1'
+
+homepage = 'https://github.com/su2code/SU2'
+description = " An open-source suite for multiphysics simulation and design"
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = ['https://github.com/su2code/SU2/archive/refs/tags']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('ninja', '1.11.1', '', SYSTEM),
+]
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+]
+
+preconfigopts = "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/cray/pe/libsci/default/gnu/12.3/%(arch)s/lib/pkgconfig; export MPICC=cc MPICXX=CC MPIF90=ftn CC=cc CXX=CC FC=ftn; "
+
+build_cmd = "./ninja -C build"
+configure_cmd = "./meson.py build -Denable-autodiff=true -Denable-directdiff=true -Dwith-mpi=enabled -Dcustom-mpi=true -Denable-cgns=true -Denable-tecio=true -Denable-openblas=true -Dblas-name=libsci "
+install_cmd = "./ninja -C build install"
+
+sanity_check_paths = {
+    'files': ['bin/SU2_CFD'],
+    'dirs': ['bin'],
+}
+
+modextrapaths = {
+    'PYTHONPATH': 'bin',
+    'SU2_RUN': 'bin',
+}
+
+moduleclass = 'phys'
