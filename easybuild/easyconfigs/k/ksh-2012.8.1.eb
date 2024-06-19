@@ -1,0 +1,32 @@
+easyblock = 'MesonNinja'
+
+name = 'ksh'
+version = '2012.8.1'
+
+homepage = 'https://github.com/att/ast'
+description = "KornShell (ksh) is a Unix shell"
+
+toolchain = SYSTEM
+
+sources = [
+    {'filename': 'kornshell.tar.gz', 'git_config': {'url': 'https://github.com/att', 'repo_name': 'ast', 'commit': '2020.0.0', 'clone_into': 'ast'}},
+]
+
+builddependencies = [
+    ('meson', '0.60.1'),
+    ('ninja', '1.10.2'),
+]
+
+preconfigopts = 'export CC="cc -march=x86-64 -mtune=generic";export CXX="CC -march=x86-64 -mtune=generic";export FC="ftn -march=x86-64 -mtune=generic";export F77="ftn -march=x86-64 -mtune=generic";'
+
+prebuildopts = "cd ast;"
+
+
+sanity_check_paths = {
+    'files': ['bin/ksh'],
+    'dirs': ['bin'],
+}
+
+modextrapaths = {'PATH': 'arch/linux.i386-64/bin'}
+
+moduleclass = 'tools'
