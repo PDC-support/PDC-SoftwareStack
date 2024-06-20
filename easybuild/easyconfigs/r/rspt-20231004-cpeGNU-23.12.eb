@@ -44,6 +44,7 @@ dependencies = [
 files_to_copy = [
     (['./bin'], '.'),
     (['./testsuite'], '.'),
+    (['./RSPTmake.inc'], '.'),
 ]
 
 sanity_check_paths = {
