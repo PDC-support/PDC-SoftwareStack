@@ -49,6 +49,7 @@ dependencies = [
 ]
 
 files_to_copy = [
+    (['./make.inc'], '.'),
     (['./src/elk'], './bin/'),
     (['./src/eos/eos'], './bin/'),
     (['./src/spacegroup/spacegroup'], './bin/'),
