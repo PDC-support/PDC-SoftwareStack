@@ -23,7 +23,7 @@ postinstallcmds = ['cp -r %(builddir)s/%(namelower)s-%(version)s/ase %(installdi
 allow_prepend_abs_path = True
 # The extra pythonpath is needed as there are different format in the egg package. See to it to adapt to the right anaconda version
 modextrapaths = {'PYTHONPATH': ['%(installdir)s'],
-	'PYTHONPATH': ['%(installdir)s/lib64/python3.9/site-packages/ase-%(version)s-py3.9.egg']
+	'PYTHONPATH': ['%(installdir)s/lib64/python3.11/site-packages/ase-%(version)s-py3.11.egg']
 }
 
 sanity_check_paths = {
