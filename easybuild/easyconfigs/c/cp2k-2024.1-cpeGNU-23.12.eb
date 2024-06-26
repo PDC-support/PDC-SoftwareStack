@@ -37,7 +37,7 @@ dependencies = [
     ('libxc', '6.2.2'),
     ('libxsmm', '1.17'),
     ('plumed', '2.9.0'),
-    ('spglib', '2.4.0'),
+    ('spglib', '2.4.0', '', True),
     ('gsl','2.7.1'),
     ('cray-fftw', EXTERNAL_MODULE),
     ('cray-hdf5', EXTERNAL_MODULE),
@@ -50,6 +50,7 @@ parallel = 16
 files_to_copy = [
     (['./arch/%(name)s-%(version_major_minor)s-%(toolchain_name)s.psmp'], 'arch'),
     (['./exe/%(name)s-%(version_major_minor)s-%(toolchain_name)s/*'], 'bin'),
+    (['./benchmarks'], '.'),
     (['./data'], '.'),
     (['./tests'], '.'),
     (['./tools'], '.')
@@ -62,5 +63,7 @@ sanity_check_paths = {
 
 # set custom CP2K_DATA_DIR
 modextravars = {'CP2K_DATA_DIR': '%(installdir)s/data'}
+modextravars = {'CP2K_TESTS_DIR': '%(installdir)s/tests'}
+modextravars = {'CP2K_BENCHMARKS_DIR': '%(installdir)s/benchmarks'}
 
 moduleclass = 'chem'
