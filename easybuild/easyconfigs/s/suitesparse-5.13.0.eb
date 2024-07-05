@@ -1,0 +1,41 @@
+import os
+
+easyblock = 'EB_SuiteSparse'
+
+name = 'suitesparse'
+version = '5.13.0'
+local_metis_ver = '5.1.0'
+
+homepage = 'https://faculty.cse.tamu.edu/davis/suitesparse.html'
+description = """SuiteSparse is a collection of libraries to manipulate sparse matrices."""
+
+toolchain = SYSTEM
+toolchainopts = {'unroll': True, 'pic': False}
+
+source_urls = ['https://github.com/DrTimothyAldenDavis/SuiteSparse/archive']
+sources = ['v%(version)s.tar.gz']
+checksums = ['59c6ca2959623f0c69226cf9afb9a018d12a37fab3a8869db5f6d7f83b6b147d']
+
+builddependencies = [
+    ('cmake', '3.23.2'),
+    ('m4', '1.4.19'),
+    ('cpeGNU', EXTERNAL_MODULE),
+]
+
+dependencies = [
+    ('cray-libsci',EXTERNAL_MODULE),
+    ('metis', local_metis_ver),
+    ('mpfr', '4.1.0'),
+]
+
+os.environ['LIBBLAS_MT'] ="-L${CRAY_LIBSCI_PREFIX_DIR}/lib -lsci_gnu_mp"
+os.environ['LIBLAPACK_MT'] ="-L${CRAY_LIBSCI_PREFIX_DIR}/lib -lsci_gnu_mp"
+
+# make sure that bin/demo can find libsuitesparseconfig.so.5 during build
+prebuildopts = "export LD_LIBRARY_PATH=%(builddir)s/SuiteSparse-%(version)s/lib:$LD_LIBRARY_PATH && " #CC=cc CXX=CC
+# remove broken symlink
+prebuildopts += "rm GraphBLAS/CUDA/test/graphblascuda_test && "
+
+#preinstallopts = "export CC=cc CXX=CC && "
+
+moduleclass = 'numlib'
