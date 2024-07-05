@@ -1,0 +1,54 @@
+# Author: Jasper Grimm (UoY)
+# Update: Sebastien Moretti (SIB), Denis Kristak (Inuits)
+# Modified for PDC by Karl Johan Westrin
+
+easyblock = 'MakeCp'
+
+name = 'hifiasm'
+version = '0.19.7'
+
+homepage = 'https://github.com/chhylp123/hifiasm'
+whatis = [
+    'Description: Hifiasm: a haplotype-resolved assembler for accurate Hifi reads.',
+    'This module provides a number of executables and header-files.',
+]
+description = """
+Hifiasm is a fast haplotype-resolved de novo assembler initially designed for
+PacBio HiFi reads. Its latest release could support the telomere-to-telomere
+assembly by utilizing ultralong Oxford Nanopore reads. Hifiasm produces arguably
+the best single-sample telomere-to-telomere assemblies combing HiFi, ultralong
+and Hi-C reads, and it is one of the best haplotype-resolved assemblers for the
+trio-binning assembly given parental short reads. For a human genome, hifiasm
+can produce the telomere-to-telomere assembly in one day.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'chhylp123'
+source_urls = [GITHUB_SOURCE]
+sources = ['%(version)s.tar.gz']
+checksums = ['16d6127c7efb2d450630f25402a05e7d691b411465b304950d84d8afd53d5ee6']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+]
+
+buildopts = 'CC="$CC" CXX="$CXX"'
+
+files_to_copy = [
+    ([name], 'bin'),
+    (['*.h'], 'include/hifiasm'),
+    'LICENSE', 'README.md',
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': [],
+}
+sanity_check_commands = ["%(name)s -h"]
+
+moduleclass = 'bio'
