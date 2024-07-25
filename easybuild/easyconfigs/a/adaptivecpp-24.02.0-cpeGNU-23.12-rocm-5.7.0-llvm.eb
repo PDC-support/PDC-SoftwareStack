@@ -1,0 +1,79 @@
+## Created by LUMI
+## Adapted for PDC by Henric Zazzi, updated by Juan de Gracia
+
+easyblock = 'CMakeMake'
+
+name =    'adaptivecpp'
+version = '24.02.0'
+versionsuffix = '-rocm-5.7.0-llvm'
+
+homepage = 'https://adaptivecpp.github.io/'
+
+whatis = [
+    "Description: adaptivecpp (formerly hipSYCL) is a modern platform for C++-based heterogeneous programming models targeting CPUs and GPUs from all major vendors."
+]
+
+description = """
+AdaptiveCpp is the independent, community-driven modern platform for C++-based heterogeneous programming models
+targeting CPUs and GPUs from all major vendors. AdaptiveCpp lets applications adapt themselves to all
+the hardware found in the system. This includes use cases where a single binary needs to be able to target all
+supported hardware, or utilize hardware from different vendors simultaneously.
+
+It currently supports the following programming models:
+
+- SYCL: At its core is a SYCL implementation that supports many use cases and approaches of implementing SYCL.
+- C++ standard parallelism: Additionally, AdaptiveCpp features experimental support for offloading C++ algorithms
+  from the parallel STL. See here for details on which algorithms can be offloaded. AdaptiveCpp is currently
+  the only solution that can offload C++ standard parallelism constructs to GPUs from Intel, NVIDIA and
+  AMD -- even from a single binary.
+
+However, this module is for Dardel and only contains AMD GPU support.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'verbose': False, 'openmp': True}
+
+source_urls = ["https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/"]
+sources =     ["v%(version)s.tar.gz"]
+
+dependencies = [
+    ('boost','1.83.0'),
+    ('cray-python/3.11.5',EXTERNAL_MODULE),
+    ('rocm/5.7.0',EXTERNAL_MODULE),
+    ('zstd/1.5.5',EXTERNAL_MODULE),  # Added zstd dependency
+]
+
+builddependencies = [
+    ('buildtools', '%(toolchain_version)s', '', True),
+]
+
+configopts  = '-DROCM_PATH=$ROCM_PATH '
+configopts += '-DWITH_ACCELERATED_CPU=ON '
+configopts += '-DWITH_SSCP_COMPILER=OFF '
+configopts += '-DWITH_STDPAR_COMPILER=ON'
+configopts += '-DWITH_CPU_BACKEND=ON '
+configopts += '-DWITH_CUDA_BACKEND=OFF '
+configopts += '-DWITH_ROCM_BACKEND=ON '
+configopts += '-DWITH_OPENCL_BACKEND=OFF '
+configopts += '-DWITH_LEVEL_ZERO_BACKEND=OFF '
+configopts += '-DDEFAULT_PLATFORM=rocm '
+configopts += '-DDEFAULT_GPU_ARCH=gfx90a '
+# Note: Deleted the config options related to clang++ due to config errors related to the std library
+
+sanity_check_paths = {
+    'files': ['bin/acpp', 'include/AdaptiveCpp/sycl/sycl.hpp',
+              'lib/hipSYCL/librt-backend-omp.%s' % SHLIB_EXT,
+              'lib/hipSYCL/librt-backend-hip.%s' % SHLIB_EXT,
+              'lib/libacpp-clang.%s' % SHLIB_EXT,
+              'lib/libacpp-rt.%s' % SHLIB_EXT],
+    'dirs': ['include/AdaptiveCpp/CL', 'include/AdaptiveCpp/SYCL'],
+}
+sanity_check_commands = [
+    'acpp --help'
+]
+
+modextravars = {
+    'ACPP_TARGETS': 'hip:gfx90a',
+}
+
+moduleclass = 'compiler'
