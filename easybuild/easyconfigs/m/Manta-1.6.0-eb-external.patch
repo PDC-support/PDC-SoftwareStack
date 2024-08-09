@@ -1,0 +1,193 @@
+diff -ruN manta-1.6.0.old/CMakeLists.txt manta-1.6.0.new/CMakeLists.txt
+--- manta-1.6.0.old/CMakeLists.txt	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/CMakeLists.txt	2024-08-09 22:07:15.000000000 +0200
+@@ -53,7 +53,7 @@
+ #
+ # if true, build with very strict error checking (disabled in src release tarballs)
+ #
+-set(DEVELOPER_MODE true)
++set(DEVELOPER_MODE false)
+ 
+ #
+ # set WIN specific cache values
+Binary files manta-1.6.0.old/redist/boost_1_58_0.tar.bz2 and manta-1.6.0.new/redist/boost_1_58_0.tar.bz2 differ
+diff -ruN manta-1.6.0.old/redist/CMakeLists.txt manta-1.6.0.new/redist/CMakeLists.txt
+--- manta-1.6.0.old/redist/CMakeLists.txt	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/redist/CMakeLists.txt	2024-08-09 20:43:54.000000000 +0200
+@@ -69,90 +69,6 @@
+ superset(CTPL_DIR "${THIS_REDIST_DIR}/${CTPL_PREFIX}")
+ 
+ #
+-# htslib
+-#
+-set(HTSLIB_PREFIX "htslib-1.9")
+-superset(HTSLIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/${HTSLIB_PREFIX}")
+-superset(HTSLIB_LIBRARY "${HTSLIB_DIR}/libhts.a")
+-
+-## It is occasionally useful to extend debug/asan build options from manta all the way down through htslib,
+-## the flags below can be uncommented to do so.
+-##
+-## Addresss sanitizer build options for htslib/samtools
+-#set(HTSLIB_CFLAGS '-O0 -g -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls')
+-## Debug build optoins for htslib/samtools
+-#set(HTSLIB_CFLAGS '-O0 -g')
+-#set(HTSLIB_CONFIGOPT CFLAGS=${HTSLIB_CFLAGS} LDFLAGS=${HTSLIB_CFLAGS})
+-
+-add_custom_command(
+-    OUTPUT ${HTSLIB_DIR}
+-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${HTSLIB_DIR}"
+-    COMMAND ${CMAKE_COMMAND} -E tar xjf "${THIS_REDIST_DIR}/${HTSLIB_PREFIX}.tar.bz2"
+-    COMMENT "Unpacking htslib library")
+-
+-set (HTSLIB_FINAL_TASK ${HTSLIB_DIR})
+-
+-if (NOT WIN32)
+-    add_custom_command(
+-        OUTPUT ${HTSLIB_LIBRARY}
+-        COMMAND ./configure CC=${CMAKE_C_COMPILER} ${HTSLIB_CONFIGOPT} --disable-libcurl --disable-bz2 --disable-lzma >htslib.config.log 2>htslib.config.error.log || \(echo "Failed to configure htslib, see ${HTSLIB_DIR}/htslib.config.error.log for details." && exit 1\)
+-        COMMAND $(MAKE) lib-static bgzip htsfile tabix >htslib.build.log 2>htslib.build.error.log || \(echo "Failed to build htslib, see ${HTSLIB_DIR}/htslib.build.error.log for details." && exit 1\)
+-        WORKING_DIRECTORY ${HTSLIB_DIR}
+-        DEPENDS ${HTSLIB_DIR}
+-        COMMENT "Building htslib library")
+-
+-    set (HTSLIB_FINAL_TASK ${HTSLIB_LIBRARY})
+-endif ()
+-
+-set(THIS_HTSLIB "${THIS_PROJECT_NAME}_htslib")
+-add_custom_target(${THIS_HTSLIB} DEPENDS "${HTSLIB_FINAL_TASK}")
+-
+-
+-if (NOT WIN32)
+-    install(PROGRAMS "${HTSLIB_DIR}/bgzip" DESTINATION "${THIS_LIBEXECDIR}")
+-    install(PROGRAMS "${HTSLIB_DIR}/htsfile" DESTINATION "${THIS_LIBEXECDIR}")
+-    install(PROGRAMS "${HTSLIB_DIR}/tabix" DESTINATION "${THIS_LIBEXECDIR}")
+-endif ()
+-
+-#
+-# samtools
+-#
+-set(SAMTOOLS_PREFIX "samtools-1.9")
+-set(SAMTOOLS_DIR "${CMAKE_CURRENT_BINARY_DIR}/${SAMTOOLS_PREFIX}")
+-set(SAMTOOLS_LIBRARY "${SAMTOOLS_DIR}/libbam.a")
+-superset(SAMTOOLS_PROG "${SAMTOOLS_DIR}/samtools")
+-
+-# final directory copy below would ideally be a soft-link, copy is for windows build
+-add_custom_command(
+-    OUTPUT ${SAMTOOLS_DIR}
+-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${SAMTOOLS_DIR}"
+-    COMMAND ${CMAKE_COMMAND} -E tar xjf "${THIS_REDIST_DIR}/${SAMTOOLS_PREFIX}.tar.bz2"
+-    DEPENDS ${HTSLIB_FINAL_TASK}
+-    COMMENT "Unpacking samtools package")
+-
+-set (SAMTOOLS_FINAL_TASK ${SAMTOOLS_DIR})
+-
+-if (NOT WIN32)
+-    add_custom_command(
+-        OUTPUT ${SAMTOOLS_PROG}
+-        COMMAND ./configure CC=${CMAKE_C_COMPILER} ${HTSLIB_CONFIGOPT} --without-curses --with-htslib=${HTSLIB_DIR} >samtools.config.log 2>samtools.config.error.log || \(echo "Failed to configure samtools, see ${SAMTOOLS_DIR}/samtools.config.error.log for details." && exit 1\)
+-        COMMAND $(MAKE) all >samtools.build.log 2>samtools.build.error.log  || \(echo "Failed to build samtools, see ${SAMTOOLS_DIR}/samtools.build.error.log for details." && exit 1\)
+-        DEPENDS ${HTSLIB_LIBRARY}
+-        DEPENDS ${SAMTOOLS_DIR}
+-        WORKING_DIRECTORY ${SAMTOOLS_DIR}
+-        COMMENT "Building samtools package")
+-
+-    set (SAMTOOLS_FINAL_TASK ${SAMTOOLS_PROG})
+-endif ()
+-
+-set(THIS_SAMTOOLS "${THIS_PROJECT_NAME}_samtools")
+-add_custom_target(${THIS_SAMTOOLS} DEPENDS "${SAMTOOLS_FINAL_TASK}")
+-
+-if (NOT WIN32)
+-    install(PROGRAMS "${SAMTOOLS_PROG}" DESTINATION "${THIS_LIBEXECDIR}")
+-endif ()
+-
+-#
+ # pyflow
+ #
+ 
+Binary files manta-1.6.0.old/redist/htslib-1.9.tar.bz2 and manta-1.6.0.new/redist/htslib-1.9.tar.bz2 differ
+Binary files manta-1.6.0.old/redist/samtools-1.9.tar.bz2 and manta-1.6.0.new/redist/samtools-1.9.tar.bz2 differ
+diff -ruN manta-1.6.0.old/src/c++/bin/CMakeLists.txt manta-1.6.0.new/src/c++/bin/CMakeLists.txt
+--- manta-1.6.0.old/src/c++/bin/CMakeLists.txt	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/c++/bin/CMakeLists.txt	2024-08-09 20:51:51.000000000 +0200
+@@ -37,7 +37,7 @@
+     set(THIS_APPLICATION_LIB ${THIS_PROJECT_NAME}_${THIS_PROGRAM})
+     add_executable        (${THIS_PROGRAM} ${THIS_PROGRAM_SOURCE})
+     target_link_libraries (${THIS_PROGRAM}  ${THIS_APPLICATION_LIB} ${PROJECT_PRIMARY_LIBRARY_TARGETS}
+-                           ${HTSLIB_LIBRARY} ${Boost_LIBRARIES}
++                           hts ${Boost_LIBRARIES}
+                            ${THIS_ADDITIONAL_LIB})
+     install(TARGETS ${THIS_PROGRAM} RUNTIME DESTINATION ${THIS_LIBEXECDIR})
+ endforeach()
+diff -ruN manta-1.6.0.old/src/cmake/boost.cmake manta-1.6.0.new/src/cmake/boost.cmake
+--- manta-1.6.0.old/src/cmake/boost.cmake	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/cmake/boost.cmake	2024-08-09 21:40:30.000000000 +0200
+@@ -34,7 +34,7 @@
+ 
+ macro (initBoostParams)
+     # required boost libraries
+-    set (THIS_BOOST_VERSION 1.58.0)
++    set (THIS_BOOST_VERSION 1.79.0)
+     # note we default to alphabetical order here, except where boost libraries depend on
+     # each other (timer->chrono)
+     set (THIS_BOOST_COMPONENTS date_time filesystem program_options
+@@ -105,7 +105,7 @@
+ # (1) can you find boost >= min_version at all?
+ # (2) if so, does that boost version include all of our required components?
+ #
+-find_package(Boost ${THIS_BOOST_VERSION})
++find_package(Boost ${THIS_BOOST_VERSION} HINTS ${EBROOTBOOST})
+ if (Boost_FOUND)
+     find_package(Boost ${THIS_BOOST_VERSION} COMPONENTS ${THIS_BOOST_COMPONENTS} QUIET)
+ endif ()
+diff -ruN manta-1.6.0.old/src/cmake/cxxConfigure.cmake manta-1.6.0.new/src/cmake/cxxConfigure.cmake
+--- manta-1.6.0.old/src/cmake/cxxConfigure.cmake	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/cmake/cxxConfigure.cmake	2024-08-09 20:55:17.000000000 +0200
+@@ -582,5 +582,5 @@
+ #
+ # include dirs:
+ #
+-set (THIS_CXX_BEFORE_SYSTEM_INCLUDES "${Boost_INCLUDE_DIRS}" "${CTPL_DIR}" "${HTSLIB_DIR}")
++set (THIS_CXX_BEFORE_SYSTEM_INCLUDES "${Boost_INCLUDE_DIRS}" "${CTPL_DIR}" SYSTEM "$ENV{EBROOTHTSLIB}/include")
+ set (THIS_CXX_ALL_INCLUDES "${THIS_SOURCE_DIR}/c++/lib")
+diff -ruN manta-1.6.0.old/src/cmake/cxxTestLibrary.cmake manta-1.6.0.new/src/cmake/cxxTestLibrary.cmake
+--- manta-1.6.0.old/src/cmake/cxxTestLibrary.cmake	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/cmake/cxxTestLibrary.cmake	2024-08-09 20:56:13.000000000 +0200
+@@ -52,7 +52,7 @@
+ 
+     target_link_libraries (${TEST_TARGET_NAME} ${LIBRARY_TARGET_NAME}
+                            ${PROJECT_TEST_LIBRARY_TARGETS} ${PROJECT_PRIMARY_LIBRARY_TARGETS}
+-                           ${HTSLIB_LIBRARY} ${Boost_LIBRARIES} ${THIS_ADDITIONAL_LIB})
++                           hts ${Boost_LIBRARIES} ${THIS_ADDITIONAL_LIB})
+ 
+     set(TEST_BINARY ${CMAKE_CURRENT_BINARY_DIR}/${TEST_TARGET_NAME})
+ 
+diff -ruN manta-1.6.0.old/src/CMakeLists.txt manta-1.6.0.new/src/CMakeLists.txt
+--- manta-1.6.0.old/src/CMakeLists.txt	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/CMakeLists.txt	2024-08-09 20:50:57.000000000 +0200
+@@ -23,6 +23,7 @@
+ ##
+ ################################################################################
+ 
++find_library($ENV{EBROOTHTSLIB}/lib hts)
+ 
+ add_subdirectory (cmake/preInstall)
+ 
+diff -ruN manta-1.6.0.old/src/python/lib/mantaOptions.py manta-1.6.0.new/src/python/lib/mantaOptions.py
+--- manta-1.6.0.old/src/python/lib/mantaOptions.py	2019-06-24 22:02:16.000000000 +0200
++++ manta-1.6.0.new/src/python/lib/mantaOptions.py	2024-08-09 21:55:10.000000000 +0200
+@@ -93,10 +93,10 @@
+         libexecDir=os.path.abspath(os.path.join(scriptDir,"@THIS_RELATIVE_LIBEXECDIR@"))
+         assert os.path.isdir(libexecDir)
+ 
+-        bgzipBin=joinFile(libexecDir,exeFile("bgzip"))
+-        htsfileBin=joinFile(libexecDir,exeFile("htsfile"))
+-        tabixBin=joinFile(libexecDir,exeFile("tabix"))
+-        samtoolsBin=joinFile(libexecDir,exeFile("samtools"))
++        bgzipBin=exeFile("bgzip")
++        htsfileBin=exeFile("htsfile")
++        tabixBin=exeFile("tabix")
++        samtoolsBin=exeFile("samtools")
+ 
+         mantaStatsBin=joinFile(libexecDir,exeFile("GetAlignmentStats"))
+         mantaMergeStatsBin=joinFile(libexecDir,exeFile("MergeAlignmentStats"))

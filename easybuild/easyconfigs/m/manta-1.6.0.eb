@@ -1,0 +1,57 @@
+easyblock = 'CMakeMake'
+
+name = 'manta'
+version = '1.6.0'
+
+homepage = 'https://github.com/Illumina/manta'
+description = """
+Manta calls structural variants (SVs) and indels from mapped paired-end sequencing reads.
+It is optimized for analysis of germline variation in small sets of individuals and
+somatic variation in tumor/normal sample pairs. Manta discovers, assembles and
+scores large-scale SVs, medium-sized indels and large insertions within a
+single efficient workflow.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'Illumina'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Manta-%(version)s-eb-external.patch']
+checksums = [
+    '76ce7c4a95a3b92cb16381f9a3b091afa234948ae6f028982abbd49e21206421',
+    '712d3b11642b29a19388875b0c6f485c2e76f7e0cb70cefd22a59952ac1f3558',
+]
+
+builddependencies = [
+    ('boost', '1.79.0','-nompi'),
+    ('doxygen', '1.9.5'),
+]
+
+dependencies = [
+    ('samtools', '1.20'),
+    ('zlib', '1.3.1'),
+]
+
+osdependencies = ['python2','cmake']
+
+local_binaries = ['CheckSVLoci', 'DumpSVLoci', 'EstimateSVLoci', 'GenerateSVCandidates', 'GetAlignmentStats',
+                  'GetChromDepth', 'MergeAlignmentStats', 'MergeSVLoci', 'SummarizeAlignmentStats', 'SummarizeSVLoci',
+                  'TestAssembler']
+
+prebuildopts = 'rm -f %(builddir)s/redist/{boost,htslib,samtools}*.tar.bz2 && '
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['configManta.py', 'runMantaWorkflowDemo.py']] +
+             ['libexec/%s' % x for x in local_binaries],
+    'dirs': ['lib/python', 'share'],
+}
+
+sanity_check_commands = ['runMantaWorkflowDemo.py']
+
+modextrapaths = {
+    'PATH': 'libexec',
+    'PYTHONPATH': 'lib/python',
+}
+
+moduleclass = 'bio'
