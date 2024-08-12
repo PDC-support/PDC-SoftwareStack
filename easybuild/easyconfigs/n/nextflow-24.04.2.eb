@@ -1,0 +1,47 @@
+easyblock = 'Binary'
+
+name = 'nextflow'
+version = '24.04.2'
+
+homepage = 'https://www.nextflow.io/'
+
+description = """
+Nextflow is a workflow system for creating scalable, portable, and reproducible workflows.
+It is based on the dataflow programming model, which greatly simplifies the writing of parallel and
+distributed pipelines, allowing you to focus on the flow of data and computation.
+
+Nextflow can deploy workflows on a variety of execution platforms, including your local machine,
+HPC schedulers, AWS Batch, Azure Batch, Google Cloud Batch, and Kubernetes.
+Additionally, it supports many ways to manage your software dependencies,
+including Conda, Spack, Docker, Podman, Singularity, and more.
+"""
+
+whatis = ["Description: Nextflow is a reactive workflow framework and a programming DSL that eases writing computational pipelines with complex data",
+          'This module provides one executable and one script'
+]
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/nextflow-io/nextflow/releases/download/v%(version)s/']
+sources = ['nextflow-%(version)s-all']
+checksums = ['1491a4efc06f0df9eed1fa6aa5a8c657435397fa99c34bf954281460e9b1c5ee']
+
+dependencies = [('java', '17.0.4')]
+
+install_cmds = [
+    "mkdir -p %(installdir)s/bin",
+    "cp %(builddir)s/nextflow-%(version)s-all %(installdir)s/bin",
+    "cd %(installdir)s/bin && ln -s nextflow-%(version)s-all nextflow",
+    "cd %(installdir)s/bin && chmod +x %(installdir)s/bin/nextflow-%(version)s-all",
+]
+
+sanity_check_paths = {
+    'files': ['bin/nextflow-%(version)s-all', 'bin/nextflow'],
+    'dirs': []
+}
+
+sanity_check_commands = [
+    "nextflow -v",
+    "nextflow help",
+]
+
+moduleclass = 'tools'
