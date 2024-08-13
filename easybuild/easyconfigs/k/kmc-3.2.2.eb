@@ -1,6 +1,6 @@
 easyblock = 'MakeCp'
 
-name = 'KMC'
+name = 'kmc'
 version = '3.2.2'
 
 homepage = 'http://sun.aei.polsl.pl/kmc'
