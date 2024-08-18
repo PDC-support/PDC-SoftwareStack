@@ -1,0 +1,48 @@
+# This file is an EasyBuild reciPY as per https://easybuilders.github.io/easybuild/
+# Author: Pablo Escobar Lopez
+# Updated: Denis Kristak (INUITS)
+# sciCORE - University of Basel
+# SIB Swiss Institute of Bioinformatics
+
+easyblock = 'ConfigureMake'
+
+name = 'librmath'
+version = '4.4.0'
+
+homepage = 'https://cran.r-project.org/doc/manuals/r-release/R-admin.html#The-standalone-Rmath-library'
+description = """The routines supporting the distribution and special functions in R and a few others are declared
+ in C header file Rmath.h. These can be compiled into a standalone library for linking to other applications."""
+
+toolchain = SYSTEM
+
+source_urls = ['https://cloud.r-project.org/src/base/R-%(version_major)s']
+sources = ['R-%(version)s.tar.gz']
+checksums = ['ace4125f9b976d2c53bcc5fca30c75e30d4edc401584859cbadb080e72b5f030']
+
+builddependencies = [
+    ('binutils', '2.37'),
+    ('pkg-config', '0.29.2'),
+]
+dependencies = [
+    ('bzip2', '1.0.8'),
+    ('curl', '7.78.0'),
+    ('pcre2', '10.42'),
+    ('xz', '5.4.5'),
+    ('zlib', '1.3.1'),
+]
+
+preconfigopts = "cd %(builddir)s/R-%(version)s && "
+configopts = "--with-readline=no --with-recommended-packages=no --with-x=no"
+
+parallel = 1
+
+postinstallcmds = ['cp -r %(builddir)s/R-%(version)s/src/include/R_ext %(installdir)s/include/']
+runtest = 'check'
+start_dir = 'src/nmath/standalone'
+
+sanity_check_paths = {
+    'files': ['lib/libRmath.%s' % SHLIB_EXT, 'lib/libRmath.a', 'lib/pkgconfig/libRmath.pc', 'include/Rmath.h'],
+    'dirs': [],
+}
+
+moduleclass = 'lib'
