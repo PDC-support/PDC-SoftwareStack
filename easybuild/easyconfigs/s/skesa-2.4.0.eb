@@ -1,0 +1,47 @@
+easyblock = 'MakeCp'
+
+name = 'skesa'
+version = '2.4.0'
+
+homepage = 'https://github.com/ncbi/SKESA'
+whatis = [
+    'Description: Strategic K-mer Extension for Scrupulous Assemblies',
+    'This module provides the assemblers SKESA and SAUTE, together with the tool GFA connector and KmerCounter.',
+]
+
+description = '''
+SKESA is a de-novo sequence read assembler for microbial genomes. It uses conservative
+heuristics and is designed to create breaks at repeat regions in the genome. This leads
+to excellent sequence quality without significantly compromising contiguity. If desired,
+SKESA contigs could be connected into a GFA graph using GFA connector.
+
+SAUTE is a de Bruijn graph based target enriched de-novo assembler designed for assembling genomic and RNA-seq reads sequenced using Illumina. The result is reported as a GFA graph and two nucleotide fasta sequence files for assemblies in the graph.
+'''
+
+toolchain = SYSTEM
+toolchainopts = {'cstd': 'c++11'}
+
+source_urls = ['https://github.com/ncbi/SKESA/archive/']
+sources = ['skesa.%(version)s_saute.1.3.0_1.tar.gz']
+checksums = ['b44c56b16d87b1961e9ee4069468f6b0e850c0cc4c99410f1f5c06b782dee092']
+
+dependencies = [
+    ('boost', '1.79.0','-nompi'),
+]
+
+prebuildopts = 'rm Makefile && '
+
+buildopts = 'CC="$CXX" BOOST_PATH=$EBROOTBOOST -f Makefile.nongs'
+
+local_binaries = ['skesa', 'saute', 'saute_prot', 'gfa_connector', 'kmercounter']
+
+files_to_copy = [(local_binaries, 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_binaries],
+    'dirs': [],
+}
+
+sanity_check_commands = ["skesa --help"]
+
+moduleclass = 'bio'
