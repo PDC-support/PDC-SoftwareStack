@@ -11,11 +11,17 @@ toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
 
 source_urls = ['https://github.com/opencollab/arpack-ng/archive/']
 sources = ['%(version)s.tar.gz']
+checksums = ['f6641deb07fa69165b7815de9008af3ea47eb39b2bb97521fbf74c97aba6e844']
 
-builddependencies = [('autotools','20220317', '', True)]
+builddependencies = [
+    ('autotools','20220317', '', True),
+    ('eigen', '3.4.0', '', True),
+]
+
+configopts = '-D EXAMPLES=OFF -D ICB=ON -D EIGEN=ON -D PYTHON3=OFF -DMPI=ON ' 
 
 sanity_check_paths = {
-    'files': ['lib/libarpack.so'],
+    'files': ['lib64/libarpack.%s' % SHLIB_EXT],
     'dirs': []
 }
 
