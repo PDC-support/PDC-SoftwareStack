@@ -2,7 +2,7 @@
 easyblock = 'MakeCp'
 
 name = 'elk'
-version = '10.0.5'
+version = '10.0.15'
 
 homepage = 'https://elk.sourceforge.io/'
 
