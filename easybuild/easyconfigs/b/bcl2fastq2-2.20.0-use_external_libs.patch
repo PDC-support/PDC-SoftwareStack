@@ -1,0 +1,64 @@
+make use of external libraries for libxml2, libexslt and libxslt.
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN bcl2fastq/src/cmake/cxxConfigure.cmake bcl2fastq.new/src/cmake/cxxConfigure.cmake
+--- bcl2fastq/src/cmake/cxxConfigure.cmake	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.new/src/cmake/cxxConfigure.cmake	2024-08-29 16:58:42.000000000 +0200
+@@ -96,26 +96,12 @@
+ # CPPUNIT
+ bcl2fastq_find_library(CPPUNIT "cppunit/Test.h" cppunit${CPPUNIT_DEBUG})
+ 
+-# XML2 - bootstrap first (if necessary) so xslt can build against it 
+-# XSLT and EXSLT
+-if((NOT HAVE_LIBXML2) OR (NOT HAVE_LIBXSLT))
+-  find_package_version(LibXml2 ${BCL2FASTQ_LIBXML2_VERSION})
+-  find_package_version(LibXslt ${BCL2FASTQ_LIBXSLT_VERSION})
+-endif((NOT HAVE_LIBXML2) OR (NOT HAVE_LIBXSLT))
+-
+-if((NOT HAVE_LIBXML2) OR (NOT HAVE_LIBXSLT))
+-  redist_package(LIBXML2 ${BCL2FASTQ_LIBXML2_VERSION} 
+-                 "--prefix=${REINSTDIR};--without-modules;--without-http;--without-ftp;--without-python;--without-threads;--without-schematron;--without-debug;--without-iconv")
+-  find_library_redist(LIBXML2 ${REINSTDIR} libxml/xpath.h xml2)
+-  redist_package(LIBXSLT ${BCL2FASTQ_LIBXSLT_VERSION} "--prefix=${REINSTDIR};--with-libxml-prefix=${REINSTDIR};--without-plugins;--without-crypto")
+-  find_library_redist(LIBEXSLT ${REINSTDIR} libexslt/exslt.h exslt)
+-  find_library_redist(LIBXSLT ${REINSTDIR} libxslt/xsltconfig.h xslt)
+-endif((NOT HAVE_LIBXML2) OR (NOT HAVE_LIBXSLT))
+-
+-include_directories(BEFORE SYSTEM ${LIBXML2_INCLUDE_DIR})
+-include_directories(BEFORE SYSTEM ${LIBXSLT_INCLUDE_DIR})
+-include_directories(BEFORE SYSTEM ${LIBEXSLT_INCLUDE_DIR})
+-set(BCL2FASTQ_DEP_LIB ${BCL2FASTQ_DEP_LIB} "${LIBEXSLT_LIBRARIES}" "${LIBXSLT_LIBRARIES}" "${LIBXML2_LIBRARIES}")
++include_directories(BEFORE SYSTEM ${EBROOTLIBXML2}/include)
++include_directories(BEFORE SYSTEM ${EBROOTLIBXSLT}/include)
++find_library(${EBROOTLIBXSLT}/lib exslt)
++find_library(${EBROOTLIBXSLT}/lib xslt)
++find_library(${EBROOTLIBXML2}/lib xml2)
++set(BCL2FASTQ_DEP_LIB ${BCL2FASTQ_DEP_LIB} exslt xslt xml2)
+ 
+ #set (CMAKE_CXX_FLAGS "$ENV{CXX_FLAGS} $ENV{CXXFLAGS} -fopenmp -msse2 -Werror -Wall -Wextra -Wunused -Wno-long-long -Wsign-compare -Wpointer-arith" CACHE STRING "g++ flags" FORCE)
+ set (CMAKE_CXX_FLAGS "$ENV{CXX_FLAGS} $ENV{CXXFLAGS} -std=c++11 -fopenmp -msse2 -Wall -Wextra -Wunused -Wno-long-long -Wsign-compare -Wpointer-arith" CACHE STRING "g++ flags" FORCE)
+diff -ruN bcl2fastq/src/CMakeLists.txt bcl2fastq.new/src/CMakeLists.txt
+--- bcl2fastq/src/CMakeLists.txt	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.new/src/CMakeLists.txt	2024-08-29 16:30:30.000000000 +0200
+@@ -180,14 +178,7 @@
+ 
+ # required libxml2 and libxslt libraries
+ set (BCL2FASTQ_LIBXML2_VERSION 2.7.8)
+-set (LIBXML2_REDIST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+-set (LIBXSLT_REDIST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+-
+-set (LIBXML2_INSTAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+-set (LIBXSLT_INSTAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+-
+ set (BCL2FASTQ_LIBXSLT_VERSION 1.1.26)
+-set (LIBXSLT_REDIST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+ 
+ # test
+ set (GOOGLE_TEST_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../modules/googletest/googletest")
+@@ -199,7 +190,6 @@
+ 
+ # redist includes
+ include ("${CMAKE_SOURCE_DIR}/cmake/boost.cmake")
+-include ("${CMAKE_SOURCE_DIR}/cmake/bcl2fastq_redist_macros.cmake")
+ 
+ # subdirs
+ add_subdirectory (cmake/preInstall)

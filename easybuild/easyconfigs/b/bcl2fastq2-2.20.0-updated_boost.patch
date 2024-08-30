@@ -1,0 +1,176 @@
+using an external and upgraded version of boost.
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN bcl2fastq/src/CMakeLists.txt bcl2fastq.boostfix/src/CMakeLists.txt
+--- bcl2fastq/src/CMakeLists.txt	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/CMakeLists.txt	2024-08-30 11:36:09.000000000 +0200
+@@ -153,6 +153,9 @@
+ add_custom_target(BCL2FASTQ_CXX)
+ add_custom_target(BCL2FASTQ_OPT)
+ 
++set(Boost_USE_STATIC_LIBS   ON)
++add_compile_definitions(BOOST_BIND_GLOBAL_PLACEHOLDERS)
++
+ # Get around broken BOOST cmake macros if BOOST_ROOT set
+ set(CMAKEBOOSTROOT $ENV{BOOST_ROOT})
+ if( NOT ${CMAKEBOOSTROOT} STREQUAL "" )
+@@ -160,8 +163,6 @@
+    message("BOOST_ROOT is set, Boost_NO_SYSTEM_PATHS is ${Boost_NO_SYSTEM_PATHS}")
+ endif( NOT ${CMAKEBOOSTROOT} STREQUAL "" )
+ 
+-set(BOOST_REDIST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../redist")
+-
+ # required boost libraries
+ set (BCL2FASTQ_BOOST_VERSION 1.54.0)
+ set (BCL2FASTQ_BOOST_COMPONENTS
+diff -ruN bcl2fastq/src/cxx/include/common/Logger.hh bcl2fastq.boostfix/src/cxx/include/common/Logger.hh
+--- bcl2fastq/src/cxx/include/common/Logger.hh	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/include/common/Logger.hh	2024-08-30 10:11:59.000000000 +0200
+@@ -15,7 +15,8 @@
+  */
+ 
+ 
+ #include <ios>
++#include <iostream>
+ #include <string>
+ 
+ #include <boost/atomic.hpp>
+diff -ruN bcl2fastq/src/cxx/include/io/FileBufWithReopen.hpp bcl2fastq.boostfix/src/cxx/include/io/FileBufWithReopen.hpp
+--- bcl2fastq/src/cxx/include/io/FileBufWithReopen.hpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/include/io/FileBufWithReopen.hpp	2024-08-30 10:12:51.000000000 +0200
+@@ -21,6 +21,7 @@
+ 
+ #include <iostream>
+ #include <fcntl.h>
++#include <cstring>
+ 
+ #include "common/Exceptions.hh"
+ #include "common/Debug.hh"
+@@ -53,7 +54,7 @@
+ BasicFileBufWithReopen<CharT, Traits>* BasicFileBufWithReopen<CharT, Traits>::reopen(const boost::filesystem::path& path, typename FadviseFlags::value_type fadvise)
+ {
+     const char * const openMode = iosFlagsToStdioMode(mode_);
+-    BCL2FASTQ_ASSERT_MSG(openMode, "Combination of open mode flags is invalid");
++    BCL2FASTQ_ASSERT_MSG(strlen(openMode) > 0, "Combination of open mode flags is invalid");
+     //BCL2FASTQ_LOG(common::LogLevel::DEBUG) << "Reopening '" << path << "' with mode '" << openMode << "'" << std::endl;
+ 
+ #ifndef WIN32
+diff -ruN bcl2fastq/src/cxx/lib/config/Bcl2FastqOptions.cpp bcl2fastq.boostfix/src/cxx/lib/config/Bcl2FastqOptions.cpp
+--- bcl2fastq/src/cxx/lib/config/Bcl2FastqOptions.cpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/lib/config/Bcl2FastqOptions.cpp	2024-08-30 10:12:14.000000000 +0200
+@@ -28,6 +28,7 @@
+ #include "config.h"
+ #include "config/Bcl2FastqOptions.hh"
+ #include <boost/algorithm/string.hpp>
++#include <boost/foreach.hpp>
+ 
+ 
+ namespace bcl2fastq {
+diff -ruN bcl2fastq/src/cxx/lib/config/SampleSheetCsv.cpp bcl2fastq.boostfix/src/cxx/lib/config/SampleSheetCsv.cpp
+--- bcl2fastq/src/cxx/lib/config/SampleSheetCsv.cpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/lib/config/SampleSheetCsv.cpp	2024-08-30 10:12:14.000000000 +0200
+@@ -23,6 +23,7 @@
+ #include <boost/filesystem.hpp>
+ #include <boost/lexical_cast.hpp>
+ #include <boost/algorithm/string.hpp>
++#include <boost/foreach.hpp>
+ 
+ #include "common/Logger.hh"
+ #include "common/Debug.hh"
+diff -ruN bcl2fastq/src/cxx/lib/io/Utility.cpp bcl2fastq.boostfix/src/cxx/lib/io/Utility.cpp
+--- bcl2fastq/src/cxx/lib/io/Utility.cpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/lib/io/Utility.cpp	2024-08-30 10:40:21.000000000 +0200
+@@ -35,38 +35,38 @@
+                 // inspired by /usr/include/c++/4.3.2/fstream
+                 // | ios_base Flag combination      |
+                 // |binary  in  out  trunc  app     |
+-    (0      )   // |                                |
++    (""     )   // |                                |
+     ("a"    )   // |                         +      |
+-    (0      )   // |                   +            |
+-    (0      )   // |                   +     +      |
++    (""     )   // |                   +            |
++    (""     )   // |                   +     +      |
+     ("w"    )   // |             +                  |
+     ("a"    )   // |             +           +      |
+     ("w"    )   // |             +     +            |
+-    (0      )   // |             +     +     +      |
++    (""     )   // |             +     +     +      |
+     ("r"    )   // |         +                      |
+     ("a+"   )   // |         +               +      |
+-    (0      )   // |         +         +            |
+-    (0      )   // |         +         +     +      |
++    (""     )   // |         +         +            |
++    (""     )   // |         +         +     +      |
+     ("r+"   )   // |         +   +                  |
+     ("a+"   )   // |         +   +           +      |
+     ("w+"   )   // |         +   +     +            |
+-    (0      )   // |         +   +     +     +      |
+-    (0      )   // |   +                            |
++    (""     )   // |         +   +     +     +      |
++    (""     )   // |   +                            |
+     ("ab"   )   // |   +                     +      |
+-    (0      )   // |   +               +            |
+-    (0      )   // |   +               +     +      |
++    (""     )   // |   +               +            |
++    (""     )   // |   +               +     +      |
+     ("wb"   )   // |   +         +                  |
+     ("ab"   )   // |   +         +           +      |
+     ("wb"   )   // |   +         +     +            |
+-    (0      )   // |   +         +     +     +      |
++    (""     )   // |   +         +     +     +      |
+     ("rb"   )   // |   +     +                      |
+     ("a+b"  )   // |   +     +               +      |
+-    (0      )   // |   +     +         +            |
+-    (0      )   // |   +     +         +     +      |
++    (""     )   // |   +     +         +            |
++    (""     )   // |   +     +         +     +      |
+     ("r+b"  )   // |   +     +   +                  |
+     ("a+b"  )   // |   +     +   +           +      |
+     ("w+b"  )   // |   +     +   +     +            |
+-    (0      )   // |   +     +   +     +     +      |
++    (""     )   // |   +     +   +     +     +      |
+ ;
+ 
+ 
+diff -ruN bcl2fastq/src/cxx/lib/io/Xml.cpp bcl2fastq.boostfix/src/cxx/lib/io/Xml.cpp
+--- bcl2fastq/src/cxx/lib/io/Xml.cpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/lib/io/Xml.cpp	2024-08-30 10:57:02.000000000 +0200
+@@ -23,6 +23,7 @@
+ #include <boost/filesystem/fstream.hpp>
+ #include <boost/format.hpp>
+ #include <boost/foreach.hpp>
++#include <boost/bind.hpp>
+ #include <boost/property_tree/xml_parser.hpp>
+ 
+ #include "io/Xml.hh"
+@@ -168,19 +169,11 @@
+     if (!tree.empty())
+     {
+         unindex(*tree.begin(), treeWithIndexAttributes);
+-#ifndef WIN32
+-        boost::property_tree::write_xml(os, treeWithIndexAttributes, boost::property_tree::xml_writer_make_settings(' ', 2));
+-#else
+         boost::property_tree::write_xml(os, treeWithIndexAttributes, boost::property_tree::xml_writer_make_settings<std::string>(' ', 2));
+-#endif
+     }
+     else
+     {
+-#ifndef WIN32
+-        boost::property_tree::write_xml(os, tree, boost::property_tree::xml_writer_make_settings(' ', 2));
+-#else
+         boost::property_tree::write_xml(os, tree, boost::property_tree::xml_writer_make_settings<std::string>(' ', 2));
+-#endif
+     }
+     return os;
+ }
+diff -ruN bcl2fastq/src/cxx/lib/layout/LaneInfo.cpp bcl2fastq.boostfix/src/cxx/lib/layout/LaneInfo.cpp
+--- bcl2fastq/src/cxx/lib/layout/LaneInfo.cpp	2017-06-22 19:14:50.000000000 +0200
++++ bcl2fastq.boostfix/src/cxx/lib/layout/LaneInfo.cpp	2024-08-30 11:06:19.000000000 +0200
+@@ -22,6 +22,7 @@
+ #include <boost/assign.hpp>
+ #include <boost/format.hpp>
+ #include <boost/foreach.hpp>
++#include <boost/bind.hpp>
+ 
+ #include "common/Debug.hh"
+ #include "layout/LaneInfo.hh"
