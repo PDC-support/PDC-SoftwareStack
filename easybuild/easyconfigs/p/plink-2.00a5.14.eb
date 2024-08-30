@@ -1,0 +1,39 @@
+# Created by Karl Johan Westrin, PDC
+
+easyblock = 'PackedBinary'
+
+name = 'plink'
+version = '2.00a5.14'
+
+homepage = 'https://www.cog-genomics.org/plink/2.0/'
+whatis = [
+    'Description: Whole-genome association analysis toolset',
+    'This module provides two executables.',
+]
+description = """
+A comprehensive update to the PLINK association analysis toolset.
+Beta testing of the first new version (1.90), focused on speed and
+memory efficiency improvements, is finishing up. Development is now
+focused on building out support for multiallelic, phased, and dosage
+data in PLINK 2.0.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://s3.amazonaws.com/plink2-assets/alpha5','https://s3.amazonaws.com/plink1-assets']
+sources = [{
+    'download_filename': 'plink2_linux_amd_avx2_20240820.zip',
+    'filename': 'plink2_linux_amd_avx2_%(version)s.zip',
+},{
+    'download_filename': 'plink_linux_x86_64_20240818.zip',
+    'filename': 'plink_linux_1.90b7.4.zip',
+}]
+
+sanity_check_paths = {
+    'files': ['plink2','plink'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['plink2 --help', 'plink --help']
+
+moduleclass = 'bio'
