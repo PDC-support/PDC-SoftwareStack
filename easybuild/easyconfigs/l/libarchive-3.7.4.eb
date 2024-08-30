@@ -1,0 +1,36 @@
+easyblock = 'ConfigureMake'
+
+name = 'libarchive'
+version = '3.7.4'
+
+homepage = 'https://www.libarchive.org/'
+
+description = """
+ Multi-format archive and compression library
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://www.libarchive.org/downloads/']
+sources = [SOURCE_TAR_GZ]
+checksums = [
+    {'libarchive-3.7.4.tar.gz': '7875d49596286055b52439ed42f044bd8ad426aa4cc5aabd96bfe7abb971d5e8'},
+]
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('xz', '5.4.5'),
+]
+
+osdependencies = ['openssh']
+
+sanity_check_paths = {
+    'files': ['include/archive.h', 'lib/libarchive.%s' % SHLIB_EXT],
+    'dirs': ['bin', 'share/man/man3'],
+}
+
+moduleclass = 'tools'
