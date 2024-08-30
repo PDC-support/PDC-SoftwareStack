@@ -18,9 +18,6 @@ sources = [{
 patches = [
     '%(name)s-%(version)s-use_external_libs.patch',
     '%(name)s-%(version)s-updated_boost.patch',
-#    '%(name)s-%(version)s-fix-cmake-target-libs-GCC-11.3-plus.patch',
-    # bcl2fastq2 v2.20.0 is not compatible with recent Boost versions, use bundled Boost
-#    '%(name)s-%(version)s-find-boost.patch',
 ]
 checksums = [
     {'%(name)s-v2-20-0-tar.zip': '8dd3044767d044aa4ce46de0de562b111c44e5b8b7348e04e665eb1b4f101fe3'},
@@ -51,8 +48,6 @@ preconfigopts += r'sed -i "s/-std=[a-z0-9\+]* //g;s/-O. //g" %s && ' % local_cma
 configopts = '-DBCL2FASTQ_VERSION:STRING=%(version)s '
 configopts += '-DBCL2FASTQ_PREFIX:STRING=%(installdir)s '
 configopts += '-DBCL2FASTQ_SOURCE_DIR:STRING=%(builddir)s/bcl2fastq/src '
-
-#maxparallel = 1
 
 sanity_check_paths = {
     'files': ['bin/bcl2fastq'],
