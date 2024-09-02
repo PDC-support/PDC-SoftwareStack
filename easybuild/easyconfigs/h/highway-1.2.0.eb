@@ -19,12 +19,12 @@ builddependencies = [
     ('cmake', '3.27.7'),
 ]
 
-configopts = "-DHWY_SYSTEM_GTEST=OFF"
+configopts = ["-DHWY_SYSTEM_GTEST=OFF", "-DHWY_SYSTEM_GTEST=OFF -DBUILD_SHARED_LIBS=ON"]
 
 runtest = "test"
 
 sanity_check_paths = {
-    'files': ['lib/libhwy.a'],
+    'files': ['lib/libhwy.a', 'lib/libhwy.%s' % SHLIB_EXT],
     'dirs': ['include/hwy'],
 }
 
