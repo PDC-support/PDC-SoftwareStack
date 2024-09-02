@@ -13,6 +13,7 @@ toolchainopts = {'pic': True}
 
 source_urls = ['http://download.osgeo.org/%(namelower)s/']
 sources = [SOURCELOWER_TAR_GZ]
+checksums = ['0620aa01b812de00b54d6c23e7c5cc843ae2cd129b24fabe411800302172b989']
 
 dependencies = [
     ('libtiff', '4.3.0'),
