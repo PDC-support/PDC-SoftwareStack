@@ -22,7 +22,7 @@ builddependencies = [
     ('cmake', '3.27.7'),
 ]
 
-configopts = '-DCMAKE_INSTALL_LIBDIR=lib'
+configopts = ['-DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=OFF','-DCMAKE_INSTALL_LIBDIR=lib']
 
 postinstallcmds = [
     # copy the LercTest source file to a LercTest subdir in the installation directory and compile it
@@ -38,7 +38,7 @@ sanity_check_commands = [
 ]
 
 sanity_check_paths = {
-    'files': ['include/Lerc_c_api.h', 'include/Lerc_types.h', 'lib/libLerc.%s' % SHLIB_EXT],
+    'files': ['include/Lerc_c_api.h', 'include/Lerc_types.h', 'lib/libLerc.a', 'lib/libLerc.%s' % SHLIB_EXT],
     'dirs': [],
 }
 
