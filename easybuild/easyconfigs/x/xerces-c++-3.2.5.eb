@@ -27,11 +27,14 @@ dependencies = [
     ('curl', '7.78.0'),
 ]
 
+configopts = ["-DBUILD_SHARED_LIBS=OFF", "-DBUILD_SHARED_LIBS=ON"]
+
 runtest = 'test'
 
 sanity_check_paths = {
     'files': ['bin/XInclude',
               'include/xercesc/xinclude/XIncludeUtils.hpp',
+              'lib/libxerces-c.a',
               'lib/libxerces-c-3.2.%s' % SHLIB_EXT],
     'dirs': ['bin', 'include', 'lib']
 }
