@@ -1,0 +1,35 @@
+easyblock = 'CMakeMake'
+
+name = 'armadillo'
+version = '12.8.0'
+
+homepage = 'https://arma.sourceforge.net/'
+description = """Armadillo is an open-source C++ linear algebra library (matrix maths) aiming towards
+ a good balance between speed and ease of use. Integer, floating point and complex numbers are supported,
+ as well as a subset of trigonometric and statistics functions."""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = ['https://sourceforge.net/projects/arma/files']
+sources = [SOURCELOWER_TAR_XZ]
+checksums = ['a89bb6fece5ce9fdd1d01a4bc145cf7cc0b939c5777cca46de69c2f5e3412cf0']
+
+builddependencies = [
+    ('cmake', '3.27.7','',True),
+]
+dependencies = [
+    ('arpack-ng', '3.9.1'),
+    ('cray-libsci', EXTERNAL_MODULE),
+]
+
+local_configopts = "-DBLAS_LIBRARY:PATH=${CRAY_LIBSCI_PREFIX_DIR}/lib "
+local_configopts += "-DLAPACK_LIBRARY:PATH=${CRAY_LIBSCI_PREFIX_DIR}/lib "
+
+configopts = [local_configopts+'-DBUILD_SHARED_LIBS=OFF ',local_configopts+'-DBUILD_SHARED_LIBS=ON ']
+
+sanity_check_paths = {
+    'files': ['include/armadillo', 'lib/libarmadillo.%s' % SHLIB_EXT, 'lib/libarmadillo.a'],
+    'dirs': ['include/armadillo_bits'],
+}
+
+moduleclass = 'numlib'
