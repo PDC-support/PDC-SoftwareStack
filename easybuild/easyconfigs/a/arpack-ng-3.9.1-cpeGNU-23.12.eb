@@ -18,10 +18,15 @@ builddependencies = [
     ('eigen', '3.4.0', '', True),
 ]
 
-configopts = '-D EXAMPLES=OFF -D ICB=ON -D EIGEN=ON -D PYTHON3=OFF -DMPI=ON ' 
+local_configopts = '-D EXAMPLES=OFF -D ICB=ON -D EIGEN=ON -D PYTHON3=OFF -DMPI=ON '
+
+configopts = [
+    local_configopts+' -DBUILD_SHARED_LIBS=OFF',
+    local_configopts+' -DBUILD_SHARED_LIBS=ON'
+]
 
 sanity_check_paths = {
-    'files': ['lib64/libarpack.%s' % SHLIB_EXT],
+    'files': ['lib64/libarpack.%s' % SHLIB_EXT, 'lib64/libarpack.a'],
     'dirs': []
 }
 
