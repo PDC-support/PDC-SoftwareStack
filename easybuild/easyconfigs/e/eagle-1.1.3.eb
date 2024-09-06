@@ -1,0 +1,54 @@
+# Built by Karl Johan Westrin (westrin@kth.se) for PDC, KTH, Stockholm
+easyblock = 'MakeCp'
+
+name = 'eagle'
+version = '1.1.3'
+
+homepage = 'https://github.com/tony-kuo/eagle'
+description = """
+EAGLE is a method for evaluating the degree to which sequencing data supports a given
+candidate genome variant. EAGLE incorporates candidate variants into explicit hypotheses
+about the individual’s genome, and then computes the probability of the observed data
+(the sequencing reads) under each hypothesis. In comparison with methods which rely heavily
+on a particular alignment of the reads to the reference genome, EAGLE readily accounts
+for uncertainties that may arise from multi-mapping or local misalignment and uses
+the entire length of each read.
+""" 
+
+whatis = [
+    'Description: Explicit Alternative Genome Likelihood Evaluator',
+    'This module provides a number of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+github_account = 'tony-kuo'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['bd510b8eef2de14898cbf417e1c7a30b97ddaba24e5e2834da7b02767362fe3c']
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('zstd', '1.5.5'),
+    ('xz', '5.4.5'),
+    ('htslib', '1.20'),
+]
+
+# To use external HTSlib
+prebuildopts = "sed -i -e '/HTSDIR/d' -e '/^HTSLIB:/d' -e 's/ HTSLIB//g' -e '/^LDLIBS=/s/$/ -lhts/g' Makefile && "
+
+files_to_copy = [(['eagle', 'eagle-rc', 'eagle-nm', 'scripts/*.*'], 'bin')]
+
+postinstallcmds = [
+    "chmod +x %(installdir)s/bin/*.*",
+    "sed -i '/^#!/s@^.*$@#!/usr/bin/env python3@g' %(installdir)s/bin/*.py",
+]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['eagle','eagle-rc','eagle-nm','tablize.py']],
+    'dirs': [],
+}
+
+sanity_check_commands = ['eagle --version', 'eagle-rc --version']
+
+moduleclass = 'bio'
