@@ -1,0 +1,56 @@
+# Contributed by Luca Marsella and Victor Holanda Rusu (CSCS)
+# Adapted by Henric Zazzi (hzazzi@kth.se), Johan Hellsvik, and Joe Jordan for PDC, KTH, Stockholm
+#
+# This file is an EasyBuild reciPY as per https://github.com/hpcugent/easybuild
+#
+# Copyright:: Copyright 2012-2013 University of Luxembourg / LCSB, Cyprus Institute / CaSToRC, Ghent University
+# Authors::   Wiktor Jurkowski <wiktor.jurkowski@uni.lu>, Fotis Georgatos <fotis.georgatos@uni.lu>, \
+# George Tsouloupas <g.tsouloupas@cyi.ac.cy>, Kenneth Hoste
+# License::   MIT/GPL
+# $Id$
+#
+# This work implements a part of the HPCBIOS project and is a component of the policy:
+# http://hpcbios.readthedocs.org/en/latest/HPCBIOS_2012-93.html
+#
+easyblock = 'CMakeMake'
+
+name = 'gromacs'
+version = '2024.2'
+versionsuffix = '-plumed-2.9.2'
+
+homepage = 'http://www.gromacs.org'
+description = """GROMACS is a versatile package to perform molecular dynamics,
+ i.e. simulate the Newtonian equations of motion for systems with hundreds to millions of particles."""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'opt': True, 'usempi': True, 'verbose': False, 'pic': True, 'dynamic': False, 'openmp': True}
+
+source_urls = ['ftp://ftp.%(namelower)s.org/pub/%(namelower)s/']
+sources = [SOURCELOWER_TAR_GZ]
+
+# CMake dependency with SYSTEM toolchain
+builddependencies = [
+    ('cmake', '3.27.7', '', True),
+]
+
+dependencies = [
+    ('craype-hugepages8M', EXTERNAL_MODULE),
+    ('cray-fftw/3.3.10.6', EXTERNAL_MODULE),
+    ('plumed', '2.9.2'),
+]
+
+preconfigopts = ' cd ../gromacs-%(version)s && plumed-patch -p -e gromacs-%(version)s -m shared && cd - && '
+
+local_configopts = "-DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF -DGMX_SIMD=AVX2_256 -DGMX_OPENMP=ON -DGMXAPI=ON "
+
+configopts = [
+    local_configopts + "-DGMX_MPI=OFF ",
+    local_configopts + "-DGMX_MPI=ON ",
+    local_configopts + "-DGMX_MPI=OFF -DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF -DGMX_BINARY_SUFFIX=_d -DGMX_LIBS_SUFFIX=_d ",
+    local_configopts + "-DGMX_MPI=ON -DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF -DGMX_BINARY_SUFFIX=_mpi_d -DGMX_LIBS_SUFFIX=_mpi_d ",
+]
+
+onlytcmod = True
+skipsteps = ['test']
+
+moduleclass = 'bio'
