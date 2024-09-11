@@ -69,9 +69,11 @@ sanity_check_paths = {
     'dirs': ['data', 'tests'],
 }
 
-# set custom CP2K_DATA_DIR
-modextravars = {'CP2K_DATA_DIR': '%(installdir)s/data'}
-modextravars = {'CP2K_TESTS_DIR': '%(installdir)s/tests'}
-modextravars = {'CP2K_BENCHMARKS_DIR': '%(installdir)s/benchmarks'}
+# set custom CP2K_DATA_DIR, and CP2K_TEST_DIR and CP2K_BENCHMARKS_DIR
+modextravars = {
+    'CP2K_DATA_DIR': '%(installdir)s/data',
+    'CP2K_TESTS_DIR': '%(installdir)s/tests',
+    'CP2K_BENCHMARKS_DIR': '%(installdir)s/benchmarks'
+}
 
 moduleclass = 'chem'
