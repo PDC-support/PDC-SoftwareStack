@@ -22,8 +22,9 @@ alignment."""
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/lh3/%(name)s/releases/download/v%(version)s/']
-sources = ['%(name)s-%(version)s.tar.bz2']
+github_account = 'lh3'
+source_urls = [GITHUB_LOWER_RELEASE]
+sources = [SOURCE_TAR_BZ2]
 checksums = ['9dd4c31ff082182948944bcdad6d328f64f09295d10547d72eba24189880a615']
 
 osdependencies = ['binutils']
