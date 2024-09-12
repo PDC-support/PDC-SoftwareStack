@@ -16,7 +16,6 @@ easyblock = 'CMakeMake'
 
 name = 'gromacs'
 version = '2024.2'
-versionsuffix = '-gpu'
 
 homepage = 'http://www.gromacs.org'
 description = """GROMACS is a versatile package to perform molecular dynamics,
@@ -32,30 +31,20 @@ sources = [SOURCELOWER_TAR_GZ]
 builddependencies = [
     ('cmake', '3.27.7', '', True),
 ]
+
 dependencies = [
     ('craype-hugepages8M', EXTERNAL_MODULE),
-    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
-    ('rocm/5.7.0', EXTERNAL_MODULE),
     ('cray-fftw/3.3.10.6', EXTERNAL_MODULE),
-    ('adaptivecpp','24.02.0', '-rocm-5.7.0-llvm'),
-    ('heffte','2.4.0', '-gpu'),
-    ('boost','1.83.0'),
     ('hwloc','2.11.1', '', ('system', '')),
 ]
 
-local_configopts = "-DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF \
-    -DGMX_SIMD=AVX2_256 -DGMX_OPENMP=ON -DGMXAPI=ON \
-    -DGMX_HWLOC=ON \
-    -DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang \
-    -DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ \
-    -DGMX_GPU=SYCL -DGMX_SYCL_HIPSYCL=ON -DHIPSYCL_TARGETS='hip:gfx90a' \
-    -DGMX_GPU_FFT_LIBRARY=rocFFT \
-    -DGMX_USE_HEFFTE=ON -DHeffte_ROOT=${EBROOTHEFFTE} \
-    -DHeffte_ENABLE_ROCM=ON -DHeffte_ROCM_ROOT=${ROCM_PATH} "
+local_configopts = "-DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF -DGMX_SIMD=AVX2_256 -DGMX_OPENMP=ON -DGMXAPI=ON -DGMX_HWLOC=ON "
 
 configopts = [
     local_configopts + "-DGMX_MPI=OFF ",
-    local_configopts + "-DGMX_MPI=ON -DCMAKE_CXX_FLAGS=-fuse-ld=ld -DCMAKE_C_FLAGS=-fuse-ld=ld",
+    local_configopts + "-DGMX_MPI=ON ",
+    local_configopts + "-DGMX_MPI=OFF -DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF -DGMX_BINARY_SUFFIX=_d -DGMX_LIBS_SUFFIX=_d ",
+    local_configopts + "-DGMX_MPI=ON -DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF -DGMX_BINARY_SUFFIX=_mpi_d -DGMX_LIBS_SUFFIX=_mpi_d ",
 ]
 
 onlytcmod = True

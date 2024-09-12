@@ -40,6 +40,7 @@ dependencies = [
     ('adaptivecpp','24.02.0', '-rocm-5.7.0-llvm'),
     ('heffte','2.4.0', '-gpu'),
     ('boost','1.83.0'),
+    ('hwloc','2.11.1', '', ('system', '')),
     ('plumed', '2.9.2'),
 ]
 
@@ -47,6 +48,7 @@ preconfigopts = ' cd ../gromacs-%(version)s && plumed-patch -p -e gromacs-%(vers
 
 local_configopts = "-DCMAKE_BUILD_TYPE=Release -DGMX_BUILD_OWN_FFTW=OFF \
     -DGMX_SIMD=AVX2_256 -DGMX_OPENMP=ON -DGMXAPI=ON \
+    -DGMX_HWLOC=ON \
     -DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang \
     -DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ \
     -DGMX_GPU=SYCL -DGMX_SYCL_HIPSYCL=ON -DHIPSYCL_TARGETS='hip:gfx90a' \
