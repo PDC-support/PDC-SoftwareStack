@@ -1,0 +1,27 @@
+easyblock = 'ConfigureMake'
+
+name = 'mpfr'
+version = '4.2.1'
+
+homepage = 'http://www.mpfr.org'
+description = """The MPFR library is a C library for multiple-precision 
+ floating-point computations with correct rounding."""
+
+toolchain = SYSTEM
+
+source_urls = ['http://www.mpfr.org/mpfr-%(version)s/']
+sources = [SOURCE_TAR_BZ2]
+checksums = ['b9df93635b20e4089c29623b19420c4ac848a1b29df1cfd59f26cab0d2666aa0']
+
+dependencies = [
+    ('gmp', '6.3.0'),
+]
+
+runtest = 'check'
+
+sanity_check_paths = {
+    'files': ['lib/libmpfr.%s' % SHLIB_EXT, 'include/mpfr.h'],
+    'dirs': []
+}
+
+moduleclass = 'math'
