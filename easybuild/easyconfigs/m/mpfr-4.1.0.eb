@@ -11,6 +11,7 @@ toolchain = SYSTEM
 
 source_urls = ['http://www.mpfr.org/mpfr-%(version)s/']
 sources = [SOURCE_TAR_BZ2]
+checksums = ['feced2d430dd5a97805fa289fed3fc8ff2b094c02d05287fd6133e7f1f0ec926']
 
 dependencies = [
     ('gmp', '6.2.1'),
