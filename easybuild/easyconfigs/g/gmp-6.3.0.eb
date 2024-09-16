@@ -37,8 +37,9 @@ toolchainopts = {'lowopt': True}
 
 source_urls = [GNU_SOURCE]
 sources = [SOURCELOWER_TAR_BZ2]
+checksums = ['ac28211a7cfb609bae2e2c8d6058d66c8fe96434f740cf6fe2e47b000d1c20cb']
 
-preconfigopts = 'export CFLAGS="$CFLAGS -mcmodel=large" && '
+preconfigopts = 'export CFLAGS="$CFLAGS -O2 -pedantic -fno-math-errno -mcmodel=large" && '
 
 
 # the output of config.guess is used by default and can be changed with --build
