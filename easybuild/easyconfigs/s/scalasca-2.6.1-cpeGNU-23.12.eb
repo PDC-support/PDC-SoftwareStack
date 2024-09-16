@@ -1,0 +1,44 @@
+# jg/mkr (CSCS)
+easyblock = 'ConfigureMake'
+
+name = 'scalasca'
+version = '2.6.1'
+
+homepage = 'http://www.scalasca.org/'
+description = """Scalasca is a software tool that supports the performance
+optimization of parallel programs by measuring and analyzing their runtime
+behavior. The analysis identifies potential performance bottlenecks -- in
+particular those concerning communication and synchronization -- and offers
+guidance in exploring their causes."""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+#source_urls = ['http://apps.fz-juelich.de/scalasca/releases/cube/%(version_major_minor)s/dist']
+source_urls = ['http://apps.fz-juelich.de/%(namelower)s/releases/%(namelower)s/%(version_major_minor)s/dist/']
+sources = [SOURCELOWER_TAR_GZ]
+
+dependencies = [
+    ('score-p/8.4', EXTERNAL_MODULE),
+    ('otf2', '3.0.3', '', True),
+    # ('scorep_binding_python', '4.4.0'),
+    # papi already loaded by perftools-base:
+    # ('papi', EXTERNAL_MODULE),
+    # plugins can be loaded afterwards, do not build in this recipe:
+    # ('bladeplugin', '0.1', '-cube-4.4-otf-2.2', True),
+    # ('jengafettplugin', '0.2', '', True),
+]
+
+configopts = " --with-otf2=$EBROOTOTF2/bin --with-opari2=$EBROOTOPARI2/bin --with-cubew=$EBROOTCUBEW/bin --with-papi-header=/opt/cray/pe/papi/default/lib64/include --with-papi-lib=/opt/cray/pe/papi/default/lib64 --disable-gui"
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s', 'lib/backend/libpearl.replay.a'],
+    'dirs': [],
+}
+
+# Ensure that local metric documentation is found by Cube GUI
+modextrapaths = {
+    'CUBE_DOCPATH': 'share/doc/%(namelower)s/patterns',
+    'PATH': 'bin/backend',
+}
+
+moduleclass = 'perf'
