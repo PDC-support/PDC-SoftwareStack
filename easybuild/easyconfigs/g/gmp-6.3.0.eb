@@ -44,8 +44,9 @@ preconfigopts = 'export CFLAGS="$CFLAGS -O2 -pedantic -fno-math-errno -mcmodel=l
 
 # the output of config.guess is used by default and can be changed with --build
 # E.g.: configopts = ' --build=haswell-pc-linux-gnu'
+configopts = ' --enable-cxx'
 sanity_check_paths = {
-    'files': ['lib/libgmp.so', 'include/%(namelower)s.h'],
+    'files': ['lib/libgmp.so', 'lib/libgmpxx.so', 'include/%(namelower)s.h'],
     'dirs': [],
 }
 
