@@ -13,26 +13,25 @@ description = """
 toolchain = SYSTEM
 toolchainopts = {'strict': True}
 
-source_urls = ['https://github.com/%(name)s/%(name)s/archive/refs/tags/']
-sources = ['v%(version)s.tar.gz']
-
-#source_urls = ['https://github.com/%(name)s/%(name)s/releases/download/releases%2FCGAL-%(version)s']
-#sources = [SOURCE_TAR_GZ]
+github_account = 'CGAL'
+source_urls = [GITHUB_RELEASE]
+sources = ['CGAL-%(version)s.tar.xz']
+checksums = ['98ac395ca08aacf38b7a8170a822b650aedf10355df41dd0e4bfb238408e08a6']
 
 builddependencies = [
-    ('cmake', '3.23.0', '', True),
+    ('cmake', '3.27.7', '', True),
 ]
 dependencies = [
-    ('zlib', '1.2.11', '', True),
-    ('boost', '1.79.0','-nompi'),
-    ('gmp', '6.3.0'),
-    ('mpfr', '4.1.0'),
+    ('zlib', EXTERNAL_MODULE),
+    ('boost', EXTERNAL_MODULE),
+    ('gmp', EXTERNAL_MODULE),
+    ('mpfr', EXTERNAL_MODULE),
 ]
 
-configopts = "-DCMAKE_BUILD_TYPE=Release -DBoost_DIR=${EBROOTBOOST} -DWITH_ZLIB=ON -DWITH_MPFR=ON -DWITH_GMP=ON -DWITH_BLAS=ON -DWITH_CGAL_Qt5=OFF "
+configopts = "-DCMAKE_BUILD_TYPE=Release -DWITH_CGAL_Qt5=OFF "
 
 sanity_check_paths = {
-    'files': [],
+    'files': ['include/CGAL/Simple_cartesian.h'],
     'dirs': ['include', 'lib', 'lib64'],
 }
 
