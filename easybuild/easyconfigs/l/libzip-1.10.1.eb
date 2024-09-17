@@ -1,0 +1,48 @@
+easyblock = 'CMakeMake'
+
+name = 'libzip'
+version = '1.10.1'
+
+homepage = 'https://libzip.org/'
+description = "libzip is a C library for reading, creating, and modifying zip archives."
+
+toolchain = SYSTEM
+
+github_account = 'nih-at'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['d56d857d1c3ad4a7f3a4c01a51c6a6e5530e35ab93503f62276e8ba2b306186a']
+
+builddependencies = [
+    ('binutils', '2.37'),
+    ('cmake', '3.27.7'),
+]
+
+osdependencies = [
+    ('openssl-devel', 'libssl-dev', 'libopenssl-devel'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('bzip2', '1.0.8'),
+    ('xz', '5.4.5'),
+    ('zstd', '1.5.5'),
+]
+
+sanity_check_paths = {
+    'files': [
+        'bin/zipcmp',
+        'bin/zipmerge',
+        'bin/ziptool',
+        'lib64/libzip.%s' % SHLIB_EXT,
+    ],
+    'dirs': ['include', 'lib/pkgconfig'],
+}
+
+sanity_check_commands = [
+    "zipcmp -h",
+    "zipmerge -h",
+    "ziptool -h"
+]
+
+moduleclass = 'lib'
