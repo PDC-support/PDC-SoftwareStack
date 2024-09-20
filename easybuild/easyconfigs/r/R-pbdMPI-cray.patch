@@ -1,0 +1,1638 @@
+Make possible to install/test pbdMPI on systems without mpiexec/mpirun/orterun, using srun instead
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN pbdMPI.orig/configure pbdMPI/configure
+--- pbdMPI.orig/configure	2024-09-19 21:24:47.231439208 +0200
++++ pbdMPI/configure	2024-09-19 21:25:42.161438177 +0200
+@@ -4661,43 +4661,6 @@
+ esac
+ 
+ 
+-MPIRUN=`which mpirun`
+-MPIEXEC=`which mpiexec`
+-ORTERUN=`which orterun`
+-
+-if test "X$MPIRUN" = "X" -o "X$MPIEXEC" = "X" -o "X$ORTERUN" = "X" ; then
+-  if test "$MPITYPE" = "OPENMPI" ; then
+-    TMP_MODULE=`module avail mpi/o | grep "mpi/o" | sed -e "s/^\(mpi\/o\S*\)\(\s*.*\)$/\1/"`
+-  fi
+-
+-  if test "$MPITYPE" = "MPICH" -o "$MPITYPE" = "MPICH2" -o "$MPITYPE" = "MPICH3" -o "$MPITYPE" = "MPICH3" ; then
+-    TMP_MODULE=`module avail mpi/m | grep "mpi/m" | sed -e "s/^\(mpi\/m\S*\)\(\s*.*\)$/\1/"`
+-  fi
+-
+-  if test $"X$TMP_MODULE" != "X" ; then
+-    if test "X$MPIRUN" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which mpirun`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        MPIRUN="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-    if test "X$MPIEXEC" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which mpiexec`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        MPIEXEC="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-    if test "X$ORTERUN" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which orterun`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        ORTERUN="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-  fi
+-fi
+ 
+ 
+ # Check whether --enable-pbdPROF was given.
+diff -ruN pbdMPI.orig/configure.ac pbdMPI/configure.ac
+--- pbdMPI.orig/configure.ac	2024-09-19 21:24:47.228105874 +0200
++++ pbdMPI/configure.ac	2024-09-19 21:25:34.451438319 +0200
+@@ -828,45 +828,6 @@
+ 
+ 
+ dnl Echo all flags to see if they are set properly
+-MPIRUN=`which mpirun`
+-MPIEXEC=`which mpiexec`
+-ORTERUN=`which orterun`
+-
+-dnl Mainly for Fedora which has "mpi/openmpi-x86_64" and "mpi/mpich-x86_64"
+-dnl Others may have "mpi/gcc/openmpi-*" or so which need more works.
+-if test "X$MPIRUN" = "X" -o "X$MPIEXEC" = "X" -o "X$ORTERUN" = "X" ; then
+-  if test "$MPITYPE" = "OPENMPI" ; then
+-    TMP_MODULE=`module avail mpi/o | grep "mpi/o" | sed -e "s/^\(mpi\/o\S*\)\(\s*.*\)$/\1/"`
+-  fi
+-
+-  if test "$MPITYPE" = "MPICH" -o "$MPITYPE" = "MPICH2" -o "$MPITYPE" = "MPICH3" -o "$MPITYPE" = "MPICH3" ; then
+-    TMP_MODULE=`module avail mpi/m | grep "mpi/m" | sed -e "s/^\(mpi\/m\S*\)\(\s*.*\)$/\1/"`
+-  fi
+-
+-  if test $"X$TMP_MODULE" != "X" ; then
+-    if test "X$MPIRUN" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which mpirun`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        MPIRUN="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-    if test "X$MPIEXEC" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which mpiexec`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        MPIEXEC="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-    if test "X$ORTERUN" = "X" ; then
+-      TMP_EXEC=`module load ${TMP_MODULE}; which orterun`
+-      if test "X$TMP_EXEC" != "X" ; then
+-        ORTERUN="module load ${TMP_MODULE}; ${TMP_EXEC}"
+-      fi
+-    fi
+-
+-  fi
+-fi
+ 
+ 
+ dnl pbdPROF
+diff -ruN pbdMPI.orig/demo/allgather.r pbdMPI/demo/allgather.r
+--- pbdMPI.orig/demo/allgather.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/allgather.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/allreduce.r pbdMPI/demo/allreduce.r
+--- pbdMPI.orig/demo/allreduce.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/allreduce.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/alltoall.r pbdMPI/demo/alltoall.r
+--- pbdMPI.orig/demo/alltoall.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/alltoall.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/any_all.r pbdMPI/demo/any_all.r
+--- pbdMPI.orig/demo/any_all.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/any_all.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/bcast_msg.r pbdMPI/demo/bcast_msg.r
+--- pbdMPI.orig/demo/bcast_msg.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/bcast_msg.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/bcast.r pbdMPI/demo/bcast.r
+--- pbdMPI.orig/demo/bcast.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/bcast.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize.
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/chunk.r pbdMPI/demo/chunk.r
+--- pbdMPI.orig/demo/chunk.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/chunk.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript chunk.r
++### SHELL> srun -n 4 Rscript chunk.r
+ ### Check reproducibility for RNG with -np 2
+ 
+ ### Initialize
+diff -ruN pbdMPI.orig/demo/divide.r pbdMPI/demo/divide.r
+--- pbdMPI.orig/demo/divide.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/divide.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript divide.r
++### SHELL> srun -n 4 Rscript divide.r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/gather.r pbdMPI/demo/gather.r
+--- pbdMPI.orig/demo/gather.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/gather.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/pbdApply.r pbdMPI/demo/pbdApply.r
+--- pbdMPI.orig/demo/pbdApply.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/pbdApply.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/pbdLapply.r pbdMPI/demo/pbdLapply.r
+--- pbdMPI.orig/demo/pbdLapply.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/pbdLapply.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/reduce.r pbdMPI/demo/reduce.r
+--- pbdMPI.orig/demo/reduce.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/reduce.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/scatter.r pbdMPI/demo/scatter.r
+--- pbdMPI.orig/demo/scatter.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/scatter.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/seed_rank.r pbdMPI/demo/seed_rank.r
+--- pbdMPI.orig/demo/seed_rank.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/seed_rank.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ ### 
+ ### Examples for parallel use of multi-stream L'Ecuyer-CMRG random number 
+ ### generation with rank-based reproducibility. See file seed_vec.r for
+diff -ruN pbdMPI.orig/demo/seed_vec.r pbdMPI/demo/seed_vec.r
+--- pbdMPI.orig/demo/seed_vec.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/seed_vec.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,6 +1,6 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ ###  compare with:
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ ### 
+ ### Note: comm.set.stream() will work in mclapply for same vector-based
+ ###       reproducibility
+diff -ruN pbdMPI.orig/demo/simple_balance.r pbdMPI/demo/simple_balance.r
+--- pbdMPI.orig/demo/simple_balance.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/simple_balance.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/simple_io.r pbdMPI/demo/simple_io.r
+--- pbdMPI.orig/demo/simple_io.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/simple_io.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/simple_pairs.r pbdMPI/demo/simple_pairs.r
+--- pbdMPI.orig/demo/simple_pairs.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/simple_pairs.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/sort.r pbdMPI/demo/sort.r
+--- pbdMPI.orig/demo/sort.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/sort.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/demo/task_pull.r pbdMPI/demo/task_pull.r
+--- pbdMPI.orig/demo/task_pull.r	2024-09-19 21:24:47.241439207 +0200
++++ pbdMPI/demo/task_pull.r	2024-09-19 21:29:59.014766654 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/inst/c_combine_r/a pbdMPI/inst/c_combine_r/a
+--- pbdMPI.orig/inst/c_combine_r/a	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/c_combine_r/a	2024-09-19 21:29:59.001433321 +0200
+@@ -6,8 +6,8 @@
+   -L/usr/local/lib \
+   -L/home/snoweye/work-my/local/ompi/lib -lmpi -lutil -lpthread
+ 
+-mpiexec -np 2 a.out
++srun -n 2 a.out
+ echo "-------"
+-mpiexec -np 2 Rscript a.r
++srun -n 2 Rscript a.r
+ echo "-------"
+-mpiexec -np 2 a.out : -np 2 Rscript a.r
++srun -n 2 a.out : -np 2 Rscript a.r
+diff -ruN pbdMPI.orig/inst/examples/test_cs/README pbdMPI/inst/examples/test_cs/README
+--- pbdMPI.orig/inst/examples/test_cs/README	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_cs/README	2024-09-19 21:29:59.001433321 +0200
+@@ -5,7 +5,7 @@
+ 
+    Run in two terminals separately. In terminal 1, run server as
+ 
+-     > mpiexec -np 1 Rscript simple.server.r
++     > srun -n 1 Rscript simple.server.r
+ 
+    and this prints a port name randomly to STDOUT and hand, such as
+ 
+@@ -15,7 +15,7 @@
+    then the terminal 1 will hang and wait for a response from the client.
+    In terminal 2, run the client with a random port name as
+ 
+-     > mpiexec -np 1 Rscript simple.client.r \
++     > srun -n 1 Rscript simple.client.r \
+ '1247084544.0;tcp://10.0.2.15:51581+1247084545.0;tcp://10.0.2.15:39522:300'
+ 
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/00_test_all.sh pbdMPI/inst/examples/test_long_vector/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_long_vector/00_test_all.sh	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/00_test_all.sh	2024-09-19 21:29:59.011433321 +0200
+@@ -6,6 +6,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/00_test_all.win pbdMPI/inst/examples/test_long_vector/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_long_vector/00_test_all.win	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/00_test_all.win	2024-09-19 21:29:59.011433321 +0200
+@@ -10,6 +10,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/allgather.r pbdMPI/inst/examples/test_long_vector/allgather.r
+--- pbdMPI.orig/inst/examples/test_long_vector/allgather.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/allgather.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/allreduce.r pbdMPI/inst/examples/test_long_vector/allreduce.r
+--- pbdMPI.orig/inst/examples/test_long_vector/allreduce.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/allreduce.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/bcast.r pbdMPI/inst/examples/test_long_vector/bcast.r
+--- pbdMPI.orig/inst/examples/test_long_vector/bcast.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/bcast.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/gather.r pbdMPI/inst/examples/test_long_vector/gather.r
+--- pbdMPI.orig/inst/examples/test_long_vector/gather.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/gather.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/reduce.r pbdMPI/inst/examples/test_long_vector/reduce.r
+--- pbdMPI.orig/inst/examples/test_long_vector/reduce.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/reduce.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/scatter.r pbdMPI/inst/examples/test_long_vector/scatter.r
+--- pbdMPI.orig/inst/examples/test_long_vector/scatter.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/scatter.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_long_vector/send_recv.r pbdMPI/inst/examples/test_long_vector/send_recv.r
+--- pbdMPI.orig/inst/examples/test_long_vector/send_recv.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_long_vector/send_recv.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .pbd_env$SPMD.CT$check.type <- FALSE
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/00_test_all.sh pbdMPI/inst/examples/test_parallel/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_parallel/00_test_all.sh	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/00_test_all.sh	2024-09-19 21:29:59.001433321 +0200
+@@ -12,7 +12,7 @@
+ 
+   f=`echo $f | sed -e "s/_par.r$/_spmd.r/"`
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+ 
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/00_test_all.win pbdMPI/inst/examples/test_parallel/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_parallel/00_test_all.win	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/00_test_all.win	2024-09-19 21:29:59.001433321 +0200
+@@ -16,7 +16,7 @@
+ 
+   f=`echo $f | sed -e "s/_par.r$/_spmd.r/"`
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+ 
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/01_mclapply_spmd.r pbdMPI/inst/examples/test_parallel/01_mclapply_spmd.r
+--- pbdMPI.orig/inst/examples/test_parallel/01_mclapply_spmd.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/01_mclapply_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,5 +1,5 @@
+ ### This example is analog to "glm_par.r", and one can run it by the command
+-### SHELL> mpiexec -np 2 Rscript --vanilla 01_mclapply_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla 01_mclapply_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/02_parMM_spmd.r pbdMPI/inst/examples/test_parallel/02_parMM_spmd.r
+--- pbdMPI.orig/inst/examples/test_parallel/02_parMM_spmd.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/02_parMM_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,5 +1,5 @@
+ ### This example is analog to "parMM_par.r", and one can run it by the command
+-### SHELL> mpiexec -np 2 Rscript --vanilla 02_parMM_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla 02_parMM_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/03_boot_spmd.r pbdMPI/inst/examples/test_parallel/03_boot_spmd.r
+--- pbdMPI.orig/inst/examples/test_parallel/03_boot_spmd.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/03_boot_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,5 +1,5 @@
+ ### This example is analog to "boot_par.r", and one can run it by the command
+-### SHELL> mpiexec -np 2 Rscript --vanilla 03_boot_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla 03_boot_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.rank <- comm.rank()
+diff -ruN pbdMPI.orig/inst/examples/test_parallel/04_glm_spmd.r pbdMPI/inst/examples/test_parallel/04_glm_spmd.r
+--- pbdMPI.orig/inst/examples/test_parallel/04_glm_spmd.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_parallel/04_glm_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,5 +1,5 @@
+ ### This example is analog to "glm_par.r", and one can run it by the command
+-### SHELL> mpiexec -np 2 Rscript --vanilla 04_glm_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla 04_glm_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_performance/00_test_all.sh pbdMPI/inst/examples/test_performance/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_performance/00_test_all.sh	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_performance/00_test_all.sh	2024-09-19 21:30:17.911432964 +0200
+@@ -8,8 +8,8 @@
+   # f_out=`echo $f | sed "s/demo_/time_/" | sed "s/\.r/\.txt/"`
+   
+   echo ">> Test $f"
+-  # echo "> mpirun -np $NP Rscript --vanilla $f" > $f_out
+-  # mpiexec -np $NP Rscript --vanilla $f >> $f_out
+-  mpiexec -np $NP Rscript --vanilla $f
++  # echo "> srun -n $NP Rscript --vanilla $f" > $f_out
++  # srun -n $NP Rscript --vanilla $f >> $f_out
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_performance/00_test_all.win pbdMPI/inst/examples/test_performance/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_performance/00_test_all.win	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_performance/00_test_all.win	2024-09-19 21:30:17.911432964 +0200
+@@ -12,8 +12,8 @@
+   # f_out=`echo $f | sed "s/demo_/time_/" | sed "s/\.r/\.win\.txt/"`
+   
+   echo ">> Test $f"
+-  # echo "> mpirun -np $NP Rscript.exe --vanilla $f" > $f_out
+-  # mpiexec -np $NP Rscript.exe --vanilla $f >> $f_out
+-  mpiexec -np $NP Rscript.exe --vanilla $ft
++  # echo "> srun -n $NP Rscript.exe --vanilla $f" > $f_out
++  # srun -n $NP Rscript.exe --vanilla $f >> $f_out
++  srun -n $NP Rscript.exe --vanilla $ft
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/00_test_all.sh pbdMPI/inst/examples/test_rmpi/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_rmpi/00_test_all.sh	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/00_test_all.sh	2024-09-19 21:29:59.004766655 +0200
+@@ -9,6 +9,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/00_test_spmd.win pbdMPI/inst/examples/test_rmpi/00_test_spmd.win
+--- pbdMPI.orig/inst/examples/test_rmpi/00_test_spmd.win	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/00_test_spmd.win	2024-09-19 21:29:59.008099987 +0200
+@@ -13,6 +13,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allgather_rmpi.r pbdMPI/inst/examples/test_rmpi/allgather_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allgather_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allgather_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allgather_spmd.r pbdMPI/inst/examples/test_rmpi/allgather_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allgather_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allgather_spmd.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allgatherv_rmpi.r pbdMPI/inst/examples/test_rmpi/allgatherv_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allgatherv_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allgatherv_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allgatherv_spmd.r pbdMPI/inst/examples/test_rmpi/allgatherv_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allgatherv_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allgatherv_spmd.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allreduce_rmpi.r pbdMPI/inst/examples/test_rmpi/allreduce_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allreduce_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allreduce_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/allreduce_spmd.r pbdMPI/inst/examples/test_rmpi/allreduce_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/allreduce_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/allreduce_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/bcast_rmpi.r pbdMPI/inst/examples/test_rmpi/bcast_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/bcast_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/bcast_rmpi.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/bcast_spmd.r pbdMPI/inst/examples/test_rmpi/bcast_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/bcast_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/bcast_spmd.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/gather_rmpi.r pbdMPI/inst/examples/test_rmpi/gather_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/gather_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/gather_rmpi.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/gather_spmd.r pbdMPI/inst/examples/test_rmpi/gather_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/gather_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/gather_spmd.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/reduce_rmpi.r pbdMPI/inst/examples/test_rmpi/reduce_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/reduce_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/reduce_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/reduce_spmd.r pbdMPI/inst/examples/test_rmpi/reduce_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/reduce_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/reduce_spmd.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/scatter_rmpi.r pbdMPI/inst/examples/test_rmpi/scatter_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/scatter_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/scatter_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/scatter_spmd.r pbdMPI/inst/examples/test_rmpi/scatter_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/scatter_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/scatter_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/scatterv_rmpi.r pbdMPI/inst/examples/test_rmpi/scatterv_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/scatterv_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/scatterv_rmpi.r	2024-09-19 21:29:59.008099987 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/scatterv_spmd.r pbdMPI/inst/examples/test_rmpi/scatterv_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/scatterv_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/scatterv_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/sendrecv_rmpi.r pbdMPI/inst/examples/test_rmpi/sendrecv_rmpi.r
+--- pbdMPI.orig/inst/examples/test_rmpi/sendrecv_rmpi.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/sendrecv_rmpi.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_rmpi.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_rmpi.r
+ 
+ library(Rmpi)
+ invisible(mpi.comm.dup(0, 1))
+diff -ruN pbdMPI.orig/inst/examples/test_rmpi/sendrecv_spmd.r pbdMPI/inst/examples/test_rmpi/sendrecv_spmd.r
+--- pbdMPI.orig/inst/examples/test_rmpi/sendrecv_spmd.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_rmpi/sendrecv_spmd.r	2024-09-19 21:29:59.004766655 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...]_spmd.r
++### SHELL> srun -n 2 Rscript --vanilla [...]_spmd.r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_s4/00_test_all.sh pbdMPI/inst/examples/test_s4/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_s4/00_test_all.sh	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_s4/00_test_all.sh	2024-09-19 21:29:59.011433321 +0200
+@@ -6,6 +6,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_s4/00_test_all.win pbdMPI/inst/examples/test_s4/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_s4/00_test_all.win	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_s4/00_test_all.win	2024-09-19 21:29:59.011433321 +0200
+@@ -10,6 +10,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/00_test_all.sh pbdMPI/inst/examples/test_send_recv/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_send_recv/00_test_all.sh	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/00_test_all.sh	2024-09-19 21:29:59.011433321 +0200
+@@ -6,6 +6,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/00_test_all.win pbdMPI/inst/examples/test_send_recv/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_send_recv/00_test_all.win	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/00_test_all.win	2024-09-19 21:29:59.011433321 +0200
+@@ -10,6 +10,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/01_basic.r pbdMPI/inst/examples/test_send_recv/01_basic.r
+--- pbdMPI.orig/inst/examples/test_send_recv/01_basic.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/01_basic.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/02_basic_no_check_type.r pbdMPI/inst/examples/test_send_recv/02_basic_no_check_type.r
+--- pbdMPI.orig/inst/examples/test_send_recv/02_basic_no_check_type.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/02_basic_no_check_type.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .pbd_env$SPMD.CT$check.type <- FALSE
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/02_lazy.r pbdMPI/inst/examples/test_send_recv/02_lazy.r
+--- pbdMPI.orig/inst/examples/test_send_recv/02_lazy.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/02_lazy.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/03_lazy.r pbdMPI/inst/examples/test_send_recv/03_lazy.r
+--- pbdMPI.orig/inst/examples/test_send_recv/03_lazy.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/03_lazy.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/03_task_pull.r pbdMPI/inst/examples/test_send_recv/03_task_pull.r
+--- pbdMPI.orig/inst/examples/test_send_recv/03_task_pull.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/03_task_pull.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_send_recv/04_task_pull.r pbdMPI/inst/examples/test_send_recv/04_task_pull.r
+--- pbdMPI.orig/inst/examples/test_send_recv/04_task_pull.r	2024-09-19 21:24:47.254772541 +0200
++++ pbdMPI/inst/examples/test_send_recv/04_task_pull.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 4 Rscript --vanilla [...].r
++### SHELL> srun -n 4 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ 
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/00_test_all.sh pbdMPI/inst/examples/test_spmd/00_test_all.sh
+--- pbdMPI.orig/inst/examples/test_spmd/00_test_all.sh	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/00_test_all.sh	2024-09-19 21:29:59.011433321 +0200
+@@ -6,6 +6,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript --vanilla $f
++  srun -n $NP Rscript --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/00_test_all.win pbdMPI/inst/examples/test_spmd/00_test_all.win
+--- pbdMPI.orig/inst/examples/test_spmd/00_test_all.win	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/00_test_all.win	2024-09-19 21:29:59.011433321 +0200
+@@ -10,6 +10,6 @@
+ for f in $FILES
+ do
+   echo ">> Test $f"
+-  mpiexec -np $NP Rscript.exe --vanilla $f
++  srun -n $NP Rscript.exe --vanilla $f
+   echo "=============================="
+ done
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/allgather.r pbdMPI/inst/examples/test_spmd/allgather.r
+--- pbdMPI.orig/inst/examples/test_spmd/allgather.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/allgather.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/allreduce.r pbdMPI/inst/examples/test_spmd/allreduce.r
+--- pbdMPI.orig/inst/examples/test_spmd/allreduce.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/allreduce.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/bcast.r pbdMPI/inst/examples/test_spmd/bcast.r
+--- pbdMPI.orig/inst/examples/test_spmd/bcast.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/bcast.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/gather.r pbdMPI/inst/examples/test_spmd/gather.r
+--- pbdMPI.orig/inst/examples/test_spmd/gather.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/gather.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/isend_irecv_wait.r pbdMPI/inst/examples/test_spmd/isend_irecv_wait.r
+--- pbdMPI.orig/inst/examples/test_spmd/isend_irecv_wait.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/isend_irecv_wait.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .pbd_env$SPMD.CT$check.type <- FALSE
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/reduce.r pbdMPI/inst/examples/test_spmd/reduce.r
+--- pbdMPI.orig/inst/examples/test_spmd/reduce.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/reduce.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/replace.r pbdMPI/inst/examples/test_spmd/replace.r
+--- pbdMPI.orig/inst/examples/test_spmd/replace.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/replace.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/scatter.r pbdMPI/inst/examples/test_spmd/scatter.r
+--- pbdMPI.orig/inst/examples/test_spmd/scatter.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/scatter.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/send_recv.r pbdMPI/inst/examples/test_spmd/send_recv.r
+--- pbdMPI.orig/inst/examples/test_spmd/send_recv.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/send_recv.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .pbd_env$SPMD.CT$check.type <- FALSE
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/sendrecv.r pbdMPI/inst/examples/test_spmd/sendrecv.r
+--- pbdMPI.orig/inst/examples/test_spmd/sendrecv.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/sendrecv.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/examples/test_spmd/sendrecv_replace.r pbdMPI/inst/examples/test_spmd/sendrecv_replace.r
+--- pbdMPI.orig/inst/examples/test_spmd/sendrecv_replace.r	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/inst/examples/test_spmd/sendrecv_replace.r	2024-09-19 21:29:59.011433321 +0200
+@@ -1,4 +1,4 @@
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+ .comm.size <- comm.size()
+diff -ruN pbdMPI.orig/inst/mpi_valgrind/pbdMPI-Ex_allreduce.r pbdMPI/inst/mpi_valgrind/pbdMPI-Ex_allreduce.r
+--- pbdMPI.orig/inst/mpi_valgrind/pbdMPI-Ex_allreduce.r	2024-09-19 21:24:47.251439207 +0200
++++ pbdMPI/inst/mpi_valgrind/pbdMPI-Ex_allreduce.r	2024-09-19 21:29:59.011433321 +0200
+@@ -29,7 +29,7 @@
+ ### ** Examples
+ 
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initial.
+diff -ruN pbdMPI.orig/inst/mpi_valgrind/vg_pbdMPI-Ex_allreduce.log pbdMPI/inst/mpi_valgrind/vg_pbdMPI-Ex_allreduce.log
+--- pbdMPI.orig/inst/mpi_valgrind/vg_pbdMPI-Ex_allreduce.log	2024-09-19 21:24:47.251439207 +0200
++++ pbdMPI/inst/mpi_valgrind/vg_pbdMPI-Ex_allreduce.log	2024-09-19 21:29:59.011433321 +0200
+@@ -85,7 +85,7 @@
+ > ### ** Examples
+ > 
+ > ### Save code in a file "demo.r" and run with 2 processors by
+-> ### SHELL> mpiexec -np 2 Rscript demo.r
++> ### SHELL> srun -n 2 Rscript demo.r
+ > 
+ > spmd.code <- "
+ + ### Initial.
+@@ -113,7 +113,7 @@
+ + "
+ > pbdMPI::execmpi(spmd.code = spmd.code, nranks = 2L)
+ >>> MPI command:
+-/home/snoweye/work-my/local/ompi/bin/mpiexec -np 2 /home/snoweye/work-my/local/R-devel/lib/R/bin/Rscript /tmp/RtmpPIyu3M/file1d0423e9c116 > /tmp/RtmpPIyu3M/file1d044cd85e7a 2>&1 & echo "PID=$!" &
++/home/snoweye/work-my/local/ompi/bin/srun -n 2 /home/snoweye/work-my/local/R-devel/lib/R/bin/Rscript /tmp/RtmpPIyu3M/file1d0423e9c116 > /tmp/RtmpPIyu3M/file1d044cd85e7a 2>&1 & echo "PID=$!" &
+ >>> MPI PID:
+ PID=7458
+ >>> MPI results:
+diff -ruN pbdMPI.orig/inst/tests/mpi_comm_ptr.r pbdMPI/inst/tests/mpi_comm_ptr.r
+--- pbdMPI.orig/inst/tests/mpi_comm_ptr.r	2024-09-19 21:24:47.251439207 +0200
++++ pbdMPI/inst/tests/mpi_comm_ptr.r	2024-09-19 21:29:59.001433321 +0200
+@@ -1,4 +1,4 @@
+-### mpiexec -np 2 Rscript mpi_comm_ptr.r
++### srun -n 2 Rscript mpi_comm_ptr.r
+ suppressPackageStartupMessages(library(pbdMPI, quietly=TRUE))
+ 
+ cs <- comm.size()
+diff -ruN pbdMPI.orig/INSTALL pbdMPI/INSTALL
+--- pbdMPI.orig/INSTALL	2024-09-19 21:24:47.231439208 +0200
++++ pbdMPI/INSTALL	2024-09-19 21:29:59.014766654 +0200
+@@ -46,7 +46,7 @@
+ --- Test 'OpenMPI':
+    In order to test if 'OpenMPI' works correctly, I simply run
+ 
+-     > mpiexec -np 2 hostname
++     > srun -n 2 hostname
+ 
+    and this should show host name twice if environment variables are correct.
+ 
+@@ -128,7 +128,7 @@
+    In order to test if 'MS-MPI' works correctly, I run
+ 
+      C:/> set_mpisrc
+-     C:/> mpiexec -np 2 hostname.exe
++     C:/> srun -n 2 hostname.exe
+ 
+    and this should list two host names twice if environment variables are
+    correct. User's id and password may be required to launch MS-MPI.
+@@ -177,7 +177,7 @@
+    In order to test if 'MS-MPI' works correctly, I run
+ 
+      C:/> set_mpi
+-     C:/> mpiexec -np 2 hostname.exe
++     C:/> srun -n 2 hostname.exe
+ 
+    and this should list two host names twice if environment variables are
+    correct. User's id and password may be required to launch MS-MPI.
+@@ -194,5 +194,5 @@
+    Suppose all environments are set correctly, I can run test examples by
+ 
+      C:/> set_mpi
+-     C:/> mpiexec -np 2 Rscript.exe -e "library(pbdMPI);init();finalize()"
++     C:/> srun -n 2 Rscript.exe -e "library(pbdMPI);init();finalize()"
+ 
+diff -ruN pbdMPI.orig/man/00_pbdMPI-package.Rd pbdMPI/man/00_pbdMPI-package.Rd
+--- pbdMPI.orig/man/00_pbdMPI-package.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/00_pbdMPI-package.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -65,7 +65,7 @@
+   
+   On most clusters, codes run with \code{mpirun} or 
+   \code{mpiexec} and \code{Rscript}, such as \cr
+-  \code{> mpiexec -np 2 Rscript some_code.r} \cr
++  \code{> srun -n 2 Rscript some_code.r} \cr
+   where \code{some_code.r} contains the entire SPMD program. The MPI 
+   Standard 4.0 recommends \code{mpiexec} over \code{mpirun}. Some
+   MPI implementations may have minor differences between the two but under
+@@ -115,12 +115,12 @@
+ \dontrun{
+ ### On command line, run each demo with 2 processors by
+ ### (Use Rscript.exe on Windows systems)
+-# mpiexec -np 2 Rscript -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
+-# mpiexec -np 2 Rscript -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
+-# mpiexec -np 2 Rscript -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
+-# mpiexec -np 2 Rscript -e "demo(gather,'pbdMPI',ask=F,echo=F)"
+-# mpiexec -np 2 Rscript -e "demo(reduce,'pbdMPI',ask=F,echo=F)"
+-# mpiexec -np 2 Rscript -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(gather,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(reduce,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
+ ### Or
+ # execmpi("demo(allgather,'pbdMPI',ask=F,echo=F)", nranks = 2L)
+ # execmpi("demo(allreduce,'pbdMPI',ask=F,echo=F)", nranks = 2L)
+diff -ruN pbdMPI.orig/man/11_d_pbd_opt.Rd pbdMPI/man/11_d_pbd_opt.Rd
+--- pbdMPI.orig/man/11_d_pbd_opt.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/11_d_pbd_opt.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -44,7 +44,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 4 processors by
+-### SHELL> mpiexec -np 4 Rscript demo.r
++### SHELL> srun -n 4 Rscript demo.r
+ 
+ ### Initialize
+ suppressMessages(library(pbdMPI, quietly = TRUE))
+diff -ruN pbdMPI.orig/man/aa_allgather-method.Rd pbdMPI/man/aa_allgather-method.Rd
+--- pbdMPI.orig/man/aa_allgather-method.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/aa_allgather-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -85,7 +85,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/aa_allreduce-method.Rd pbdMPI/man/aa_allreduce-method.Rd
+--- pbdMPI.orig/man/aa_allreduce-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/aa_allreduce-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -62,7 +62,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/aa_bcast-method.Rd pbdMPI/man/aa_bcast-method.Rd
+--- pbdMPI.orig/man/aa_bcast-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/aa_bcast-method.Rd	2024-09-19 21:29:59.014766654 +0200
+@@ -47,7 +47,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/aa_gather-method.Rd pbdMPI/man/aa_gather-method.Rd
+--- pbdMPI.orig/man/aa_gather-method.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/aa_gather-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -84,7 +84,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/aa_reduce-method.Rd pbdMPI/man/aa_reduce-method.Rd
+--- pbdMPI.orig/man/aa_reduce-method.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/aa_reduce-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -60,7 +60,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initial.
+diff -ruN pbdMPI.orig/man/aa_scatter-method.Rd pbdMPI/man/aa_scatter-method.Rd
+--- pbdMPI.orig/man/aa_scatter-method.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/aa_scatter-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -81,7 +81,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ab_recv-method.Rd pbdMPI/man/ab_recv-method.Rd
+--- pbdMPI.orig/man/ab_recv-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ab_recv-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -85,7 +85,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ab_send-method.Rd pbdMPI/man/ab_send-method.Rd
+--- pbdMPI.orig/man/ab_send-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ab_send-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -82,7 +82,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ac_irecv-method.Rd pbdMPI/man/ac_irecv-method.Rd
+--- pbdMPI.orig/man/ac_irecv-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ac_irecv-method.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -64,7 +64,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ac_isend-method.Rd pbdMPI/man/ac_isend-method.Rd
+--- pbdMPI.orig/man/ac_isend-method.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/ac_isend-method.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -61,7 +61,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ad_sendrecv-method.Rd pbdMPI/man/ad_sendrecv-method.Rd
+--- pbdMPI.orig/man/ad_sendrecv-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ad_sendrecv-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -69,7 +69,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ad_sendrecv.replace-method.Rd pbdMPI/man/ad_sendrecv.replace-method.Rd
+--- pbdMPI.orig/man/ad_sendrecv.replace-method.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ad_sendrecv.replace-method.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -73,7 +73,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ae_alltoall.Rd pbdMPI/man/ae_alltoall.Rd
+--- pbdMPI.orig/man/ae_alltoall.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ae_alltoall.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -58,7 +58,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript --vanilla [...].r
++### SHELL> srun -n 2 Rscript --vanilla [...].r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/cc_comm.Rd pbdMPI/man/cc_comm.Rd
+--- pbdMPI.orig/man/cc_comm.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/cc_comm.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -161,7 +161,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/dd_info.Rd pbdMPI/man/dd_info.Rd
+--- pbdMPI.orig/man/dd_info.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/dd_info.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -36,7 +36,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/dd_is.comm.null.Rd pbdMPI/man/dd_is.comm.null.Rd
+--- pbdMPI.orig/man/dd_is.comm.null.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/dd_is.comm.null.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -27,7 +27,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/dd_sourcetag.Rd pbdMPI/man/dd_sourcetag.Rd
+--- pbdMPI.orig/man/dd_sourcetag.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/dd_sourcetag.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -32,7 +32,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/dd_wait.Rd pbdMPI/man/dd_wait.Rd
+--- pbdMPI.orig/man/dd_wait.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/dd_wait.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -37,7 +37,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/uu_execmpi.Rd pbdMPI/man/uu_execmpi.Rd
+--- pbdMPI.orig/man/uu_execmpi.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/uu_execmpi.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -5,7 +5,7 @@
+ \description{
+   This function basically saves code in a spmd.file and executes
+   MPI via R's system call e.g.
+-  \code{system("mpiexec -np 1 Rscript spmd.file")}.
++  \code{system("srun -n 1 Rscript spmd.file")}.
+ }
+ \usage{
+ execmpi(spmd.code = NULL, spmd.file = NULL,
+@@ -92,7 +92,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.file <- tempfile()
+ cat("
+diff -ruN pbdMPI.orig/man/vv_get_jid.Rd pbdMPI/man/vv_get_jid.Rd
+--- pbdMPI.orig/man/vv_get_jid.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/vv_get_jid.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -57,7 +57,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/vv_print_cat.Rd pbdMPI/man/vv_print_cat.Rd
+--- pbdMPI.orig/man/vv_print_cat.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/vv_print_cat.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -61,7 +61,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/vv_seed.Rd pbdMPI/man/vv_seed.Rd
+--- pbdMPI.orig/man/vv_seed.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/vv_seed.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -154,7 +154,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ suppressMessages(library(pbdMPI, quietly = TRUE))     
+diff -ruN pbdMPI.orig/man/ww_comm_as_gbd.Rd pbdMPI/man/ww_comm_as_gbd.Rd
+--- pbdMPI.orig/man/ww_comm_as_gbd.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ww_comm_as_gbd.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -44,7 +44,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ww_comm_balance.Rd pbdMPI/man/ww_comm_balance.Rd
+--- pbdMPI.orig/man/ww_comm_balance.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ww_comm_balance.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -64,7 +64,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ww_comm_read.Rd pbdMPI/man/ww_comm_read.Rd
+--- pbdMPI.orig/man/ww_comm_read.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ww_comm_read.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -97,7 +97,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/ww_comm_write.Rd pbdMPI/man/ww_comm_write.Rd
+--- pbdMPI.orig/man/ww_comm_write.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/ww_comm_write.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -60,7 +60,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_allpairs.Rd pbdMPI/man/xx_comm_allpairs.Rd
+--- pbdMPI.orig/man/xx_comm_allpairs.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_allpairs.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -40,7 +40,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_any_all.Rd pbdMPI/man/xx_comm_any_all.Rd
+--- pbdMPI.orig/man/xx_comm_any_all.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_any_all.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -51,7 +51,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_base.Rd pbdMPI/man/xx_comm_base.Rd
+--- pbdMPI.orig/man/xx_comm_base.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_base.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -40,7 +40,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_dist.Rd pbdMPI/man/xx_comm_dist.Rd
+--- pbdMPI.orig/man/xx_comm_dist.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_dist.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -59,7 +59,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_pairwise.Rd pbdMPI/man/xx_comm_pairwise.Rd
+--- pbdMPI.orig/man/xx_comm_pairwise.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_pairwise.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -62,7 +62,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_range.Rd pbdMPI/man/xx_comm_range.Rd
+--- pbdMPI.orig/man/xx_comm_range.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_range.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -37,7 +37,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_sort.Rd pbdMPI/man/xx_comm_sort.Rd
+--- pbdMPI.orig/man/xx_comm_sort.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/xx_comm_sort.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -39,7 +39,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_stop_warning.Rd pbdMPI/man/xx_comm_stop_warning.Rd
+--- pbdMPI.orig/man/xx_comm_stop_warning.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/xx_comm_stop_warning.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -65,7 +65,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/xx_comm_which.Rd pbdMPI/man/xx_comm_which.Rd
+--- pbdMPI.orig/man/xx_comm_which.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/xx_comm_which.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -51,7 +51,7 @@
+ \examples{
+ \dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/yy_api_apply.Rd pbdMPI/man/yy_api_apply.Rd
+--- pbdMPI.orig/man/yy_api_apply.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/yy_api_apply.Rd	2024-09-19 21:29:59.018099988 +0200
+@@ -76,7 +76,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 2 processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/man/yy_api_task_pull.Rd pbdMPI/man/yy_api_task_pull.Rd
+--- pbdMPI.orig/man/yy_api_task_pull.Rd	2024-09-19 21:24:47.261439207 +0200
++++ pbdMPI/man/yy_api_task_pull.Rd	2024-09-19 21:29:59.021433320 +0200
+@@ -66,7 +66,7 @@
+ \dontrun{
+ ### Under command mode, run the demo with 2 processors by
+ ### (Use Rscript.exe for windows system)
+-# mpiexec -np 2 Rscript -e "demo(task_pull,'pbdMPI',ask=F,echo=F)"
++# srun -n 2 Rscript -e "demo(task_pull,'pbdMPI',ask=F,echo=F)"
+ ### Or
+ # execmpi("demo(task_pull,'pbdMPI',ask=F,echo=F)", nranks = 2L)
+ }
+diff -ruN pbdMPI.orig/man/yy_pkg_tools.Rd pbdMPI/man/yy_pkg_tools.Rd
+--- pbdMPI.orig/man/yy_pkg_tools.Rd	2024-09-19 21:24:47.258105874 +0200
++++ pbdMPI/man/yy_pkg_tools.Rd	2024-09-19 21:29:59.014766654 +0200
+@@ -40,7 +40,7 @@
+ \examples{
+ %\dontrun{
+ ### Save code in a file "demo.r" and run with 22processors by
+-### SHELL> mpiexec -np 2 Rscript demo.r
++### SHELL> srun -n 2 Rscript demo.r
+ 
+ spmd.code <- "
+ ### Initialize
+diff -ruN pbdMPI.orig/README.md pbdMPI/README.md
+--- pbdMPI.orig/README.md	2024-09-19 21:24:47.228105874 +0200
++++ pbdMPI/README.md	2024-09-19 21:30:17.911432964 +0200
+@@ -79,7 +79,7 @@
+ Save this as, say, `mpi_hello_world.r` and run it via:
+ 
+ ```
+-mpirun -np 4 Rscript mpi_hello_world.r
++srun -n 4 Rscript mpi_hello_world.r
+ ```
+ 
+ The function `comm.print()` is a "sugar" function custom to pbdMPI that makes
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/01-introduction.tex pbdMPI/vignettes/pbdMPI-include/01-introduction.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/01-introduction.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/01-introduction.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -141,7 +141,7 @@
+ 
+ To make sure your MPI system is working, test with
+ \begin{Command}
+-mpiexec -np 2 hostname
++srun -n 2 hostname
+ \end{Command}
+ This should list two host names where MPI jobs are running.  Note to
+ use \code{hostname.exe} with the extension on a Windows system.
+@@ -193,12 +193,12 @@
+ \begin{Command}
+ ### At the shell prompt, run the demo with 2 processors by
+ ### (Use Rscript.exe for windows system)
+-mpiexec -np 2 Rscript -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript -e "demo(gather,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript -e "demo(reduce,'pbdMPI',ask = F,echo=F)"
+-mpiexec -np 2 Rscript -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript -e "demo(gather,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript -e "demo(reduce,'pbdMPI',ask = F,echo=F)"
++srun -n 2 Rscript -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ 
+ 
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/02-performance.tex pbdMPI/vignettes/pbdMPI-include/02-performance.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/02-performance.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/02-performance.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -12,7 +12,7 @@
+ Save the following script in \code{demo_spmd.r} and run it with two
+ processors by
+ \begin{Command}
+-mpiexec -np 2 Rscript demo_spmd.r
++srun -n 2 Rscript demo_spmd.r
+ \end{Command}
+ to see the computing time on your platform.
+ 
+@@ -38,7 +38,7 @@
+ 
+ Save the following script in \code{demo_rmpi.r} and run with two processors by
+ \begin{Command}
+-mpiexec -np 2 Rscript demo_rmpi.r
++srun -n 2 Rscript demo_rmpi.r
+ \end{Command}
+ to see the computing time on your platform.
+ 
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/03-faq.tex pbdMPI/vignettes/pbdMPI-include/03-faq.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/03-faq.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/03-faq.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -245,7 +245,7 @@
+       defined function \code{FUN()} that runs on workers, and the manager
+       (rank 0) controls the task management.
+ \begin{Command}
+-mpiexec -np 4 Rscript -e "demo(task_pull,'pbdMPI',ask=F,echo=F)"
++srun -n 4 Rscript -e "demo(task_pull,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ \begin{Code}[title=SPMD R Script (task\_pull)]
+ ### Initialize
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/04-windows_msmpi.tex pbdMPI/vignettes/pbdMPI-include/04-windows_msmpi.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/04-windows_msmpi.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/04-windows_msmpi.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -92,12 +92,12 @@
+ following demos. There are six basic examples.
+ \begin{Command}
+ ### Run the demo with 2 processors by
+-mpiexec -np 2 Rscript.exe -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript.exe -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript.exe -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript.exe -e "demo(gather,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript.exe -e "demo(reduce,'pbdMPI',ask=F,echo=F)"
+-mpiexec -np 2 Rscript.exe -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(allgather,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(allreduce,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(bcast,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(gather,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(reduce,'pbdMPI',ask=F,echo=F)"
++srun -n 2 Rscript.exe -e "demo(scatter,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ {\color{red}Warning:}
+ Note that spacing inside \code{demo} is not working for Windows systems
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/05-analog.tex pbdMPI/vignettes/pbdMPI-include/05-analog.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/05-analog.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/05-analog.tex	2024-09-19 21:30:17.911432964 +0200
+@@ -26,7 +26,7 @@
+ \end{Code}
+ Now save this script in a file and run with
+ \begin{Command}
+-mpirun -np 2 Rscript 01_mclapply_spmd.r
++srun -n 2 Rscript 01_mclapply_spmd.r
+ \end{Command}
+ to see the computing time on your platform.
+ \begin{Code}[title=SPMD R Script]
+@@ -89,7 +89,7 @@
+ \end{Code}
+ Now save this script in a file and run with
+ \begin{Command}
+-mpirun -np 2 Rscript 02_parMM_spmd.r
++srun -n 2 Rscript 02_parMM_spmd.r
+ \end{Command}
+ to see the computing time on your platform.
+ \begin{Code}[title=SPMD R Script]
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/07-simpleio.tex pbdMPI/vignettes/pbdMPI-include/07-simpleio.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/07-simpleio.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/07-simpleio.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -11,7 +11,7 @@
+ \code{comm.read.table()}. The first is
+ \begin{Command}
+ ### Run the demo with 4 processors by
+-mpiexec -np 4 Rscript -e "demo(simple_io,'pbdMPI',ask=F,echo=F)"
++srun -n 4 Rscript -e "demo(simple_io,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ The demo utilizing \code{iris} data~\citep{Fisher1936} to show simple input
+ and output functions of \pkg{pbdMPI} and is summarized as in next.
+@@ -55,7 +55,7 @@
+ how to load balance between different formats next.
+ \begin{Command}
+ ### Run the demo with 4 processors by
+-mpiexec -np 4 Rscript -e "demo(simple_balance,'pbdMPI',ask=F,echo=F)"
++srun -n 4 Rscript -e "demo(simple_balance,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ In the \code{block0}, the \code{iris} is distributed as $(38, 38, 37, 37)$
+ row-bock of each processor.
+diff -ruN pbdMPI.orig/vignettes/pbdMPI-include/08-simplepairs.tex pbdMPI/vignettes/pbdMPI-include/08-simplepairs.tex
+--- pbdMPI.orig/vignettes/pbdMPI-include/08-simplepairs.tex	2024-09-19 21:24:47.244772541 +0200
++++ pbdMPI/vignettes/pbdMPI-include/08-simplepairs.tex	2024-09-19 21:29:59.014766654 +0200
+@@ -59,7 +59,7 @@
+ functions in different ways.
+ \begin{Command}
+ ### Run the demo with 4 processors by
+-mpiexec -np 4 Rscript -e "demo(simple_pairs,'pbdMPI',ask=F,echo=F)"
++srun -n 4 Rscript -e "demo(simple_pairs,'pbdMPI',ask=F,echo=F)"
+ \end{Command}
+ See \pkg{pbdDEMO} vignettes~\citep{Schmidt2013pbdDEMOvignette}
+ for more statistical examples.
