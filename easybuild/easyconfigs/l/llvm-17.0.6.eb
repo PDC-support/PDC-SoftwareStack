@@ -25,7 +25,7 @@ builddependencies = [
 
 srcdir="/tmp/$USER/%(namelower)s/%(version)s/system-system/%(namelower)s-project-%(namelower)sorg-%(version)s/llvm"
 
-configopts = "-DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_INSTALL_UTILS=ON -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS=clang -DLLVM_ENABLE_RUNTIMESD=openmp "
+configopts = '-DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_INSTALL_UTILS=ON -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_ENABLE_PROJECTS="llvm;clang;polly;lld;lldb;clang-tools-extra" -DLLVM_ENABLE_RUNTIMESD=openmp '
 
 
 sanity_check_paths = {
