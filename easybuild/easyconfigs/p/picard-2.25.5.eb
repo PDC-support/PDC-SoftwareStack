@@ -39,7 +39,7 @@ sources = [{
 }]
 checksums = ['f7fa9784b84d384abfcbd77076f5ceab7b2797dc863ac35fd41470daa3efe3a5']
 
-postinstallcmds = ["mv %(installdir)s/%(name)s-%(version)s.jar %(installdir)s/%(namelower)s.jar",'echo "#!/bin/bash"> %(installdir)s/%(namelower)s', 'echo -ne "java -jar %(installdir)s/%(namelower)s.jar" >> %(installdir)s/%(namelower)s', 'echo " ${@}" >> %(installdir)s/%(namelower)s', 'chmod +x %(installdir)s/%(namelower)s']
+postinstallcmds = ["mv %(installdir)s/%(name)s-%(version)s.jar %(installdir)s/%(namelower)s.jar",'echo "#!/bin/bash"> %(installdir)s/%(namelower)s', 'echo -ne "java -jar %(installdir)s/%(namelower)s.jar" >> %(installdir)s/%(namelower)s', 'echo " \${@}" >> %(installdir)s/%(namelower)s', 'chmod +x %(installdir)s/%(namelower)s']
 
 osdependencies = ['java']
 
@@ -48,6 +48,11 @@ sanity_check_paths = {
     'dirs': [],
 }
 
-#modloadmsg = "To execute picard run: java -jar $EBROOTPICARD/%(name)s.jar"
+modextravars = {
+    'PICARD_ROOT':'%(installdir)s',
+    'PICARD':'%(installdir)s/%(name)s.jar'
+}
+
+modloadmsg = '%(name)s/%(version)s: java -jar $PICARD command ...'
 
 moduleclass = 'bio'
