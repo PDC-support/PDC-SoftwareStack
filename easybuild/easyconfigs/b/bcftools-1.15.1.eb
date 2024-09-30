@@ -16,7 +16,8 @@ description = """Samtools is a suite of programs for interacting with high-throu
 toolchain = SYSTEM
 toolchainopts = {'pic': True}
 
-source_urls = ['https://github.com/samtools/%(namelower)s/releases/download/%(version)s']
+github_account = 'samtools'
+source_urls = [GITHUB_LOWER_RELEASE]
 sources = [SOURCELOWER_TAR_BZ2]
 checksums = ['f21f9564873eb27ccf22d13b91a64acb8fbbfe4f9e4c37933a54b9a95857f2d7']
 
