@@ -1,0 +1,36 @@
+easyblock = 'MakeCp'
+
+name = 'platanus'
+version = '1.2.4'
+
+homepage = 'http://platanus.bio.titech.ac.jp/'
+whatis = [
+    'Description: PLATform for Assembling NUcleotide Sequences',
+    'This module provides a number of executables and scripts.',
+]
+description = """
+Platanus is a de novo assembler designed to assemble high-throughput data.
+It can handle highly heterozygotic samples. The following is the assembly
+outline. First, it constructs contigs using the algorithm based on de Bruijn
+graph. Second, the order of contigs is determined according to paired-end
+(mate-pair) data and constructs scaffolds. Finally, paired-end reads localized
+on gaps in scaffolds are assembled and gaps are closed.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'openmp': True, 'cstd': 'c++11'}
+
+buildopts = 'CXXFLAGS="$CXXFLAGS -Dnullptr=0 -lm -fpermissive -fopenmp -std=c++0x -O3 -funroll-loops -Wall -finline-limit-50000"'
+             
+github_account = 'sglim2'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+
+files_to_copy = [(["platanus"], 'bin'), "README", "LICENSE"]
+
+sanity_check_paths = {
+    'files': ["bin/platanus"],
+    'dirs': [""],
+}
+
+moduleclass = 'bio'
