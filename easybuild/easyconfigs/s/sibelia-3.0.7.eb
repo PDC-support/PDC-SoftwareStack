@@ -4,10 +4,19 @@ name = 'sibelia'
 version = '3.0.7'
 
 homepage = 'http://bioinf.spbau.ru/en/%(namelower)s'
-description = """Sibelia: A comparative genomics tool: It assists biologists in analysing 
- the genomic variations that correlate with pathogens, or the genomic changes that help 
- microorganisms adapt in different environments. Sibelia will also be helpful for the 
- evolutionary and genome rearrangement studies for multiple strains of microorganisms."""
+whatis = [
+    'Description: SiBELia: Synteny Block ExpLoration tool',
+    'This module provides a number of executables and scripts.',
+]
+description = """
+Sibelia: A comparative genomics tool: It assists biologists in analysing
+the genomic variations that correlate with pathogens, or the genomic changes that help
+microorganisms adapt in different environments. Sibelia will also be helpful for the
+evolutionary and genome rearrangement studies for multiple strains of microorganisms.
+
+Sibelia is useful in finding: (1) shared regions, (2) regions that present in one group of
+genomes but not in others, (3) rearrangements that transform one genome to other genomes.
+"""
 
 toolchain = SYSTEM
 
