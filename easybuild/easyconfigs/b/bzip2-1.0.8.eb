@@ -1,6 +1,4 @@
 # contributed by Luca Marsella (CSCS)
-import os
-
 name = 'bzip2'
 version = "1.0.8"
 
@@ -17,8 +15,7 @@ toolchain = SYSTEM
 source_urls = ['https://sourceware.org/pub/%(name)s/']
 sources = [SOURCE_TAR_GZ]
 
-os.environ['CC'] = 'gcc'
-os.environ['CFLAGS'] = '-O3 -fPIC'
+buildopts = 'CC="gcc" CFLAGS="-Wall -Winline -O3 -fPIC"'
 
 # create pkgconfig file
 postinstallcmds = [
