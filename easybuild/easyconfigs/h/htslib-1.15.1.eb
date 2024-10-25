@@ -38,7 +38,7 @@ docurls = [
 toolchain = SYSTEM
 
 github_account = 'samtools'
-source_urls = [GITHUB_LOWER_RELEASE]
+source_urls = ['https://github.com/%(github_account)s/%(namelower)s/releases/download/%(version)s/']
 sources =     [SOURCELOWER_TAR_BZ2]
 checksums =   ['8d7f8bf9658226942eeab70af2a22aca618577eaa8fe2ed9416ee306d5351aa1']
 
