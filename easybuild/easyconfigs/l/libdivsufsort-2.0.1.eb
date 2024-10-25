@@ -13,7 +13,8 @@ description = """libdivsufsort is a software library that implements a lightweig
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/y-256/libdivsufsort/archive/refs/tags/']
+github_account = 'y-256'
+source_urls = [GITHUB_SOURCE]
 sources = ['%(version)s.tar.gz']
 checksums = ['9164cb6044dcb6e430555721e3318d5a8f38871c2da9fd9256665746a69351e0']
 
@@ -23,8 +24,10 @@ builddependencies = [
 
 unpack_options = '--strip-components=1'
 
+configopts = ['-DBUILD_SHARED_LIBS=ON', '-DBUILD_SHARED_LIBS=OFF']
+
 sanity_check_paths = {
-    'files': ['lib/libdivsufsort.%s' % SHLIB_EXT],
+    'files': ['lib/libdivsufsort.%s' % SHLIB_EXT, 'lib/libdivsufsort.a'],
     'dirs': [],
 }
 
