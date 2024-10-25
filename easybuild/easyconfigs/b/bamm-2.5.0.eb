@@ -1,0 +1,33 @@
+easyblock = 'CMakeMake'
+
+name = 'bamm'
+version = '2.5.0'
+
+homepage = 'http://bamm-project.org/'
+whatis = [
+    'Description: Bayesian Analysis of Macroevolutionary Mixtures',
+]
+description = """
+BAMM is oriented entirely towards detecting and quantifying heterogeneity
+in evolutionary rates. It uses reversible jump Markov chain Monte Carlo
+to automatically explore a vast universe of candidate models of lineage
+diversification and trait evolution.
+"""
+
+toolchain = SYSTEM
+
+# https://github.com/macroevolution/bamm
+github_account = 'macroevolution'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['526eef85ef011780ee21fe65cbc10ecc62efe54044102ae40bdef49c2985b4f4']
+
+builddependencies = [('cmake', '3.23.2', '', True)]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': [],
+}
+sanity_check_commands = ["%(namelower)s"]
+
+moduleclass = 'bio'
