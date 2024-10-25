@@ -1,0 +1,54 @@
+easyblock = "CMakeMake"
+
+name = 'sibelia'
+version = '3.0.7'
+
+homepage = 'http://bioinf.spbau.ru/en/%(namelower)s'
+description = """Sibelia: A comparative genomics tool: It assists biologists in analysing 
+ the genomic variations that correlate with pathogens, or the genomic changes that help 
+ microorganisms adapt in different environments. Sibelia will also be helpful for the 
+ evolutionary and genome rearrangement studies for multiple strains of microorganisms."""
+
+toolchain = SYSTEM
+
+source_urls = [('http://sourceforge.net/projects/%(namelower)s-bio/files/', 'download')]
+sources = ['Sibelia-%(version)s-Source.tar.gz']
+patches = ['Sibelia-3.0.7-indeces.patch']
+checksums = [
+    '114d076dd9f381d7e856ea54414e8a53e9f6bad28d75bb530ee511584f53070e',  # Sibelia-3.0.7-Source.tar.gz
+    'c20badf609d38b10be26c0f4a6517f6805684d6fb24fe0d34f4794c9c365529e',  # Sibelia-3.0.7-indeces.patch
+]
+
+builddependencies = [
+    ('boost','1.79.0','-nompi'),
+    ('tclap','1.2.5'),
+    ('seqan','2.4.0'),
+    ('htslib','1.20'),
+]
+
+dependencies = [
+    ('libdivsufsort','2.0.1'),
+]
+
+osdependencies = ['cmake']
+
+start_dir = 'src'
+
+separate_build_dir = True
+
+preconfigopts = 'rm ../Sibelia-%(version)s-Source/src/{include,libdivsufsort-2.0.1} -r && '
+preconfigopts+= 'sed -i.bak /libdivsufsort/d ../Sibelia-%(version)s-Source/src/CMakeLists.txt && '
+
+prebuildopts = 'sed -i.bak "s#gcc#$CC#g" ../Sibelia-%(version)s-Source/src/lagan/src/Makefile && '
+prebuildopts += 'sed -i.bak "s#g++#$CXX#g" ../Sibelia-%(version)s-Source/src/lagan/src/Makefile && '
+prebuildopts += 'sed -i.bak "s#gcc#$CC#g" ../Sibelia-%(version)s-Source/src/lagan/src/glocal/Makefile && '
+prebuildopts += 'sed -i.bak "s#g++#$CXX#g" ../Sibelia-%(version)s-Source/src/lagan/src/glocal/Makefile && '
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['C-Sibelia.py', 'Sibelia', 'snpEffAnnotate.py']],
+    'dirs': [''],
+}
+
+sanity_check_commands = ['Sibelia --help']
+
+moduleclass = 'bio'
