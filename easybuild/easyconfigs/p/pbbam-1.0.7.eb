@@ -1,0 +1,40 @@
+easyblock = 'MesonNinja'
+
+name = 'pbbam'
+version = '1.0.7'
+
+homepage = 'http://pbbam.readthedocs.io/'
+description = """The pbbam software package provides components to create, query, & edit PacBio BAM files
+ and associated indices."""
+
+toolchain = SYSTEM
+toolchainopts = {'cstd': 'c++14'}
+
+github_account = 'PacificBiosciences'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['e4e9e9207486f757c538bbd75032f9d033500540c495ce48a8dacb6f2ca3b536']
+
+builddependencies = [
+    ('pkg-config', '0.29.2'),
+    ('meson', '0.61.5'),
+    ('ninja', '1.11.1'),
+    ('googletest', '1.8.1'),
+    ('samtools', '1.20'),
+    ('boost', '1.79.0','-nompi'),
+]
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('pbcopper', '1.8.0'),
+    ('htslib', '1.20'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/pbbamify', 'bin/pbindex', 'bin/pbindex', 'bin/pbindexdump', 'bin/pbmerge',
+              'lib/libpbbam.%s' % SHLIB_EXT],
+    'dirs': ['include/pbbam', 'lib/pkgconfig'],
+}
+
+sanity_check_commands = ["%s -h" % x for x in ['bam2sam', 'pbbamify', 'pbindex', 'pbindexdump', 'pbmerge']]
+
+moduleclass = 'bio'
