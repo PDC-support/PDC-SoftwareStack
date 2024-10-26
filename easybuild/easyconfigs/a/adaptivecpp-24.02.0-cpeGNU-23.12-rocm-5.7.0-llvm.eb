@@ -37,14 +37,15 @@ source_urls = ["https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/"]
 sources =     ["v%(version)s.tar.gz"]
 
 dependencies = [
-    ('boost','1.83.0'),
     ('cray-python/3.11.5',EXTERNAL_MODULE),
     ('rocm/5.7.0',EXTERNAL_MODULE),
     ('zstd/1.5.5',EXTERNAL_MODULE),  # Added zstd dependency
 ]
 
 builddependencies = [
-    ('buildtools', '%(toolchain_version)s', '', True),
+    ('cmake', '3.23.2', '', True),
+    ('make', '4.3', '', True),
+    ('boost','1.83.0'),
 ]
 
 configopts  = '-DROCM_PATH=$ROCM_PATH '
