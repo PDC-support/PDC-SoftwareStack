@@ -1,0 +1,60 @@
+easyblock = 'ConfigureMake'
+
+name = 'libflame'
+version = '4.0'
+versionsuffix = '-amd'
+
+homepage = 'https://developer.amd.com/amd-cpu-libraries/blas-library/#libflame'
+description = """
+This module provides AMD's fork of libFLAME. libFLAME is a portable library
+for dense matrix computations, providing much of the functionality present in
+LAPACK.
+
+Note that libFLAME will conflict with the Cray LibSci library, so when using
+this module you have to unload the cray-libsci module as otherwise the
+Cray compiler wrappers will add LibSci to the libraries used by the
+compiler.
+
+Cray LibSci already contains BLAS, LAPACK and ScaLAPACK functionality and
+should be your first choice. But this module may be useful if you run into
+problems with the Cray LibSci library. Note however that software in the
+LUMI stack is by default build with the Cray LibSci library, so your code
+that relies on libFLAME and BLIS may not link correctly to any of the other
+modules in the LUMI software stacks.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = ['https://github.com/amd/%(name)s/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['bcb05763aa1df1e88f0da5e43ff86d956826cbea1d9c5ff591d78a3e091c66a4']
+
+builddependencies = [
+    ('make', '4.3'),
+]
+dependencies = [
+    ('blis', '4.0', '-amd'),
+]
+
+# Use unset FLIBS to let configure pick up LDFLAGS
+preconfigopts = 'module unload cray-libsci && sed -e "s|CC_VENDOR=..echo.*|CC_VENDOR=gcc|" -e "s|-mtune=native ||" -i configure && sed -e "s|#!.*python|#! /usr/bin/python3|" -i build/flatten-headers.py && unset FLIBS && LIBS="-lblis-mt $LIBS" LDFLAGS="$LDFLAGS -L$EBROOTBLIS/lib -fopenmp -lm -lpthread" CFLAGS="$CFLAGS -fopenmp -I${EBROOTBLIS}/include/blis" '
+configopts = "--enable-max-arg-list-hack --enable-lapack2flame --enable-external-lapack-interfaces --enable-cblas-interfaces --enable-static-build --enable-dynamic-build --enable-multithreading=openmp --enable-supermatrix --enable-amd-flags --enable-amd-opt "
+
+prebuildopts = "module unload cray-libsci && "
+
+# libFLAME C++ Template API tests
+# runtest = 'checkcpp LIBBLAS=$EBROOTBLIS/lib/libblis.a'
+
+postinstallcmds = [
+    "mkdir -p %(installdir)s/share/licenses/%(name)s && cp AUTHORS CHANGELOG KNOWN-ISSUES LICENSE README.md README-AMD.md README-UT-SHPC.md %(installdir)s/share/licenses/%(name)s",
+]
+whatis = [
+    "Description: AMD's fork of libFLAME. libFLAME is a portable library for dense matrix computations, providing much of the functionality present in LAPACK.",
+]
+
+sanity_check_paths = {
+    'files': ['include/FLAME.h', 'lib/%(name)s.a', 'lib/%(name)s.so'],
+    'dirs': ['lib'],
+}
+
+moduleclass = 'numlib'
