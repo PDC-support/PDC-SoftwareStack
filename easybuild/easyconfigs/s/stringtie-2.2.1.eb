@@ -21,7 +21,6 @@ checksums = ['ce4eec532bbbe39af462be844afa6395ab38fa3418ef5fc2431e2d6194129527',
 
 dependencies = [
     ('bzip2', '1.0.8'),
-    ('libdeflate', '1.12'),
     ('xz', '5.4.5'),
     ('zlib', '1.3.1'),
     ('htslib', '1.15.1'),
