@@ -39,10 +39,8 @@ dependencies = [
     ('zlib', '1.3.1'),
     ('bzip2', '1.0.8'),
     ('curl', '7.78.0'),
-    ('pcre', '8.45'),
     ('pcre2', '10.42'),
-    ('libdeflate', '1.12'),
-    ('librmath', '4.4.0'), #Hwad skall denna vara?
+    ('librmath', '4.4.0'),
     ('libsvm', '3.30'),
     ('htslib', '1.20'),
 ]
