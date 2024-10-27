@@ -15,7 +15,29 @@ name = 'sqlite'
 version = '3.43.1'
 
 homepage = 'http://www.sqlite.org/'
-description = "SQLite: SQL Database Engine in a C Library"
+whatis = [
+    'Description: SQLite: SQL Database Engine in a C Library'
+]
+description = """
+SQLite is a C-language library that implements a small, fast, self-contained,
+high-reliability, full-featured, SQL database engine. SQLite is the most used
+database engine in the world. SQLite is built into all mobile phones and most
+computers and comes bundled inside countless other applications that people
+use every day. More Information...
+
+The SQLite file format is stable, cross-platform, and backwards compatible and
+the developers pledge to keep it that way through the year 2050. SQLite database f
+iles are commonly used as containers to transfer rich content between systems
+and as a long-term archival format for data. There are over 1 trillion (1e12)
+SQLite databases in active use.
+
+SQLite source code is in the public-domain and is free to everyone to use for
+any purpose.
+"""
+
+software_license_urls = [
+    'https://www.sqlite.org/copyright.html',
+]
 
 toolchain = SYSTEM
 
@@ -24,7 +46,7 @@ sources = ['%(namelower)s-autoconf-3430100.tar.gz']
 checksums = ['39116c94e76630f22d54cd82c3cea308565f1715f716d1b2527f1c9c969ba4d9']
 
 dependencies = [
-    ('libreadline', '8.1', '', ('system', '')),
+    ('libreadline', '8.2', '', ('system', '')),
 ]
 
 sanity_check_paths = {
