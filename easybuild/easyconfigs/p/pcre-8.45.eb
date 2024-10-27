@@ -44,16 +44,14 @@ checksums =   ['4e6ce03e0336e8b4a3d6c2b70b1c5e18590a5673a98186da90d4f33c23defc09
 osdependencies = ['binutils']
 
 dependencies = [
-    ('libreadline', '8.1'),
-    ('ncurses', '6.2'),
-    ('zlib', '1.2.11'),
+    ('zlib', '1.3.1'),
     ('bzip2', '1.0.8'),
 ]
 
 configopts  = "--with-pic --disable-cpp --enable-utf --enable-unicode-properties --enable-newline-is-any "
 configopts += "--enable-pcre16 --enable-pcre32 "
 configopts += "--enable-jit "
-configopts += "--enable-pcregrep-libz --enable-pcregrep-libbz2 --enable-pcretest-libreadline "
+configopts += "--enable-pcregrep-libz --enable-pcregrep-libbz2 "
 
 local_executables = ['pcre-config', 'pcregrep', 'pcretest']
 local_lib_variants = ['', 'posix', '16', '32']
