@@ -54,7 +54,6 @@ dependencies = [
     ('libxml2', '2.12.3', '', True),
     ('libpng', '1.6.40', '', True),
     ('zlib', '1.3.1', '', True),
-    ('pcre', '8.45', '', True),
     ('libgeotiff', '1.7.3', '', True),
     ('hdf', '4.2.16-2', '', True),
     ('armadillo', '12.8.0'),
@@ -73,7 +72,7 @@ dependencies = [
 ]
 
 # iterative build for both static and shared libraries
-local_configopts_common = "-DGDAL_USE_INTERNAL_LIBS=OFF -DGDAL_USE_MYSQL=OFF "
+local_configopts_common = "-DGDAL_USE_INTERNAL_LIBS=OFF -DGDAL_USE_MYSQL=OFF -DGDAL_USE_PCRE2=ON "
 local_configopts_common += "-DGEOTIFF_INCLUDE_DIR=$EBROOTLIBGEOTIFF/include -DPython_ROOT=$EBROOTPYTHON "
 local_configopts_common += "-DHDF5_C_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so "
 
