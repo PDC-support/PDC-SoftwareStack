@@ -1,0 +1,51 @@
+easyblock = 'MakeCp'
+
+name = 'angsd'
+version = '0.940'
+
+homepage = 'http://www.popgen.dk/angsd'
+whatis = ['Description: Program for analysing NGS data.']
+description = """
+ANGSD is a software for analyzing next generation sequencing data.
+The software can handle a number of different input types from mapped
+reads to imputed genotype probabilities. Most methods take genotype
+uncertainty into account instead of basing the analysis on called genotypes.
+This is especially useful for low and medium depth data. The software
+is written in C++ and has been used on large sample sizes.
+
+This program is not for manipulating BAM/CRAM files, but solely
+a tool to perform various kinds of analysis. 
+"""
+
+toolchain = SYSTEM
+
+github_account = 'ANGSD'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%(version)s.tar.gz']
+checksums = ['73b43eb553892721c7d5db5d6d883a17074ee4e07536a32871c3b1ac5f701ad7']
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('bzip2', '1.0.8'),
+    ('xz', '5.4.5'),
+    ('htslib', '1.20'),
+]
+
+buildopts = "HTSSRC=systemwide"
+
+files_to_copy = [
+    (['angsd', 'misc/supersim', 'misc/thetaStat', 'misc/realSFS', 'misc/msToGlf',
+      'misc/smartCount', 'misc/printIcounts', 'misc/contamination', 'misc/splitgl',
+      'misc/NGSadmix', 'misc/contamination2', 'misc/haploToPlink', 'misc/ngsPSMC',
+      'misc/ibs'], 'bin'),
+    'doc',
+]
+
+sanity_check_paths = {
+    'files': ['bin/angsd'],
+    'dirs': ['doc'],
+}
+
+sanity_check_commands = ["angsd --help"]
+
+moduleclass = 'bio'
