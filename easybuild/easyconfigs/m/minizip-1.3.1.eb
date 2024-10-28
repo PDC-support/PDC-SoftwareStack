@@ -1,0 +1,39 @@
+easyblock = 'ConfigureMake'
+
+name = 'minizip'
+version = '1.3.1'
+
+homepage = 'https://www.winimage.com/zLibDll/minizip.html'
+description = "Mini zip and unzip based on zlib"
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+# This exists in the contrib section of zlib and since it depends on
+# zlib the sources will already have been downloaded
+
+source_urls = ['https://zlib.net/fossils']
+sources = [
+    {'filename': 'zlib-%s.tar.gz' % version, 'alt_location': 'zlib'},
+]
+#checksums = ['c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1']
+
+builddependencies = [
+    ('binutils', '2.37'),
+    ('autotools', '20220317'),
+]
+
+dependencies = [
+    ('zlib', version),
+]
+
+start_dir = 'contrib/minizip'
+
+preconfigopts = 'autoreconf -i && '
+
+sanity_check_paths = {
+    'files': ['include/minizip/unzip.h', 'lib/libminizip.a', 'lib/libminizip.%s' % SHLIB_EXT],
+    'dirs': [],
+}
+
+moduleclass = 'lib'
