@@ -32,7 +32,8 @@ description = """A set of tools (in Java) for working with next generation seque
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/broadinstitute/picard/releases/download/%(version)s']
+github_account = 'broadinstitute'
+source_urls = ['https://github.com/%(github_account)s/%(namelower)s/releases/download/%(version)s']
 sources = [{
     'filename': '%(name)s-%(version)s.jar',
     'download_filename': '%(name)s.jar',
