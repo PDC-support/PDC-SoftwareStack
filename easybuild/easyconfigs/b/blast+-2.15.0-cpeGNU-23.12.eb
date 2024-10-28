@@ -5,7 +5,18 @@ name = 'blast+'
 version = '2.15.0'
 
 homepage = 'https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download'
-description = """Blast for searching sequences""" 
+whatis = [
+    'Description: Basic Local Alignment Search Tool (BLAST) for searching sequences.'
+]
+
+description = """
+The Basic Local Alignment Search Tool (BLAST) finds regions of local
+similarity between sequences. The program compares nucleotide or
+protein sequences to sequence databases and calculates the statistical
+significance of matches. BLAST can be used to infer functional and
+evolutionary relationships between sequences as well as
+help identify members of gene families.
+"""
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
 toolchainopts = {'usempi': True}
@@ -15,7 +26,7 @@ sources = ['ncbi-blast-%(version)s+-src.tar.gz']
 
 dependencies = [
     ('glib', '2.78.0','',SYSTEM),
-    ('sqlite', '3.36.0','',SYSTEM),
+    ('sqlite', '3.43.1','',SYSTEM),
 ]
 
 sanity_check_paths = {
