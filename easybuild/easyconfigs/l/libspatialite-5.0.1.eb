@@ -20,12 +20,9 @@ builddependencies = [
 
 dependencies = [
     ('freexl', '1.0.6'),
-    ('geos', '3.9.1'),
-    ('sqlite', '3.36.0'),
     ('proj', '9.0.0'),
     ('libxml2', '2.9.12'),
     ('librttopo', '1.1.0'),
-    ('zlib', '1.2.11'),
     ('minizip', '1.2.11'),
 ]
 
