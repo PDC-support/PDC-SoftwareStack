@@ -4,11 +4,27 @@ name = 'rcorrector'
 version = '1.0.2'
 
 homepage = 'https://github.com/mourisl/Rcorrector'
-description = """Rcorrector(RNA-seq error CORRECTOR) is a kmer-based error correction method for RNA-seq data."""
+whatis = [
+    'Description: RNA-seq error CORRECTOR: Efficient and accurate error correction for RNA-seq data.',
+]
+
+description = """
+Rcorrector is a k-mer based method to correct random sequencing errors in
+Illumina RNA-seq reads. Rcorrector uses a de Bruijn graph to compactly represent
+all trusted k-mers in the input reads. Unlike WGS read correctors, which use a
+global threshold to determine trusted k-mers, Rcorrector computes a
+local threshold at every position in a read.
+
+Rcorrector has an accuracy higher than or comparable to existing methods,
+including the only other method (SEECER) designed for RNA-seq reads, and is
+more time and memory efficient. With a 5 GB memory footprint for 100 million
+reads, it can be run on virtually any desktop or server.
+"""
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/mourisl/Rcorrector/archive']
+github_account = 'mourisl'
+source_urls = [GITHUB_SOURCE]
 sources = ['v%(version)s.tar.gz']
 patches = ['Rcorrector-%(version)s-fix-makefile.patch']
 checksums = [
@@ -20,6 +36,8 @@ dependencies = [
     ('zlib', '1.3.1'),
     ('jellyfish', '2.3.0'),
 ]
+
+osdependencies = ['perl']
 
 buildopts = 'LIBS=-lpthread CXXFLAGS="${CXXFLAGS} -Wall -O3 -std=c++0x"'
 
