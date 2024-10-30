@@ -4,7 +4,27 @@ name = 'bbmap'
 version = '39.01'
 
 homepage = 'https://sourceforge.net/projects/bbmap/'
-description = """BBMap short read aligner, and other bioinformatic tools."""
+whatis = [
+    'Description: BBMap short read aligner, and other bioinformatic tools.',
+]
+
+description = """
+BBMap is a splice-aware global aligner for DNA and RNA sequencing reads.
+It can align reads from all major platforms – Illumina, 454, Sanger, Ion Torrent,
+Pac Bio, and Nanopore. BBMap is fast and extremely accurate, particularly with
+highly mutated genomes or reads with long indels, even whole-gene deletions
+over 100kbp long. It has no upper limit to genome size or number of contigs,
+and has been successfully used for mapping to an 85 gigabase soil metagenome
+with over 200 million contigs. Additionally, the indexing phase is very fast
+compared to other aligners.
+
+BBMap has a large array of options, described in its shell script. It can output
+many different statistics files, such as an empirical read quality histogram,
+insert-size distribution and genome coverage, with or without generating a sam file.
+As a result, it is useful in quality control of libraries and sequencing runs,
+or evaluating new sequencing platforms. The derivative program BBSplit is also
+useful in binning or refining metagenomic reads.
+"""
 
 toolchain = SYSTEM
 
