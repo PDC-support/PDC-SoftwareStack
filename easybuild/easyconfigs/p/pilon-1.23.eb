@@ -17,8 +17,8 @@ osdependencies = ['java']
 
 postinstallcmds = [
     "cd %(installdir)s",
-    "echo '#!/bin/sh' > %(installdir)s/pilon",
-    "echo 'java -jar -Xmx${PDC_PILON_MEM:-30G} %(installdir)s/pilon-%(version)s.jar $@' >> %(installdir)s/pilon",
+    "echo '#!/bin/bash' > %(installdir)s/pilon",
+    "echo 'exec java -jar -Xmx${PDC_PILON_MEM:-30G} %(installdir)s/pilon-%(version)s.jar $@' >> %(installdir)s/pilon",
     "chmod a+rx %(installdir)s/pilon"
 ]
 
