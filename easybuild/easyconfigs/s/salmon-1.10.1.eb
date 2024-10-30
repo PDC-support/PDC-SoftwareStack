@@ -18,9 +18,24 @@ easyblock = 'CMakeMake'
 name = 'salmon'
 version = '1.10.1'
 
-homepage = 'https://github.com/COMBINE-lab/salmon'
-description = """Salmon is a wicked-fast program to produce a highly-accurate,
- transcript-level quantification estimates from RNA-seq data."""
+homepage = 'https://combine-lab.github.io/salmon/'
+whatis = [
+    'Description: Salmon: Fast, accurate and bias-aware transcript quantification from RNA-seq data',
+]
+
+description = """
+Salmon is a tool for wicked-fast transcript quantification from RNA-seq data.
+It requires a set of target transcripts (either from a reference or de-novo assembly)
+to quantify. All you need to run Salmon is a FASTA file containing your reference
+transcripts and a (set of) FASTA/FASTQ file(s) containing your reads. Optionally,
+Salmon can make use of pre-computed alignments (in the form of a SAM/BAM file) to
+the transcripts rather than the raw reads.
+
+The mapping-based mode of Salmon runs in two phases; indexing and quantification.
+The indexing step is independent of the reads, and only needs to be run once for
+a particular set of reference transcripts. The quantification step, obviously,
+is specific to the set of RNA-seq reads and is thus run more frequently.
+"""
 
 toolchain = SYSTEM
 toolchainopts = {'pic': True}
