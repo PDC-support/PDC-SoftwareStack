@@ -1,0 +1,47 @@
+easyblock = 'ConfigureMake'
+
+name = 'treemix'
+version = '1.13'
+
+homepage = 'http://bitbucket.org/nygcresearch/treemix'
+whatis = ['Description: TreeMix: a method for inferring the patterns of population splits and mixtures in the history of a set of populations.',]
+
+description = """
+TreeMix is a method for inferring the patterns of population splits and mixtures
+in the history of a set of populations. In the underlying model, the modern-day
+populations in a species are related to a common ancestor via a graph of ancestral
+populations. We use the allele frequencies in the modern populations to infer
+the structure of this graph.
+
+The details of the TreeMix model are presented in: Pickrell JK and Pritchard JK:
+Inference of population splits and mixtures from genome-wide allele frequency data.
+
+Some extensions are presented in: Pickrell JK, Patterson N, Barbieri C, Berthold F,
+Gerlach L, Güldemann T, Kure B, Mpoloka SW, Nakagawa H, Naumann C, Lipson M, Loh PR,
+Lachance J, Mountain J, Bustamante CD, Berger B, Tishkoff SA, Henn BM, Stoneking M,
+Reich D, Pakendorf B. The genetic prehistory of southern Africa.
+"""
+
+toolchain = SYSTEM
+
+bitbucket_account = 'nygcresearch'
+source_urls = [BITBUCKET_DOWNLOADS]
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['fe544f2daa13fd06b20c1a81aac728963ea5b66b75908916ca87ccd7f4cfa3d9']
+
+builddependencies = [
+    ('boost', '1.79.0','-nompi'),
+]
+
+dependencies = [
+    ('gsl', '2.7.1'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/treemix'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["treemix -h | grep 'TreeMix v. %(version)s'"]
+
+moduleclass = 'bio'
