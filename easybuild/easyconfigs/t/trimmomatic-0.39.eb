@@ -56,6 +56,7 @@ sanity_check_paths = {
     'dirs': [""],
 }
 
-modloadmsg = '%(name)s/%(version)s: java -jar $TRIMMOMATIC [PE|SE] other-options...'
+modloadmsg = '%(name)s/%(version)s: USAGE: java -jar $TRIMMOMATIC [PE|SE] other-options...\n'
+modloadmsg+= '%(name)s/%(version)s: NOTE: Included adapters are found at $TRIMMOMATIC_ROOT/adapter'
 
 moduleclass = 'bio'
