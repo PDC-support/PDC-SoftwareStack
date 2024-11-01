@@ -1,0 +1,219 @@
+make possible to install several kallisto binairies, each with
+different options (read: maxsize of k) in the same module 
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN kallisto.orig/CMakeLists.txt kallisto/CMakeLists.txt
+--- kallisto.orig/CMakeLists.txt	2024-10-31 19:45:08.559143991 +0100
++++ kallisto/CMakeLists.txt	2024-11-01 01:30:28.925417076 +0100
+@@ -7,6 +7,9 @@
+ if(NOT MAX_KMER_SIZE)
+ set(MAX_KMER_SIZE "32")
+ endif()
++if(NOT KALLISTO_EXEC_NAME)
++set(KALLISTO_EXEC_NAME "kallisto")
++endif()
+ 
+ set(DO_ENABLE_AVX2 "")
+ set(DO_ENABLE_COMPILATION_ARCH "")
+@@ -20,6 +23,7 @@
+ endif(COMPILATION_ARCH MATCHES "OFF")
+ 
+ add_compile_definitions("MAX_KMER_SIZE=${MAX_KMER_SIZE}")
++add_compile_definitions(KALLISTO_EXEC_NAME="${KALLISTO_EXEC_NAME}")
+ 
+ 
+ option(USE_HDF5 "Compile with HDF5 support" OFF) #OFF by default
+diff -ruN kallisto.orig/src/CMakeLists.txt kallisto/src/CMakeLists.txt
+--- kallisto.orig/src/CMakeLists.txt	2024-10-31 19:45:08.639143990 +0100
++++ kallisto/src/CMakeLists.txt	2024-11-01 01:09:31.208774272 +0100
+@@ -16,14 +16,14 @@
+ add_library(kallisto_core ${sources} ${headers})
+ target_include_directories(kallisto_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+ 
+-add_executable(kallisto main.cpp)
++add_executable(${KALLISTO_EXEC_NAME} main.cpp)
+ 
+ find_package( Threads REQUIRED )
+ ExternalProject_Get_Property(bifrost install_dir)
+ if (USE_BAM)
+-target_link_libraries(kallisto kallisto_core pthread ${CMAKE_CURRENT_SOURCE_DIR}/../ext/htslib/libhts.a ${install_dir}/build/src/libbifrost.a  -DMAX_KMER_SIZE=${MAX_KMER_SIZE})
++target_link_libraries(${KALLISTO_EXEC_NAME} kallisto_core pthread ${CMAKE_CURRENT_SOURCE_DIR}/../ext/htslib/libhts.a ${install_dir}/build/src/libbifrost.a  -DMAX_KMER_SIZE=${MAX_KMER_SIZE})
+ else()
+-target_link_libraries(kallisto kallisto_core pthread ${install_dir}/build/src/libbifrost.a -DMAX_KMER_SIZE=${MAX_KMER_SIZE})
++target_link_libraries(${KALLISTO_EXEC_NAME} kallisto_core pthread ${install_dir}/build/src/libbifrost.a -DMAX_KMER_SIZE=${MAX_KMER_SIZE})
+ endif(USE_BAM)
+ 
+ if(LINK MATCHES static)
+@@ -37,7 +37,7 @@
+         set(CMAKE_EXE_LINKER_FLAGS  "-static -static-libgcc -static-libstdc++")
+     endif(UNIX AND NOT APPLE)
+ 
+-    SET_TARGET_PROPERTIES(kallisto kallisto_core PROPERTIES LINK_SEARCH_END_STATIC 1)
++    SET_TARGET_PROPERTIES(${KALLISTO_EXEC_NAME} kallisto_core PROPERTIES LINK_SEARCH_END_STATIC 1)
+ endif(LINK MATCHES static)
+ 
+ 
+@@ -56,7 +56,7 @@
+     else()
+         message(FATAL_ERROR "zlib found but no include directories are set.")
+     endif()
+-    target_link_libraries(kallisto kallisto_core ${ZLIB_LIBRARIES})
++    target_link_libraries(${KALLISTO_EXEC_NAME} kallisto_core ${ZLIB_LIBRARIES})
+ else()
+     message(FATAL_ERROR "zlib not found. Required for to output files" )
+ endif( ZLIB_FOUND )
+@@ -67,9 +67,9 @@
+     include_directories(../ext/zlib-ng/zlib-ng)
+     include_directories(../ext/zlib-ng)
+     if(WIN32)
+-    target_link_libraries(kallisto ${CMAKE_CURRENT_SOURCE_DIR}/../ext/zlib-ng/zlib-ng/libz.lib)
++    target_link_libraries(${KALLISTO_EXEC_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../ext/zlib-ng/zlib-ng/libz.lib)
+     else()
+-    target_link_libraries(kallisto ${CMAKE_CURRENT_SOURCE_DIR}/../ext/zlib-ng/zlib-ng/libz.a)
++    target_link_libraries(${KALLISTO_EXEC_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../ext/zlib-ng/zlib-ng/libz.a)
+     endif(WIN32)
+ endif(ZLIBNG)
+ 
+@@ -77,7 +77,7 @@
+     if(HDF5_FOUND)
+         include_directories( ${HDF5_INCLUDE_DIRS} )
+         target_link_libraries( kallisto_core ${HDF5_LIBRARIES} )
+-        target_link_libraries( kallisto ${HDF5_LIBRARIES} )
++        target_link_libraries( ${KALLISTO_EXEC_NAME} ${HDF5_LIBRARIES} )
+     else()
+         message(FATAL_ERROR "HDF5 not found. Required to output files")
+     endif()
+@@ -85,13 +85,13 @@
+ 
+ if(LINK MATCHES static)
+     if (UNIX AND NOT APPLE)
+-        target_link_libraries(kallisto librt.a)
++        target_link_libraries(${KALLISTO_EXEC_NAME} librt.a)
+     endif()
+ else()
+     if (UNIX AND NOT APPLE)
+-        target_link_libraries(kallisto rt)
++        target_link_libraries(${KALLISTO_EXEC_NAME} rt)
+     endif()
+ endif(LINK MATCHES static)
+ 
+ 
+-install(TARGETS kallisto DESTINATION "${CMAKE_INSTALL_BINDIR}")
++install(TARGETS ${KALLISTO_EXEC_NAME} DESTINATION "${CMAKE_INSTALL_BINDIR}")
+diff -ruN kallisto.orig/src/main.cpp kallisto/src/main.cpp
+--- kallisto.orig/src/main.cpp	2024-10-31 19:45:08.639143990 +0100
++++ kallisto/src/main.cpp	2024-11-01 01:09:52.742107200 +0100
+@@ -2080,7 +2080,7 @@
+ }
+ 
+ void PrintVersion() {
+-  cout << "kallisto, version " << KALLISTO_VERSION;
++  cout << KALLISTO_EXEC_NAME << ", version " << KALLISTO_VERSION;
+ #if KALLISTO_CPP_VERSION < 201703L
+ std::cout << "."; // Just an internal use hidden "marker" so we know what C++ version kallisto was compiled in
+ #endif
+@@ -2088,8 +2088,8 @@
+ }
+ 
+ void usage() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl << endl
+-       << "Usage: kallisto <CMD> [arguments] .." << endl << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl << endl
++       << "Usage: " << KALLISTO_EXEC_NAME << " <CMD> [arguments] .." << endl << endl
+        << "Where <CMD> can be one of:" << endl << endl
+        << "    index         Builds a kallisto index "<< endl
+        << "    quant         Runs the quantification algorithm " << endl
+@@ -2103,9 +2103,9 @@
+ }
+ 
+ void usageBus() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+        << "Generates BUS files for single-cell sequencing" << endl << endl
+-       << "Usage: kallisto bus [arguments] FASTQ-files" << endl << endl
++       << "Usage: " << KALLISTO_EXEC_NAME << " bus [arguments] FASTQ-files" << endl << endl
+        << "Required arguments:" << endl
+        << "-i, --index=STRING            Filename for the kallisto index to be used for" << endl
+        << "                              pseudoalignment" << endl
+@@ -2134,9 +2134,9 @@
+ }
+ 
+ void usageIndex() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+        << "Builds a kallisto index" << endl << endl
+-       << "Usage: kallisto index [arguments] FASTA-files" << endl << endl
++       << "Usage: " << KALLISTO_EXEC_NAME << " index [arguments] FASTA-files" << endl << endl
+        << "Required argument:" << endl
+        << "-i, --index=STRING          Filename for the kallisto index to be constructed " << endl << endl
+        << "Optional argument:" << endl
+@@ -2154,16 +2154,16 @@
+ }
+ 
+ void usageh5dump() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+        << "Converts HDF5-formatted results to plaintext" << endl << endl
+-       << "Usage:  kallisto h5dump [arguments] abundance.h5" << endl << endl
++       << "Usage:  " << KALLISTO_EXEC_NAME << " h5dump [arguments] abundance.h5" << endl << endl
+        << "Required argument:" << endl
+        << "-o, --output-dir=STRING       Directory to write output to" << endl << endl;
+ }
+ 
+ void usageInspect() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl << endl
+-       << "Usage: kallisto inspect INDEX-file" << endl << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl << endl
++       << "Usage: " << KALLISTO_EXEC_NAME << " inspect INDEX-file" << endl << endl
+        << "Optional arguments:" << endl
+        << "-t                      Number of threads" << endl << endl;
+ }
+@@ -2171,11 +2171,11 @@
+ void usageEM(bool valid_input = true) {
+   if (valid_input) {
+ 
+-  cout << "kallisto " << KALLISTO_VERSION << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+        << "Computes equivalence classes for reads and quantifies abundances" << endl << endl;
+   }
+   //      "----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|"
+-  cout << "Usage: kallisto quant [arguments] FASTQ-files" << endl << endl
++  cout << "Usage: " << KALLISTO_EXEC_NAME << " quant [arguments] FASTQ-files" << endl << endl
+        << "Required arguments:" << endl
+        << "-i, --index=STRING            Filename for the kallisto index to be used for" << endl
+        << "                              quantification" << endl
+@@ -2203,9 +2203,9 @@
+ }
+ 
+ void usageEMOnly() {
+-  cout << "kallisto " << KALLISTO_VERSION << endl
++  cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+        << "Computes equivalence classes for reads and quantifies abundance" << endl << endl
+-       << "Usage: kallisto quant-only [arguments]" << endl << endl
++       << "Usage: " << KALLISTO_EXEC_NAME << " quant-only [arguments]" << endl << endl
+        << "Required argument:" << endl
+        << "-o, --output-dir=STRING       Directory to write output to" << endl << endl
+        << "Optional arguments:" << endl
+@@ -2217,11 +2217,11 @@
+ 
+ void usageTCCQuant(bool valid_input = true) {
+   if (valid_input) {
+-    cout << "kallisto " << KALLISTO_VERSION << endl
++    cout << KALLISTO_EXEC_NAME << " " << KALLISTO_VERSION << endl
+          << "Quantifies abundance from pre-computed transcript-compatibility counts" << endl << endl;
+   }
+ 
+-  cout << "Usage: kallisto quant-tcc [arguments] transcript-compatibility-counts-file" << endl << endl
++  cout << "Usage: " << KALLISTO_EXEC_NAME << " quant-tcc [arguments] transcript-compatibility-counts-file" << endl << endl
+        << "Required arguments:" << endl
+        << "-o, --output-dir=STRING       Directory to write output to" << endl << endl
+        << "Optional arguments:" << endl
+@@ -2233,8 +2233,8 @@
+        << "                              (default: equivalence classes are taken from the index)" << endl
+        << "-f, --fragment-file=FILE      File containing fragment length distribution" << endl
+        << "                              (default: effective length normalization is not performed)" << endl
+-       << "--long                        Use version of EM for long reads " << endl 
+-       << "-P, --platform.               [PacBio or ONT] used for sequencing " << endl 
++       << "    --long                    Use version of EM for long reads " << endl 
++       << "-P, --platform=STRING         [PacBio or ONT] used for sequencing " << endl 
+        << "-l, --fragment-length=DOUBLE  Estimated average fragment length" << endl
+        << "-s, --sd=DOUBLE               Estimated standard deviation of fragment length" << endl
