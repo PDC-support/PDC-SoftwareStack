@@ -4,10 +4,29 @@ easyblock = 'CMakeMake'
 
 name = 'kallisto'
 version = '0.50.1'
+versionsuffix = '-noh5'
 
 homepage = 'https://pachterlab.github.io/kallisto/'
-description = """kallisto is a program for quantifying abundances of transcripts from RNA-Seq data, or more generally
- of target sequences using high-throughput sequencing reads."""
+whatis = [
+    'Description: kallisto - Near-optimal RNA-Seq quantification.',
+    'This module provides one executeable binary.',
+]
+description = """
+kallisto is a program for quantifying abundances of transcripts from bulk and
+single-cell RNA-Seq data, or more generally of target sequences using high-throughput
+sequencing reads. It is based on the novel idea of pseudoalignment for rapidly
+determining the compatibility of reads with targets, without the need for alignment.
+
+On benchmarks with standard RNA-Seq data, kallisto can quantify 30 million human reads
+in less than 3 minutes on a Mac desktop computer using only the read sequences and a
+transcriptome index that itself takes less than 10 minutes to build. Pseudoalignment
+of reads preserves the key information needed for quantification, and kallisto
+is therefore not only fast, but also as accurate as existing quantification tools.
+In fact, because the pseudoalignment procedure is robust to errors in the reads,
+in many benchmarks kallisto significantly outperforms existing tools.
+
+NOTE: This version of kallisto is compiled without HDF5 support.
+"""
 
 toolchain = SYSTEM
 
@@ -22,18 +41,14 @@ checksums = [
 
 builddependencies = [
     ('autotools','20220317'),
-    ('cmake','3.14.5'),
 ]
 
 dependencies = [
     ('htslib', '1.20'),
-    ('zlib', '1.3.1'),
-    ('cray-hdf5',EXTERNAL_MODULE),
 ]
 
-prebuildopts = 'rm -rf ext/htslib &&'
-
-configopts = "-DUSE_HDF5=ON -DHDF5_INCLUDE_DIRS=${HDF5_DIR}/include -DHDF5_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so -DUSE_BAM=ON -DZLIBNG=ON"
+configopts = "-DUSE_HDF5=OFF -DUSE_BAM=ON -DZLIBNG=ON"
+prebuildopts = 'rm -rf %(builddir)s/%(name)s-%(version)s/ext/htslib &&'
 parallel = 1
 
 sanity_check_paths = {
