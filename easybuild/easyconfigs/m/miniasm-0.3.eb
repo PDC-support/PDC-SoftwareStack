@@ -4,13 +4,18 @@ name = 'miniasm'
 version = '0.3'
 local_commit = 'ce615d1d6b8678d38f2f9d27c9dccd944436ae75'
 
-homepage = 'https://github.com/lh3/miniasm'
-description = """Miniasm is a very fast OLC-based de novo assembler for noisy long reads. It
+homepage = 'https://lh3.github.io/miniasm'
+whatis = [
+    'Description: Ultrafast de novo assembly for long noisy reads (though having no consensus step)',
+]
+description = """
+Miniasm is a very fast OLC-based de novo assembler for noisy long reads. It
 takes all-vs-all read self-mappings (typically by minimap) as input and outputs
 an assembly graph in the GFA format. Different from mainstream assemblers,
 miniasm does not have a consensus step. It simply concatenates pieces of read
 sequences to generate the final unitig sequences. Thus the per-base error rate
-is similar to the raw input reads."""
+is similar to the raw input reads.
+"""
 
 toolchain = SYSTEM
 
