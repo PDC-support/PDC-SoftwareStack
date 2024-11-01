@@ -1,0 +1,44 @@
+easyblock = 'CMakeMake'
+
+name = 'bustools'
+version = '0.43.1'
+whatis = [
+    'Description: Tools for working with BUS files',
+    'This module provides one executeable binary.',
+]
+
+homepage = 'https://bustools.github.io'
+description = """
+bustools is a program for manipulating BUS files for single cell RNA-Seq datasets.
+It can be used to error correct barcodes, collapse  UMIs, produce gene count or
+transcript compatibility count matrices, and is useful for many other tasks.
+See the kallisto | bustools  website for examples  and instructions on how to
+use bustools as part of a single-cell RNA-seq workflow.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'BUStools'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['ac94a33ca459de81c5756825a7a7f8daeae357fc6bf0ef88d4900e77b70f2b90']
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('binutils', '2.37'),
+    ('zlib', '1.3.1'),
+]
+
+separate_build_dir = True
+
+sanity_check_paths = {
+    'files': ['bin/bustools'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["bustools version"]
+
+moduleclass = 'bio'
