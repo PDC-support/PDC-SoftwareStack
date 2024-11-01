@@ -4,10 +4,29 @@ easyblock = 'CMakeMake'
 
 name = 'kallisto'
 version = '0.48.0'
+versionsuffix = '-noh5'
 
 homepage = 'https://pachterlab.github.io/kallisto/'
-description = """kallisto is a program for quantifying abundances of transcripts from RNA-Seq data, or more generally
- of target sequences using high-throughput sequencing reads."""
+whatis = [
+    'Description: kallisto - Near-optimal RNA-Seq quantification.',
+    'This module provides one executeable binary.',
+]
+description = """
+kallisto is a program for quantifying abundances of transcripts from bulk and
+single-cell RNA-Seq data, or more generally of target sequences using high-throughput
+sequencing reads. It is based on the novel idea of pseudoalignment for rapidly
+determining the compatibility of reads with targets, without the need for alignment.
+
+On benchmarks with standard RNA-Seq data, kallisto can quantify 30 million human reads
+in less than 3 minutes on a Mac desktop computer using only the read sequences and a
+transcriptome index that itself takes less than 10 minutes to build. Pseudoalignment
+of reads preserves the key information needed for quantification, and kallisto
+is therefore not only fast, but also as accurate as existing quantification tools.
+In fact, because the pseudoalignment procedure is robust to errors in the reads,
+in many benchmarks kallisto significantly outperforms existing tools.
+
+NOTE: This version of kallisto is compiled without HDF5 support.
+"""
 
 toolchain = SYSTEM
 
@@ -16,22 +35,21 @@ source_urls = [GITHUB_SOURCE]
 sources = ['v%(version)s.tar.gz']
 patches = ['Kallisto-%(version)s_use-external-htslib.patch']
 checksums = [
-    {'v0.48.0.tar.gz': '1797ac4d1f0771e3f1f25dd7972bded735fcb43f853cf52184d3d9353a6269b0'},
-    {'Kallisto-0.48.0_use-external-htslib.patch': 'fa9a96c7f8731006b6c87e1397429a292ebb3aa3e5d3db4fc9520d8c8a13f920'},
+    {'v%(version)s.tar.gz': '1797ac4d1f0771e3f1f25dd7972bded735fcb43f853cf52184d3d9353a6269b0'},
+    {'Kallisto-%(version)s_use-external-htslib.patch': 'fa9a96c7f8731006b6c87e1397429a292ebb3aa3e5d3db4fc9520d8c8a13f920'},
 ]
 
 builddependencies = [
     ('autotools','20220317'),
-    ('cmake','3.14.5'),
 ]
 
 dependencies = [
     ('htslib', '1.15.1'),
     ('zlib', '1.3.1'),
-    ('cray-hdf5',EXTERNAL_MODULE),
 ]
 
-configopts = "-DUSE_HDF5=ON -DHDF5_INCLUDE_DIRS=${HDF5_DIR}/include -DHDF5_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so"
+configopts = "-DUSE_HDF5=OFF"
+prebuildopts = 'rm -rf %(builddir)s/%(name)s-%(version)s/ext/htslib &&'
 parallel = 4
 
 sanity_check_paths = {
@@ -42,7 +60,7 @@ sanity_check_paths = {
 sanity_check_commands = [
     "kallisto version",
     "cd %(builddir)s/kallisto-%(version)s/test && kallisto index -i ts.idx transcripts.fasta.gz",
-    "cd %(builddir)s/kallisto-%(version)s/test && kallisto quant -i ts.idx -o out -b 100 reads_{1,2}.fastq.gz",
+    "cd %(builddir)s/kallisto-%(version)s/test && kallisto quant -i ts.idx -o out reads_{1,2}.fastq.gz",
 ]
 
 moduleclass = 'bio'
