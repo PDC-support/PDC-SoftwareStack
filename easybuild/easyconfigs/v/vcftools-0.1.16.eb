@@ -4,9 +4,19 @@ name = 'vcftools'
 version = '0.1.16'
 
 homepage = "https://vcftools.github.io"
-description = """The aim of VCFtools is to provide 
- easily accessible methods for working with complex 
- genetic variation data in the form of VCF files."""
+
+whatis = [
+    'Description: VCFtools provides methods for working with VCF files'
+]
+
+description = """
+The aim of VCFtools is to provide  easily accessible methods for working with
+complex genetic variation data in the form of VCF files.
+"""
+
+docurls = [
+   'man page vcftools in section 1'
+]
 
 toolchain = SYSTEM
 
