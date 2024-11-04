@@ -6,7 +6,7 @@ version = '9.1.1'
 
 homepage = 'https://proj.org'
 whatis = [
-    'PROJ is a generic coordinate transformation software that'
+    'Description: PROJ is a generic coordinate transformation software that '
     'transforms geospatial coordinates from one coordinate reference system (CRS) to another.'
 ]
 description = """
