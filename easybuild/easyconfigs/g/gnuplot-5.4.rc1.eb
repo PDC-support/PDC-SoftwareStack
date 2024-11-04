@@ -5,7 +5,32 @@ name = 'gnuplot'
 version = '5.4.rc1'
 
 homepage = 'http://gnuplot.sourceforge.net/'
-description = "Portable interactive, function plotting utility"
+whatis = [
+    'Description: Gnuplot is a portable command-line driven graphing utility',
+    'This version of GNUplot does not use Qt5 graphics'
+]
+
+description = """
+Gnuplot is a portable command-line driven graphing utility available for many
+platforms. The source code is copyrighted but freely distributed (i.e., you
+don't have to pay for it). It was originally created to allow scientists and
+students to visualize mathematical functions and data interactively, but has
+grown to support many non-interactive uses such as web scripting. It is also
+used as a plotting engine by third-party applications like Octave. Gnuplot has
+been supported and under active development since 1986.
+
+This version of GNUplot does not use Qt5 for its GUI, so the GUI is rather
+primitive.
+"""
+
+docurls = [
+    'Web-based documentation: http://gnuplot.sourceforge.net/documentation.html',
+    'Manual page for gnuplot',
+]
+
+software_license_urls = [
+    f'https://sourceforge.net/p/gnuplot/gnuplot-main/ci/{version}/tree/Copyright',
+]
 
 toolchain = {'name': 'system', 'version': 'system'}
 
