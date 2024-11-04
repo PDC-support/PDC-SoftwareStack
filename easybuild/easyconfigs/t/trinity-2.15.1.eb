@@ -12,7 +12,7 @@ easyblock = 'MakeCp'
 name = 'trinity'
 version = '2.15.1'
 
-homepage = 'https://trinityrnaseq.github.io'
+homepage = 'https://github.com/trinityrnaseq/trinityrnaseq/wiki'
 description = """
 Trinity RNA-Seq represents a novel method for the efficient and robust de novo reconstruction
 of transcriptomes from RNA-Seq data. Trinity combines three independent software modules: 
@@ -32,7 +32,7 @@ source_urls = ['https://github.com/trinityrnaseq/trinityrnaseq/releases/download
 sources = ['trinityrnaseq-v%(version)s.FULL.tar.gz']
 patches = ['Trinity-eb.patch']
 checksums = [
-    {'trinityrnaseq-v2.15.1.FULL.tar.gz': 'ba37e5f696d3d54e8749c4ba439901a3e97e14a4314a5229d7a069ad7b1ee580'},
+    {'trinityrnaseq-v%(version)s.FULL.tar.gz': 'ba37e5f696d3d54e8749c4ba439901a3e97e14a4314a5229d7a069ad7b1ee580'},
     {'Trinity-eb.patch': 'db93587c7a529bac681fcd603e168665748985b172497aa30aa03ef061aa915c'},
 ]
 
