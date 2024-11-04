@@ -13,7 +13,7 @@ transcripts that corresponds to paralogous genes.
 
 whatis = [
     'Description: Butterfly is part of the Trinity RNA-Seq pipeline.',
-    'This module provides a number of executables and scripts.',
+    'This module provides a jar-file and a executable wrapper.',
 ]
 
 toolchain = SYSTEM
@@ -27,7 +27,12 @@ osdependencies = ['java']
 
 modextrapaths = {'PATH': ''}
 
-postinstallcmds = ['echo "#!/bin/bash"> %(installdir)s/butterfly', 'echo -ne "java -jar %(installdir)s/Butterfly.jar" >> %(installdir)s/butterfly', 'echo " ${@}" >> %(installdir)s/butterfly', 'chmod +x %(installdir)s/butterfly']
+postinstallcmds = [
+    'echo "#!/bin/bash" > %(installdir)s/butterfly',
+    'echo -n "exec java -jar %(installdir)s/Butterfly.jar" >> %(installdir)s/butterfly',
+    "echo ' ${@}' >> %(installdir)s/butterfly",
+    'chmod +x %(installdir)s/butterfly',
+]
 sanity_check_paths = {
     'files': ["Butterfly.jar","butterfly"],
     'dirs': [""],
