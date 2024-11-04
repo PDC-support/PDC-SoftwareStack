@@ -12,8 +12,25 @@ name = 'blat'
 version = '35'
 
 homepage = 'http://genome.ucsc.edu/FAQ/FAQblat.html'
-description = """BLAT on DNA is designed to quickly find sequences of 95% and greater similarity of length 25 bases or
- more."""
+whatis = [
+    'Description: BLAT - the BLAST Like Alignment Tool',
+]
+description = """
+BLAT on DNA is designed to quickly find sequences of 95% and greater similarity
+of length 25 bases or more. It may miss more divergent or shorter sequence alignments.
+It will find perfect sequence matches of 20 bases. BLAT on proteins finds
+sequences of 80% and greater similarity of length 20 amino acids or more.
+In practice DNA BLAT works well on primates, and protein BLAT on land vertebrates.
+
+BLAT is not BLAST. DNA BLAT works by keeping an index of the entire genome in memory.
+The index consists of all overlapping 11-mers stepping by 5 except for those heavily
+involved in repeats. The index takes up about 2 gigabytes of RAM. RAM can be further
+reduced to less than 1 GB by increasing step size to 11. The genome itself is not kept
+in memory, allowing BLAT to deliver high performance on a reasonably priced Linux box.
+The index is used to find areas of probable homology, which are then loaded into memory
+for a detailed alignment. Protein BLAT works in a similar manner, except with 4-mers
+rather than 11-mers. The protein index takes a little more than 2 gigabytes.
+"""
 
 toolchain = SYSTEM
 
