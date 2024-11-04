@@ -7,8 +7,21 @@ name = 'nano'
 version = '6.3'
 
 homepage = 'http://www.nano-editor.org/'
-description = """GNU nano is designed to be a free replacement for the Pico
-text editor"""
+whatis = [
+    'Description: GNU nano is a small and friendly test editor and a free replacement for Pico',
+]
+
+description = """
+GNU nano was designed to be a free replacement for the Pico text editor, part
+of the Pine email suite from The University of Washington. It aimed to "emulate
+Pico as closely as is reasonable and then include extra functionality".
+"""
+
+docurls = [
+    'Online documentation at https://www.nano-editor.org/docs.php',
+    'Manual pages for nano and rnano in section 1 and nanorc in section 5',
+    'Support for the GNU info command (info nano)',
+]
 
 toolchain = SYSTEM
 
