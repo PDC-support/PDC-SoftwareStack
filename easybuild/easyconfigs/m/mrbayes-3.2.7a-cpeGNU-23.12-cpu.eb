@@ -1,0 +1,51 @@
+easyblock = 'ConfigureMake'
+
+name = 'mrbayes'
+version = '3.2.7a'
+versionsuffix = '-cpu'
+
+homepage = 'https://nbisweden.github.io/MrBayes/'
+whatis = [
+    'Description: MrBayes: Bayesian Inference of Phylogeny.',
+]
+
+description = """
+MrBayes is a program for Bayesian inference and model choice across a wide range
+of phylogenetic and evolutionary models. MrBayes uses Markov chain Monte Carlo (MCMC)
+methods to estimate the posterior distribution of model parameters.
+
+MrBayes 3 provides extensive online help through the help command. Simply type help
+at the command prompt to get a list of the available commands. Type help <command>
+to get help information for a specific command. For instance, help lset will give
+you the help information for the lset command, including a discussion of all the
+available parameters and options. The help information for a command typically
+also includes a summary table of the options and current settings.
+
+You can produce a text file containing all the help information for the current
+version of the program by using the manual command in MrBayes. If you produce
+this file immediately after starting the program, the text file will contain
+all the default settings and can be used as a command reference.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['https://github.com/NBISweden/MrBayes/archive/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['3eed2e3b1d9e46f265b6067a502a89732b6f430585d258b886e008e846ecc5c6']
+
+dependencies = [
+    ('beagle-lib', '4.0.0',versionsuffix),
+]
+
+preconfigopts = 'printenv && '
+configopts = "--with-mpi --without-readline --with-beagle=${EBROOTBEAGLEMINLIB} "
+
+sanity_check_paths = {
+    'files': ['bin/mb'],
+    'dirs': ['share']
+}
+
+sanity_check_commands = ["mb -help"]
+
+moduleclass = 'bio'
