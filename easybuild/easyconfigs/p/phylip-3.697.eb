@@ -21,7 +21,7 @@ gene frequencies, restriction sites and fragments, distance
 matrices and discrete characters.
 """
 
-toolchain = SYSTEM #{'name': 'GCC', 'version': '12.3.0'}
+toolchain = SYSTEM
 # -fcommon is required to avoid 'multiple definitions' linking error
 toolchainopts = {'extra_cflags': "-fcommon"}
 
