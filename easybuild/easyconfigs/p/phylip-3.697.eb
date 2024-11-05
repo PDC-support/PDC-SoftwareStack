@@ -1,0 +1,42 @@
+easyblock = 'MakeCp'
+
+name = 'phylip'
+version = '3.697'
+
+homepage = 'https://phylipweb.github.io/phylip'
+whatis = [
+    'Description: PHYLIP is a free package of programs for inferring phylogenies.',
+]
+
+description = """
+PHYLIP is a free Computational phylogenetics package of programs for inferring
+evolutionary trees (phylogenies). The name is an acronym for PHYLogeny Inference Package.
+It consists of 35 portable programs. A complete documentation is written for all
+the programs in the package and is part of the package.
+
+Methods(implemented by each program) that are available in the package include
+parsimony, distance matrix, and likelihood methods, including bootstrapping and
+consensus trees. Data types that can be handled include molecular sequences,
+gene frequencies, restriction sites and fragments, distance
+matrices and discrete characters.
+"""
+
+toolchain = SYSTEM #{'name': 'GCC', 'version': '12.3.0'}
+# -fcommon is required to avoid 'multiple definitions' linking error
+toolchainopts = {'extra_cflags': "-fcommon"}
+
+source_urls = ['https://phylipweb.github.io/phylip/download/']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['9a26d8b08b8afea7f708509ef41df484003101eaf4beceb5cf7851eb940510c1']
+
+buildopts = '-Csrc -fMakefile.unx all CFLAGS="$CFLAGS" && make -Csrc -fMakefile.unx install'
+
+files_to_copy = [(['exe/*'], 'bin'), (['src/libdrawgram.%s' % SHLIB_EXT, 'src/libdrawtree.%s' % SHLIB_EXT], 'lib')]
+
+sanity_check_paths = {
+    'files': ['bin/dnapars', 'bin/fitch', 'bin/gendist', 'bin/penny', 'bin/seqboot',
+              'lib/libdrawgram.%s' % SHLIB_EXT, 'lib/libdrawtree.%s' % SHLIB_EXT],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'bio'
