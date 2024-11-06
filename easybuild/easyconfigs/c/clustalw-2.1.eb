@@ -16,7 +16,30 @@ name = 'clustalw'
 version = '2.1'
 
 homepage = 'https://www.ebi.ac.uk/Tools/msa/clustalw2/'
-description = """ClustalW2 is a general purpose multiple sequence alignment program for DNA or proteins."""
+whatis = [
+    'Description: Multiple alignment of nucleic acid and protein sequences.',
+]
+description = """
+ClustalW2 is a general purpose global multiple sequence alignment program
+for DNA or proteins. It produces biologically meaningful multiple sequence
+alignments of divergent sequences. It calculates the best match for the selected
+sequences, and lines them up so that the identities, similarities and differences
+can be seen. Evolutionary relationships can be seen via viewing Cladograms or Phylograms.
+
+Multiple alignments of protein sequences are important tools in studying sequences.
+The basic information they provide is identification of conserved sequence regions.
+This is very useful in designing experiments to test and modify the function of
+specific proteins, in predicting the function and structure of proteins and in
+identifying new members of protein families.
+
+Sequences can be aligned across their entire length (global alignment) or only
+in certain regions (local alignment). This is true for pairwise and multiple
+alignments. Global alignments need to use gaps (representing insertions/deletions)
+while local alignments can avoid them, aligning regions between gaps. ClustalW2 is
+a fully automatic program for global multiple alignment of DNA and protein sequences.
+The alignment is progressive and considers the sequence redundancy. Trees can also
+be calculated from multiple alignments. The program has some adjustable features. 
+"""
 
 toolchain = SYSTEM
 toolchainopts = {'pic': True}
