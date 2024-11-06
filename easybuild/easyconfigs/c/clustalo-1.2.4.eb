@@ -11,10 +11,22 @@ name = 'clustalo'
 version = '1.2.4'
 
 homepage = 'http://www.clustal.org/omega/'
-description = """ Clustal Omega is a multiple sequence alignment
- program for proteins. It produces biologically meaningful multiple
- sequence alignments of divergent sequences. Evolutionary relationships
- can be seen via viewing Cladograms or Phylograms """
+whatis = [
+    'Description: Clustal Omega is a multiple sequence alignment program for proteins.',
+]
+description = """
+Clustal Omega is a new multiple sequence alignment program that uses
+seeded guide trees and HMM profile-profile techniques to generate
+alignments between three or more sequences. It produces biologically
+meaningful multiple sequence alignments of divergent sequences.
+Evolutionary relationships can be seen via viewing Cladograms or Phylograms.
+
+Clustal Omega is the latest addition to the Clustal family. It offers a significant
+increase in scalability over previous versions, allowing hundreds of thousands
+of sequences to be aligned in only a few hours. It will also make use of
+multiple processors, where present. In addition, the quality of alignments is
+superior to previous versions, as measured by a range of popular benchmarks. 
+"""
 
 toolchain = SYSTEM
 
