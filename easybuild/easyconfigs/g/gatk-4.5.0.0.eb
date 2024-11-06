@@ -20,19 +20,24 @@ easyblock = 'Tarball'
 
 name = 'gatk'
 version = '4.5.0.0'
-#versionsuffix = '-Java-%(javaver)s'
 
 homepage = 'https://www.broadinstitute.org/gatk/'
-description = """The Genome Analysis Toolkit or GATK is a software package developed at the Broad Institute
- to analyse next-generation resequencing data. The toolkit offers a wide variety of tools,
- with a primary focus on variant discovery and genotyping as well as strong emphasis on
- data quality assurance. Its robust architecture, powerful processing engine and
- high-performance computing features make it capable of taking on projects of any size."""
+whatis = [
+    'Description: Genome Analysis ToolKit - Variant Discovery in High-Throughput Sequencing Data',
+]
+description = """
+The Genome Analysis ToolKit or GATK is a software package developed at the Broad Institute
+to analyse next-generation resequencing data. The toolkit offers a wide variety of tools,
+with a primary focus on variant discovery and genotyping as well as strong emphasis on
+data quality assurance. Its robust architecture, powerful processing engine and
+high-performance computing features make it capable of taking on projects of any size.
+"""
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/broadinstitute/gatk/releases/download/%(version)s/']
-sources = ['gatk-%(version)s.zip']
+github_account = 'broadinstitute'
+source_urls = ['https://github.com/%(github_account)s/%(name)s/releases/download/%(version)s/']
+sources = [SOURCELOWER_ZIP]
 checksums = ['dc1a4471e8bb566397db9894ca18acbf8f40f3fc312c8fad9a8c5390c218e916']
 
 dependencies = [
