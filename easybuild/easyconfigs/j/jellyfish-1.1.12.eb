@@ -1,0 +1,52 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia 
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au> 
+# License::     GPLv3.0
+#
+# Notes::
+##
+
+easyblock = 'ConfigureMake'
+
+name = 'jellyfish'
+version = '1.1.12'
+
+homepage = 'http://www.genome.umd.edu/jellyfish.html'
+whatis = [
+    'Description: Jellyfish: A fast multi-threaded k-mer counter.',
+]
+
+description = """
+Jellyfish is a tool for fast, memory-efficient counting of k-mers in DNA.
+A k-mer is a substring of length k, and counting the occurrences of all such
+substrings is a central step in many analyses of DNA sequence. Jellyfish can
+count k-mers quickly by using an efficient encoding of a hash table and by
+exploiting the "compare-and-swap" CPU instruction to increase parallelism.
+
+Jellyfish is a command-line program that reads FASTA and multi-FASTA files
+containing DNA sequences. It outputs its k-mer counts in an binary format,
+which can be translated into a human-readable text format using the
+"jellyfish dump" command. See the documentation for more details.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'gmarcais'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['1ae32d3775e551272a757608671dc1d69d0659d253b174e393b6cb24f6a7e181']
+
+builddependencies = [
+#    ('autotools', '20220317'),
+]
+
+preconfigopts = "autoreconf -i && "
+
+sanity_check_paths = {
+    'files': ['bin/jellyfish'],
+    'dirs': []
+}
+
+moduleclass = 'bio'
