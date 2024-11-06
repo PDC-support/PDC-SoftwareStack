@@ -4,13 +4,22 @@ name = 'kraken'
 version = '1.1.1'
 
 homepage = 'https://ccb.jhu.edu/software/%(namelower)s/'
-description = """Kraken is a system for assigning taxonomic labels to short DNA sequences,
- usually obtained through metagenomic studies. Previous attempts by other
- bioinformatics software to accomplish this task have often used sequence
- alignment or machine learning techniques that were quite slow, leading to
- the development of less sensitive but much faster abundance estimation
- programs. Kraken aims to achieve high sensitivity and high speed by
- utilizing exact alignments of k-mers and a novel classification algorithm."""
+whatis = [
+    'Description: Kraken taxonomic sequence classification system.',
+    'This module provides several scripts.',
+]
+description = """
+Kraken is a system for assigning taxonomic labels to short DNA sequences,
+usually obtained through metagenomic studies. Previous attempts by other
+bioinformatics software to accomplish this task have often used sequence
+alignment or machine learning techniques that were quite slow, leading to
+the development of less sensitive but much faster abundance estimation
+programs. Kraken aims to achieve high sensitivity and high speed by
+utilizing exact alignments of k-mers and a novel classification algorithm.
+
+NOTE: Usage of Kraken1 is deprecated, plese consider migrating to
+either KrakenUniq or else to Kraken2.
+"""
 
 # Part is compiled with CXX, the rest is in Perl
 toolchain = SYSTEM
@@ -29,7 +38,7 @@ builddependencies = [
 
 dependencies = [
     ('perl', '5.34.0'),
-#    ('wget', '1.21.3'),
+    ('jellyfish', '1.1.12'),
 ]
 
 osdependencies = ['wget']
@@ -46,5 +55,8 @@ sanity_check_paths = {
               'standard_installation.sh', 'upgrade_db.sh', 'verify_gi_numbers.pl'],
     'dirs': [],
 }
+
+modloadmsg = 'kraken/1.1.1: NOTE: Usage of Kraken1 is deprecated.\n'
+modloadmsg+= 'Users of Kraken1 are urged to migrate to either KrakenUniq or else to Kraken2.'
 
 moduleclass = 'bio'
