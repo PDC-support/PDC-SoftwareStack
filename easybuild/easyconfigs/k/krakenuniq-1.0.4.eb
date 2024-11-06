@@ -4,7 +4,21 @@ name = 'krakenuniq'
 version = '1.0.4'
 
 homepage = 'https://github.com/fbreitwieser/krakenuniq/'
-description = """KrakenUniq: confident and fast metagenomics classification using unique k-mer counts"""
+whatis = [
+    'Description: KrakenUniq: confident and fast metagenomics classification using unique k-mer counts',
+    'This module provides several scripts.',
+]
+description = """
+False-positive identifications are a significant problem in metagenomics classification.
+KrakenUniq (formerly KrakenHLL) is a novel metagenomics classifier that combines
+the fast k-mer-based classification of Kraken with an efficient algorithm for
+assessing the coverage of unique k-mers found in each species in a dataset.
+On various test datasets, KrakenUniq gives better recall and precision than
+other methods and effectively classifies and distinguishes pathogens with low
+abundance from false positives in infectious disease samples. By using the
+probabilistic cardinality estimator HyperLogLog, KrakenUniq runs as fast as
+Kraken and requires little additional memory.
+"""
 
 toolchain = SYSTEM
 
@@ -14,10 +28,9 @@ sources = ['v%(version)s.tar.gz']
 checksums = ['5e2ef21878c1c4ce92be9925e47b9ccae0ecb59a79d71cc4cbb53d057e0de9ec']
 
 dependencies = [
-    ('jellyfish', '2.3.0'),
+    ('jellyfish', '1.1.12'),
     ('perl', '5.34.0'),
     ('bzip2', '1.0.8'),
-#    ('Compress-Raw-Zlib', '2.202'),
 ]
 
 extract_sources = True
