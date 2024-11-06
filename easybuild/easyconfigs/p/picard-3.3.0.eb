@@ -1,0 +1,73 @@
+##
+# This is an easyconfig file for EasyBuild, see https://github.com/easybuilders/easybuild
+#
+# This is a contribution from Phoenix HPC Service, The University of Adelaide, Australia
+# Homepage: https://www.adelaide.edu.au/phoenix/
+#
+# Copyright::   adelaide.edu.au/phoenix
+# Authors::	Robert Qiao <robert.qiao@adelaide.edu.au>, Exe Escobedo <exequiel.sepulvedaescobedo@adelaide.edu.au>
+# License::	MIT
+#
+# 2.10.1:
+# Adam Huffman
+# The Francis Crick Institute
+# 2.18.11:
+# Jonas Demeulemeester
+# The Francis Crick Institute
+# 2.21.1
+# Pavel Grochal (INUITS)
+# 2.25.1
+# J. Sassmannshausen (GSTT)
+# 2.25.5
+# Erica Bianco (HPCNow!)
+##
+
+easyblock = 'JAR'
+
+name = 'picard'
+version = '3.3.0'
+
+homepage = 'https://broadinstitute.github.io/picard/'
+whatis = [
+    'Description: A set of tools (in Java) for working with next generation sequencing data in the BAM format.',
+]
+description = """
+A set of command line tools (in Java) for manipulating high-throughput
+sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'broadinstitute'
+source_urls = ['https://github.com/%(github_account)s/%(namelower)s/releases/download/%(version)s']
+sources = [{
+    'filename': '%(name)s-%(version)s.jar',
+    'download_filename': '%(name)s.jar',
+}]
+checksums = ['58819a7660646b74b34e282f5d4d21c8dbaea22ddeff96e3258755dafa0f86dc']
+
+postinstallcmds = [
+    "mv %(installdir)s/%(namelower)s-%(version)s.jar %(installdir)s/%(namelower)s.jar",
+    'echo "#!/bin/bash"> %(installdir)s/%(namelower)s',
+    'echo -n "exec java -jar %(installdir)s/%(namelower)s.jar" >> %(installdir)s/%(namelower)s',
+    "echo ' ${@}' >> %(installdir)s/%(namelower)s",
+    'chmod +x %(installdir)s/%(namelower)s'
+]
+
+dependencies = [
+    ('java', '17.0.4', '', SYSTEM),
+]
+
+sanity_check_paths = {
+    'files': ['picard.jar'],
+    'dirs': [],
+}
+
+modextravars = {
+    'PICARD_ROOT':'%(installdir)s',
+    'PICARD':'%(installdir)s/%(name)s.jar'
+}
+
+modloadmsg = '%(name)s/%(version)s: java -jar $PICARD command ...'
+
+moduleclass = 'bio'
