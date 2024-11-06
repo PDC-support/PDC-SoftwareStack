@@ -28,7 +28,13 @@ name = 'picard'
 version = '2.25.5'
 
 homepage = 'https://broadinstitute.github.io/picard/'
-description = """A set of tools (in Java) for working with next generation sequencing data in the BAM format."""
+whatis = [
+    'Description: A set of tools (in Java) for working with next generation sequencing data in the BAM format.',
+]
+description = """
+A set of command line tools (in Java) for manipulating high-throughput
+sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF.
+"""
 
 toolchain = SYSTEM
 
