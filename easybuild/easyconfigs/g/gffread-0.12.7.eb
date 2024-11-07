@@ -1,0 +1,49 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+easyblock = 'MakeCp'
+
+name = 'gffread'
+version = '0.12.7'
+
+homepage = 'https://ccb.jhu.edu/software/stringtie/gff.shtml#gffread'
+whatis = [
+    'Description: GFF/GTF parsing utility providing format conversions, region filtering, FASTA sequence extraction and more.',
+]
+description = """
+The program gffread can be used to validate, filter, convert and perform various
+other operations on GFF files (use gffread -h to see the various usage options).
+Because the program shares the same GFF parser code with Cufflinks, Stringtie,
+and gffcompare, it could be used to verify that a GFF file from a certain annotation
+source is correctly "understood" by these programs. Thus the gffread utility can
+be used to simply read the transcripts from the file, and optionally print these
+transcripts back, in either GFF3 (default) or GTF2 format (with the -T option),
+while discarding any non-essential attributes, optionally fixing some potential
+issues with the input file(s).
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+github_account = 'gpertea'
+source_urls = [GITHUB_LOWER_RELEASE]
+sources = [SOURCE_TAR_GZ]
+checksums = ['bfde1c857495e578f5b3af3c007a9aa40593e69450eafcc6a42c3e8ef08ed1f5']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+buildopts = " release"
+
+files_to_copy = [
+    (['%(name)s'], 'bin'),
+    'LICENSE',
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': []
+}
+
+sanity_check_commands = ['%(name)s']
+
+moduleclass = 'bio'
