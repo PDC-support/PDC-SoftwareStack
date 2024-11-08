@@ -1,0 +1,42 @@
+# Created by Karl Johan Westrin, PDC
+
+easyblock = 'PackedBinary'
+
+name = 'haploeagle'
+version = '2.4.1'
+
+homepage = 'https://alkesgroup.broadinstitute.org/Eagle'
+whatis = [
+    'Description: Eagle: Haplotype phasing software',
+    'This module provides one executable.',
+]
+description = """
+The Eagle software estimates haplotype phase either within a genotyped cohort
+or using a phased reference panel. Eagle2 is now the default phasing method
+used by the Sanger and Michigan imputation servers and uses a new, very fast
+HMM-based algorithm that improves speed and accuracy over existing methods via
+two key ideas: a new data structure based on the positional Burrows-Wheeler
+transform and a rapid search algorithm that explores only the most relevant
+paths through the HMM. Compared to the Eagle1 algorithm, Eagle2 has similar
+speed but much greater accuracy at sample sizes <50,000; as such, we have made
+the Eagle2 algorithm the default option. (The Eagle1 algorithm can be accessed
+via the --v1 flag.) Eagle v2.3+ supports phasing sequence data with or without
+a reference and also supports phasing chrX.
+
+NOTE: Not to be mixed up with the Explicit Alternative Genome Likelihood Evaluator,
+which is also abbreviated eagle.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://alkesgroup.broadinstitute.org/Eagle/downloads/']
+sources = ['Eagle_v%(version)s.tar.gz']
+
+sanity_check_paths = {
+    'files': ['eagle'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['eagle -h']
+
+moduleclass = 'bio'
