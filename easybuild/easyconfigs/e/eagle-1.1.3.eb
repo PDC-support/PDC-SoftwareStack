@@ -13,6 +13,9 @@ about the individual’s genome, and then computes the probability of the observ
 on a particular alignment of the reads to the reference genome, EAGLE readily accounts
 for uncertainties that may arise from multi-mapping or local misalignment and uses
 the entire length of each read.
+
+NOTE: The unrelated, but the identically named software Eagle, used for haplotype phasing,
+is available under the name haploeagle.
 """ 
 
 whatis = [
