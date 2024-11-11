@@ -36,7 +36,7 @@ sources = ['%(namelower)s-%(version)s-source.zip']
 checksums = ['cb6cbbbb5a7167a2f21a3d63cb9774336361f540e1ec3d8ff907f955c35f71b8']
 
 dependencies = [
-    #('zlib', '1.2.11', '', SYSTEM),
+    ('zlib', '1.3.1', '', SYSTEM),
     #('Perl', '5.34.0'),
     #('python', '3.9.6', '', SYSTEM),
 ]
