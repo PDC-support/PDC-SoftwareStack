@@ -1,0 +1,49 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'CMakeMake'
+
+name = 'spades'
+version = '4.0.0'
+
+homepage = 'https://ablab.github.io/spades'
+description = """
+SPAdes - St. Petersburg genome assembler - a versatile toolkit designed for
+assembling and analyzing sequencing data from Illumina and IonTorrent technologies.
+In addition, most of SPAdes pipelines support a hybrid mode allowing the use
+of long reads (PacBio and Oxford Nanopore) as supplementary data.
+
+SPAdes package provides pipelines for DNA assembly of isolates and single-cell
+bacteria, as well as of metagenomic and transcriptomic data. Additional modes
+allow to recover bacterial plasmids and RNA viruses, perform HMM-guided assembly
+and more. SPAdes package also includes supplementary tools for efficient k-mer
+counting and k-mer-based read filtering, assembly graph construction and simplification,
+sequence-to-graph alignment and metagenomic binning refinement.
+""" 
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'ablab'
+source_urls = [GITHUB_RELEASE]
+sources = ['SPAdes-%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.23.0', '', True),
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('bzip2', '1.0.8', '', True),
+    ('zlib', '1.3.1', '', True),
+    ('libreadline', '8.2', '', True),
+]
+
+start_dir = 'src'
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['spades-bwa', 'spades-core', 'spades-gbuilder', 'spades-hammer',
+                                     'spades-ionhammer', 'spades-kmercount', 'spades.py']],
+    'dirs': [],
+}
+
+sanity_check_commands = [('spades.py', '--test')]
+
+moduleclass = 'bio'
