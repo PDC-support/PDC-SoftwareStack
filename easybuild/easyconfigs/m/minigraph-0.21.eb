@@ -25,7 +25,6 @@ toolchain = SYSTEM
 github_account = 'lh3'
 source_urls = [GITHUB_SOURCE]
 sources = [{'download_filename': 'v%(version)s.tar.gz', 'filename': SOURCE_TAR_GZ}]
-#checksums = ['']
 
 builddependencies = [
     ('binutils', '2.37'),
