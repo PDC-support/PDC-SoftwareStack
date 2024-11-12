@@ -1,0 +1,64 @@
+# easybuild easyconfig
+#
+# John Dey <jfdey@fredhutch.org>
+# Fred Hutchinson Cancer Research Center - Seattle Washington - US
+# Modified for PDC by Karl Johan Westrin
+easyblock = 'CmdCp'
+
+name = 'revbayes'
+version = '1.2.1'
+
+homepage = 'https://revbayes.github.io'
+whatis = [
+    'Description: Bayesian phylogenetic inference using probabilistic graphical models and an interpreted language',
+]
+description = """
+RevBayes provides an interactive environment for statistical computation in
+phylogenetics. It is primarily intended for modeling, simulation and Bayesian
+inference in evolutionary biology, particularly phylogenetics. However, the
+environment is quite general and can be useful for many complex modeling tasks.
+
+RevBayes uses its own language, Rev, which is a probabilistic programming
+language like JAGS, STAN, Edward, PyMC3, and related software. However,
+phylogenetic models require inference machinery and distributions that are
+unavailable in these other tools.
+
+The Rev language is similar to the language used in R. Like the R language,
+Rev is designed to support interactive analysis. It supports both functional
+and procedural programming models, and makes a clear distinction between the two.
+Rev is also more strongly typed than R.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'cstd': 'gnu++11'}
+
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['58c320ee7251a7a244aba57b471a6e695f3db8196ea4c9381bb2bc1076bcedfa']
+
+builddependencies = [
+    ('cmake', '3.23.2','',True),
+    ('boost', '1.83.0'),
+]
+
+dependencies = []
+
+start_dir = 'projects/cmake'
+local_cmd = 'sed -i -e "/#include.*vector/a#include <memory>" -e "s@stddef.h@cstddef@g" ../../src/revlanguage/workspace/RevVariable.cpp ../../src/revlanguage/functions/UserFunction.cpp && '
+local_cmd+= 'sed -i "/^j=/s/=.*/=32/g" build.sh && '
+local_cmd+= './build.sh -mpi true -static_boost true -DCMAKE_CXX_FLAGS="-pthread" -DBoost_NO_BOOST_CMAKE=ON && '
+local_cmd+= './build.sh -mpi false -static_boost true -DCMAKE_CXX_FLAGS="-pthread" -DBoost_NO_BOOST_CMAKE=ON'
+cmds_map = [('', local_cmd)]
+
+files_to_copy = [(['projects/cmake/rb*'], 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/rb-mpi', 'bin/rb'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    'rb --help',
+]
+
+moduleclass = 'bio'
