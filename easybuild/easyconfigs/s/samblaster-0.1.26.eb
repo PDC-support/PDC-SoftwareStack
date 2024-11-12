@@ -1,0 +1,45 @@
+#  easybuild easyconfig
+#
+#  John Dey jfdey@fredhutch.org fizwit@github.com 
+easyblock = 'MakeCp'
+
+name = 'samblaster'
+version = '0.1.26'
+whatis = [
+    'Description: samblaster: a tool to mark duplicates and extract discordant and split reads from sam files.',
+]
+description = """
+samblaster is a fast and flexible program for marking duplicates in read-id
+grouped paired-end SAM files. It can also optionally output discordant read
+pairs and/or split read mappings to separate SAM files, and/or unmapped/clipped
+reads to a separate FASTQ file. When marking duplicates, samblaster will require
+approximately 20MB of memory per 1M read pairs.
+"""
+
+homepage = 'https://github.com/GregoryFaust/samblaster'
+
+toolchain = SYSTEM
+
+github_account = 'GregoryFaust'
+source_urls = [GITHUB_SOURCE]
+sources = [{
+    'download_filename': 'v.%(version)s.zip',
+    'filename': SOURCE_ZIP
+}]
+checksums = ['79ff6f8306482e73e04678424bf14b840d80561660bb59deac1b75ada2f330cf']
+
+files_to_copy = [
+    (["samblaster"], "bin/"),
+    'README.md',
+    'SAMBLASTER_Supplemental.pdf',
+    'LICENSE.txt',
+]
+
+sanity_check_paths = {
+    'files': ['bin/samblaster', 'README.md'],
+    'dirs': []
+}
+
+sanity_check_commands = ["samblaster --help"]
+
+moduleclass = 'bio'
