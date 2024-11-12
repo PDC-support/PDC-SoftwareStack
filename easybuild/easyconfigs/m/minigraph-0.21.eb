@@ -1,0 +1,49 @@
+easyblock = "MakeCp"
+
+name = 'minigraph'
+version = '0.21'
+
+homepage = 'https://lh3.github.io/minigraph'
+whatis = [
+    'Description: Sequence-to-graph mapper and graph generator',
+]
+description = """
+Minigraph is a sequence-to-graph mapper and graph constructor. For graph generation,
+it aligns a query sequence against a sequence graph and incrementally augments
+an existing graph with long query subsequences diverged from the graph.
+The figure on the right briefly explains the procedure.
+
+Minigraph borrows ideas and code from minimap2. It is fairly efficient and
+can construct a graph from 90 human assemblies in a couple of days using 24
+CPU cores. Older versions of minigraph was unable to produce base alignment.
+The latest version can. Please add option -c for graph generation as it
+generally improves the quality of graphs.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'lh3'
+source_urls = [GITHUB_SOURCE]
+sources = [{'download_filename': 'v%(version)s.tar.gz', 'filename': SOURCE_TAR_GZ}]
+#checksums = ['']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+dependencies = [
+    ('zlib', '1.3.1'),
+]
+
+files_to_copy = [
+    (['*.h', 'minigraph.1', 'test', 'tex'], 'lib'),
+    (['minigraph', 'misc/m*.*'], 'bin'),
+    'README.md',
+    'LICENSE.txt',
+]
+
+sanity_check_paths = {
+    'files': ['bin/minigraph'],
+    'dirs': ['lib'],
+}
+
+moduleclass = 'bio'
