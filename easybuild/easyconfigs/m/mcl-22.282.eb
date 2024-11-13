@@ -1,0 +1,49 @@
+easyblock = 'ConfigureMake'
+
+name = 'mcl'
+version = '22.282'
+
+homepage = 'https://micans.org/mcl/'
+whatis = [
+    'Description: MCL - a cluster algorithm for graphs',
+]
+description = """
+The MCL algorithm is short for the Markov Cluster Algorithm, a fast and scalable
+unsupervised cluster algorithm for graphs (also known as networks) based on
+simulation of (stochastic) flow in graphs. It has found usage in bioinformatics
+and other disciplines. These pages contain descriptions, an animation, various
+bits and pieces, and mcl software. The software scales to millions of nodes and
+hundreds of millions of edges, running on a single machine and utilising multiple
+CPUs. The software is widely used, part of various Linux distributions, and has
+been stable for about a decade now. The mcl program comes with various network
+loading, creation and manipulation companions, and development is focused on these.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['http://micans.org/%(namelower)s/src/']
+sources = ['%(namelower)s-%(version_major)s-%(version_minor)s.tar.gz']
+checksums = ['291f35837b6e852743bd87e499c5a46936125dcdf334f7747af92e88ac902183']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('perl', '5.34.0'),
+    ('cimfomfa', '22.273'),
+]
+
+configopts = '--enable-rcl '
+
+fix_perl_shebang_for = ['bin/*.pl']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['clm', 'clxdo', 'mcl', 'mcx', 'mcxarray', 'mcxdump', 'mcxi',
+                                     'mcxload', 'mcxmap', 'mcxsubs', 'rcl', 'rcl-qc']],
+    'dirs': ['share']
+}
+
+sanity_check_commands = ["mcl --help"]
+
+moduleclass = 'bio'
