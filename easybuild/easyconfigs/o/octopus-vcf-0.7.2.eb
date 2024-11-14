@@ -1,0 +1,64 @@
+easyblock = 'CMakeMakeCp'
+
+# To avoid a naming clash
+name = 'octopus-vcf'
+version = '0.7.2'
+
+homepage = 'https://luntergroup.github.io/octopus/'
+whatis = [
+    'Description: Octopus: Bayesian haplotype-based mutation calling',
+]
+description = """
+Octopus is a mapping-based variant caller that implements several calling
+models within a unified haplotype-aware framework. Octopus takes inspiration
+from particle filtering by constructing a tree of haplotypes and dynamically
+pruning and extending the tree based on haplotype posterior probabilities in
+a sequential manner. This allows octopus to implicitly consider all possible
+haplotypes at a given loci in reasonable time.
+
+NOTE: Not to be mixed up with software package for DFT and TDDFT.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'luntergroup'
+source_urls = ['https://github.com/luntergroup/octopus/archive/']
+sources = ['v%(version)s.tar.gz']
+patches = ['Octopus-vcf.patch']
+checksums = [
+    '887096c7357b1ba7f0653f9ad34fa32f56f80ba618fe4daaf6837d4737e7838d',
+    '11e3138a3397cfe26d7e8c406a5d2c91a8e2690f5509f1007af6b0e6f59d0616',
+]
+
+osdependencies = ['git','python']
+
+builddependencies = [
+    ('cmake', '3.27.7','',True),
+    ('boost', '1.79.0','-nompi',True),
+]
+
+dependencies = [
+    ('htslib', '1.20','',True),
+    ('gmp', '6.3.0','',True),
+    ('zlib', '1.3.1','',True),
+]
+
+preconfigopts = 'export CC=gcc-12 CXX=g++-12 LDFLAGS="${LDFLAGS} -lz" && '
+configopts = '-DHTSlib_NO_SYSTEM_PATHS=TRUE -DHTSLIB_ROOT=$EBROOTHTSLIB'
+
+separate_build_dir = True
+
+files_to_copy = [
+    (['%(builddir)s/easybuild_obj/src/octopus'], 'bin'),
+    'doc', 'lib', 'LICENSE', 'logo.png', 'README.md',
+    'resources', 'scripts', 'test'
+]
+
+sanity_check_commands = ['octopus -h']
+
+sanity_check_paths = {
+    'files': ['bin/octopus'],
+    'dirs': ['doc', 'lib', 'resources']
+}
+
+moduleclass = 'bio'

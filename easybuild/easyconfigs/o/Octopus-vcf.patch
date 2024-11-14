@@ -1,0 +1,70 @@
+diff -ruN octopus-0.7.2.orig/src/CMakeLists.txt octopus-0.7.2/src/CMakeLists.txt
+--- octopus-0.7.2.orig/src/CMakeLists.txt	2024-11-14 21:45:43.000000000 +0100
++++ octopus-0.7.2/src/CMakeLists.txt	2024-11-14 21:49:49.000000000 +0100
+@@ -616,6 +616,7 @@
+ )
+ 
+ set(WarningIgnores
++    -Wno-deprecated-declarations
+     -Wno-unused-parameter
+     -Wno-unused-function
+     -Wno-missing-braces
+@@ -701,13 +702,8 @@
+     target_compile_features(octopus-debug PRIVATE cxx_thread_local)
+     target_include_directories(octopus-debug PUBLIC ${octopus_SOURCE_DIR}/lib ${octopus_SOURCE_DIR}/src)
+     target_link_libraries(octopus-debug tandem ranger date-tz)
+-    if (NOT BUILD_SHARED_LIBS)
+-        message(STATUS "Linking against boost static libraries")
+-        set(Boost_USE_STATIC_LIBS ON)
+-    else()
+-        message(STATUS "Linking against boost dynamic libraries")
+-        target_compile_definitions(octopus-debug PRIVATE -DBOOST_LOG_DYN_LINK) # Required for log
+-    endif()
++    message(STATUS "Linking against boost static libraries")
++    set(Boost_USE_STATIC_LIBS ON)
+     set(Boost_NO_BOOST_CMAKE TRUE)
+     find_package (Boost 1.65 REQUIRED COMPONENTS ${REQUIRED_BOOST_LIBRARIES} REQUIRED)
+     message(STATUS "Boost include dir: " ${Boost_INCLUDE_DIR})
+@@ -734,13 +730,8 @@
+     add_executable(octopus-sanitize main.cpp ${OCTOPUS_SOURCES} ${INCLUDE_SOURCES})
+     target_compile_features(octopus-sanitize PRIVATE cxx_thread_local)
+     target_compile_options(octopus-sanitize PRIVATE ${SanitizeFlags} -fno-omit-frame-pointer)
+-    if (NOT BUILD_SHARED_LIBS)
+-        message(STATUS "Linking against boost static libraries")
+-        set(Boost_USE_STATIC_LIBS ON)
+-    else()
+-        message(STATUS "Linking against boost dynamic libraries")
+-        target_compile_definitions(octopus-sanitize PRIVATE -DBOOST_LOG_DYN_LINK) # Required for log
+-    endif()
++    message(STATUS "Linking against boost static libraries")
++    set(Boost_USE_STATIC_LIBS ON)
+     set(Boost_NO_BOOST_CMAKE TRUE)
+     find_package (Boost 1.65 REQUIRED COMPONENTS ${REQUIRED_BOOST_LIBRARIES} REQUIRED)
+     message(STATUS "Boost include dir: " ${Boost_INCLUDE_DIR})
+@@ -766,13 +757,8 @@
+     add_executable(octopus main.cpp ${OCTOPUS_SOURCES} ${INCLUDE_SOURCES})
+     target_compile_features(octopus PRIVATE cxx_thread_local)
+     target_compile_options(octopus PRIVATE ${CXX_OPTIMIZATION_FLAGS})
+-    if (BUILD_SHARED_LIBS)
+-        message(STATUS "Linking against boost dynamic libraries")
+-        target_compile_definitions(octopus PRIVATE -DBOOST_LOG_DYN_LINK) # Required for log
+-    else()
+-        message(STATUS "Linking against boost static libraries")
+-        set(Boost_USE_STATIC_LIBS ON)
+-    endif()
++    message(STATUS "Linking against boost static libraries")
++    set(Boost_USE_STATIC_LIBS ON)
+     set(Boost_NO_BOOST_CMAKE TRUE)
+     find_package (Boost 1.65 REQUIRED COMPONENTS ${REQUIRED_BOOST_LIBRARIES} REQUIRED)
+     message(STATUS "Boost include dir: " ${Boost_INCLUDE_DIR})
+diff -ruN octopus-0.7.2.orig/src/core/octopus.cpp octopus-0.7.2/src/core/octopus.cpp
+--- octopus-0.7.2.orig/src/core/octopus.cpp	2024-11-14 21:45:45.000000000 +0100
++++ octopus-0.7.2/src/core/octopus.cpp	2024-11-14 21:48:14.000000000 +0100
+@@ -22,6 +22,7 @@
+ #include <chrono>
+ #include <sstream>
+ #include <iostream>
++#include <fstream>
+ #include <cassert>
+ 
+ #include <boost/optional.hpp>
