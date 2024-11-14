@@ -1,0 +1,40 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'MakeCp'
+
+name = 'gffcompare'
+version = '0.12.6'
+
+# Some docs also at GitHub site - this is referred to as canonical
+homepage = 'https://ccb.jhu.edu/software/stringtie/gffcompare.shtml'
+whatis = [
+    'Description: classify, merge, tracking and annotation of GFF files by comparing to a reference annotation GFF',
+]
+description = """
+GffCompare provides classification and reference annotation mapping and matching
+statistics for RNA-Seq assemblies (transfrags) or other generic GFF/GTF files.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+# Switched to GitHub sources owing to SSL error at original download site
+github_account = 'gpertea'
+source_urls = [GITHUB_RELEASE]
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['0e713bc9177d874c935802d11669776da5e9377a8c4d031153b48a783d3391d0']
+
+buildopts = " release"
+
+files_to_copy = ['%(namelower)s', 'LICENSE', 'README.md']
+
+modextrapaths = {'PATH': ''}
+
+sanity_check_paths = {
+    'files': ['%(namelower)s'],
+    'dirs': []
+}
+
+sanity_check_commands = ['%(namelower)s -v']
+
+moduleclass = 'bio'
