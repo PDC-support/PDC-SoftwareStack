@@ -1,0 +1,39 @@
+easyblock = 'MakeCp'
+
+name = 'soapdenovo-trans'
+version = '1.0.5'
+
+homepage = 'http://soap.genomics.org.cn/SOAPdenovo-Trans.html'
+whatis = [
+    'Description: A de novo transcriptome assembler designed specifically for RNA-Seq.',
+]
+description = """
+SOAPdenovo-Trans is a de novo transcriptome assembler basing on the SOAPdenovo
+framework, adapt to alternative splicing and different expression level among
+transcripts. The assembler provides a more accurate, complete and faster way
+to construct the full-length transcript sets.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/aquaskyline/SOAPdenovo-Trans/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = [
+    {'%(version)s.tar.gz': 'c1903c0d81142270db95916e2833400f72c4841b5c9194f182c19ebda418936f'},
+]
+
+builddependencies = [('zlib', '1.3.1')]
+
+start_dir = 'src'
+
+buildopts = ' && make 127mer=1'
+
+files_to_copy = [(['../SOAPdenovo-Trans-127mer', '../SOAPdenovo-Trans-31mer'], 'bin'), '../LICENSE',
+                 '../README.md', '../VERSION']
+
+sanity_check_paths = {
+    'files': ['bin/SOAPdenovo-Trans-127mer', 'bin/SOAPdenovo-Trans-31mer'],
+    'dirs': []
+}
+
+moduleclass = 'bio'
