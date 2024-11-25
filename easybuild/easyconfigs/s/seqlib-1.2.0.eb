@@ -1,0 +1,59 @@
+# Author: Jasper Grimm (UoY)
+
+easyblock = 'ConfigureMake'
+
+name = 'seqlib'
+version = '1.2.0'
+
+homepage = 'https://github.com/walaj/SeqLib'
+whatis = [
+    'Description: C++ interface to HTSlib, BWA-MEM and Fermi.',
+]
+description = """
+SeqLib - a C++ API and command line tool that provides a rapid and user-friendly
+interface to BAM/SAM/CRAM files, global sequence alignment operations and sequence
+assembly. Four C libraries perform core operations in SeqLib: HTSlib for BAM access,
+BWA-MEM and BLAT for sequence alignment and Fermi for error correction and
+sequence assembly.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'walaj'
+source_urls = [GITHUB_SOURCE]
+sources = ['%(version)s.tar.gz']
+patches = [
+    'SeqLib-%(version_major_minor)s.0_avoid-bwa-fml-namespace-conflict.patch',
+    'SeqLib-%(version_major_minor)s.0_use-external-deps.patch',
+]
+checksums = [
+    '6892bdb5cae88d8d8acbbfadd351cfa00004bc7c0fd1ae912dc1ff1ccfd61a70',  # 1.2.0.tar.gz
+    # SeqLib-1.2.0_avoid-bwa-fml-namespace-conflict.patch
+    '9be9229bcf34db8e4bd1fd49614bb55d84c12df263ca7174980f7f4b1bd63da9',
+    '413f0ad8e0963d8922205d31e0c361cfa98a10f93e7d3e0506e0bed539ec70eb',  # SeqLib-1.2.0_use-external-deps.patch
+]
+
+builddependencies = [
+    ('autotools', '20220317'),
+    ('bwa', '0.7.16'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+    ('xz', '5.4.5'),
+    ('bzip2', '1.0.8'),
+    ('jsoncpp', '1.9.5'),
+    ('htslib', '1.20'),
+    ('fermi-lite', '20190320'),
+    ('ssw', '1.1'),
+]
+
+preconfigopts = "autoreconf -i -f && "
+
+sanity_check_paths = {
+    'files': ['bin/seqtools', 'lib/libseqlib.%s' % SHLIB_EXT],
+    'dirs': [],
+}
+sanity_check_commands = ["seqtools"]
+
+moduleclass = 'bio'
