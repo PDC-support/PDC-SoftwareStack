@@ -38,7 +38,6 @@ dependencies = [
     ('beagle-lib', '4.0.0',versionsuffix),
 ]
 
-preconfigopts = 'printenv && '
 configopts = "--with-mpi --without-readline --with-beagle=${EBROOTBEAGLEMINLIB} "
 
 sanity_check_paths = {
