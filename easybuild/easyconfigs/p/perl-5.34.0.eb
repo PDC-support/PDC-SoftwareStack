@@ -1853,6 +1853,11 @@ exts_list = [
         'source_urls': ['https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/'],
         'checksums': ['c490a3be7715ea6e4305efd9710e5edab82dabc55fd786b6505b550a30d71738'],
     }),
+    ('Bio::SearchIO::hmmer3', '1.7.3', {
+        'source_tmpl': 'Bio-SearchIO-hmmer-%(version)s.tar.gz',
+        'source_urls': ['https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/'],
+        'checksums': ['686152f8ce7c611d27ee35ac002ecc309f6270e289a482993796a23bb5388246'],
+    }),
 ]
 
 moduleclass = 'lang'
