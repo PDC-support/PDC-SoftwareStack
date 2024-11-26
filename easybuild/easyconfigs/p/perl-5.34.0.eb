@@ -1817,6 +1817,42 @@ exts_list = [
         'source_urls': ['https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/'],
         'checksums': ['903436c9859875bef5593243aae85ced329ad0fb4b57bbf45975e32547c50c15'],
     }),
+    #
+    # Packages for BioPerl
+    #
+    ('Archive::Zip', '1.68', {
+        'source_urls': ['https://cpan.metacpan.org/authors/id/P/PH/PHRED/'],
+        'sources': ['Archive-Zip-%(version)s.tar.gz'],
+        'checksums': ['984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650'],
+    }),
+    ('Compress::Raw::Zlib', '2.202', {
+        'source_urls': ['https://cpan.metacpan.org/authors/id/P/PM/PMQS/'],
+        'sources': ['Compress-Raw-Zlib-%(version)s.tar.gz'],
+        'checksums': ['96e20946eb457a32d2d7a0050b922e37b5ada41246bcdc824196d3f7c4da91b7'],
+    }),
+    ('DB_File', '1.857', {
+        'source_urls': ['https://www.cpan.org/modules/by-module/DB_File/PMQS'],
+        'checksums': ['7528eaee49ccd3de268d9358226c6c7617d0d7d8786fcc31d7402c54d570a394'],
+    }),
+    ('XML::Writer', '0.900', {
+        'source_tmpl': 'XML-Writer-%(version)s.tar.gz',
+        'source_urls': ['https://cpan.metacpan.org/authors/id/J/JO/JOSEPHW'],
+        'checksums': ['73c8f5bd3ecf2b350f4adae6d6676d52e08ecc2d7df4a9f089fa68360d400d1f'],
+    }),
+    ('XML::DOM::XPath', '0.14', {
+        'source_tmpl': 'XML-DOM-XPath-%(version)s.tar.gz',
+        'source_urls': ['https://cpan.metacpan.org/authors/id/M/MI/MIROD'],
+        'checksums': ['0173a74a515211997a3117a47e7b9ea43594a04b865b69da5a71c0886fa829ea'],
+    }),
+    ('Bio::Procedural', '1.7.4', {
+        'source_tmpl': 'Bio-Procedural-%(version)s.tar.gz',
+        'source_urls': ['https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/'],
+        'checksums': ['d2bd9cfbb091eee2d80ed6cf812ac3813b1c8a1aaca20671037f5f225d31d1da'],
+    }),
+    ('BioPerl', '1.7.8', {
+        'source_urls': ['https://cpan.metacpan.org/authors/id/C/CJ/CJFIELDS/'],
+        'checksums': ['c490a3be7715ea6e4305efd9710e5edab82dabc55fd786b6505b550a30d71738'],
+    }),
 ]
 
 moduleclass = 'lang'
