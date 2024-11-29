@@ -1,0 +1,36 @@
+easyblock = 'Tarball'
+
+name = 'checkm-db'
+version = '.2015_01_16'
+
+homepage = 'https://ecogenomics.github.io/CheckM'
+whatis = [
+    'Description: Databases for CheckM.',
+]
+description = """
+CheckM provides a set of tools for assessing the quality of genomes recovered
+from isolates, single cells, or metagenomes.
+
+This is the corresponding database.
+NOTE: This module is only a temporary solution, and will be removed once a
+common directory for databases is selected.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://data.ace.uq.edu.au/public/CheckM_databases/']
+sources = ['checkm_data_2015_01_16.tar.gz']
+checksums = [
+    '971ec469348bd6c3d9eb96142f567f12443310fa06c1892643940f35f86ac92c',  # checkm_data_2015_01_16.tar.gz
+]
+
+sanity_check_paths = {
+    'files': ['selected_marker_sets.tsv', 'taxon_marker_sets.tsv'],
+    'dirs': ['distributions/', 'genome_tree', 'hmms', 'hmms_ssu', 'img', 'pfam', 'test_data'],
+}
+
+modextravars = {
+    'CHECKM_DATA_PATH': '%(installdir)s',
+}
+
+moduleclass = 'data'
