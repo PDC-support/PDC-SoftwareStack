@@ -1,0 +1,63 @@
+# Updated from previous config
+# Author: Pavel Grochal (INUITS)
+# Updated by: Filip Kružík (INUITS)
+# License: GPLv2
+
+easyblock = 'PythonPackage'
+
+name = 'checkm'
+version = '1.2.2'
+
+homepage = 'https://ecogenomics.github.io/CheckM'
+whatis = [
+    'Description: CheckM - assessing the quality of genome bins',
+]
+description = """
+CheckM provides a set of tools for assessing the quality of genomes recovered from
+isolates, single cells, or metagenomes. It provides robust estimates of genome
+completeness and contamination by using collocated sets of genes that are ubiquitous
+and single-copy within a phylogenetic lineage. Assessment of genome quality can
+also be examined using plots depicting key genomic characteristics (e.g., GC,
+coding density) which highlight sequences outside the expected distributions of
+a typical genome. CheckM also provides tools for identifying genome bins that are
+likely candidates for merging based on marker set compatibility, similarity in
+genomic characteristics, and proximity within a reference genome tree.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'Ecogenomics'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['a748b94e93f8d5fecfd0d5b3f17fcb119b25d4b45217e047b2fd742b21e74c0e']
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+# Dependencies:
+# https://github.com/Ecogenomics/CheckM/blob/master/setup.py
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('pplacer', '1.1.alpha19', '', SYSTEM),
+    ('prodigal', '2.6.3', '', SYSTEM),
+    ('hmmer', '3.4'),
+    ('matplotlib', '3.8.2'),
+    ('pysam', '0.22.1'),
+    ('dendropy', '.4.6.1'),
+    ('checkm-db', '.2015_01_16', '', SYSTEM),
+]
+
+download_dep_fail = True
+use_pip = True
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': ['lib/python3.11/site-packages'],
+}
+
+sanity_check_commands = ["checkm test %(builddir)s/checkm_test_results"]
+
+sanity_pip_check = True
+
+moduleclass = 'bio'
