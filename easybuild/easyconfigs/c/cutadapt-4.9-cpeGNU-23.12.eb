@@ -1,0 +1,77 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+# Author: Pablo Escobar Lopez
+# Swiss Institute of Bioinformatics (SIB)
+# Biozentrum - University of Basel
+# Modified by: Adam Huffman, Jonas Demeulemeester
+# The Francis Crick Institute
+# Modified by: Albert Bogdanowicz
+# Institute of Biochemistry and Biophysics PAS
+# Modified by: Jasper Grimm
+# University of York
+
+easyblock = 'PythonBundle'
+
+name = 'cutadapt'
+version = '4.9'
+
+homepage = 'https://cutadapt.readthedocs.io'
+whatis = [
+    'Description: Cutadapt removes adapter sequences from sequencing reads',
+]
+description = """
+Cutadapt finds and removes adapter sequences, primers, poly-A tails and other
+types of unwanted sequence from your high-throughput sequencing reads.
+
+Cleaning your data in this way is often required: Reads from small-RNA sequencing
+contain the 3’ sequencing adapter because the read is longer than the molecule
+that is sequenced. Amplicon reads start with a primer sequence. Poly-A tails are
+useful for pulling out RNA from your sample, but often you don’t want them to be
+in your reads.
+
+Cutadapt helps with these trimming tasks by finding the adapter or primer sequences
+in an error-tolerant way. It can also modify and filter single-end and paired-end
+reads in various ways. Adapter sequences can contain IUPAC wildcard characters.
+Cutadapt can also demultiplex your reads.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+builddependencies = [
+    ('binutils', '2.37','',SYSTEM),
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('pigz', '2.8','',SYSTEM),
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('py-isal', '.1.1.0'),
+]
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+exts_list = [
+    # note: newer xopen versions require newer python-isal
+    ('xopen', '1.7.0', {
+        'checksums': ['901f9c8298e95ed74767a4bd76d9f4cf71d8de27b8cf296ac3e7bc1c11520d9f'],
+    }),
+    ('dnaio', '1.2.1', {
+        'checksums': ['4786dc63614b9f3011463d9ea9d981723dd38d1091a415a557f71d8c74400f38'],
+    }),
+    (name, version, {
+        'checksums': ['da3b45775b07334d2e2580a7b154d19ea7e872f0da813bb1ac2a4da712bfc223'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+sanity_check_commands = [
+    "cutadapt --help",
+    "cutadapt --version",
+]
+
+moduleclass = 'bio'
