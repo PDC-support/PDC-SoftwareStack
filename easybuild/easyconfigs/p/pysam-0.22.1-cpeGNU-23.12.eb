@@ -1,0 +1,58 @@
+easyblock = 'PythonPackage'
+
+name = 'pysam'
+version = '0.22.1'
+
+homepage = 'https://pysam.readthedocs.io/en/latest/'
+whatis = [
+    'Description: pysam: htslib interface for python. (Dependency purposes only.)'
+]
+description = """
+Pysam is a python module for reading, manipulating and writing genomic data sets.
+
+Pysam is a wrapper of the htslib C-API and provides facilities to read and write
+SAM/BAM/VCF/BCF/BED/GFF/GTF/FASTA/FASTQ files as well as access to the command
+line functionality of the samtools and bcftools packages. The module supports
+compression and random access through indexing.
+
+This module provides a low-level wrapper around the htslib C-API as using cython
+and a high-level, pythonic API for convenient access to the data within genomic
+file formats.
+
+Pysam is a python module for reading and manipulating SAMfiles. It's a lightweight
+wrapper of the samtools C-API. Pysam also includes an interface for tabix.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'pysam-developers'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['e4981524d7627c53fa0d3f8cbec2bd65c2ea7520092f25e1029af12cb7b82ff6']
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('htslib', '1.20','',True),
+]
+
+preinstallopts = """export CFLAGS="-fPIC $CFLAGS" && """
+preinstallopts+="env HTSLIB_LIBRARY_DIR=${EBROOTHTSLIB}/lib HTSLIB_INCLUDE_DIR=${EBROOTHTSLIB}/include "
+download_dep_fail = True
+use_pip = True
+
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+moduleclass = 'bio'
