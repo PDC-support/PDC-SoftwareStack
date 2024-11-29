@@ -1,0 +1,51 @@
+easyblock = 'ConfigureMake'
+
+name = 'fastp'
+version = '0.24.0'
+
+homepage = 'https://github.com/%(github_account)s/%(name)s'
+whatis = [
+    'Description: fastp: an ultra-fast all-in-one FASTQ preprocessor',
+    'This module provides one executable.',
+]
+
+description = """
+fastp is an ultra-fast FASTQ preprocessor with useful quality control and
+data-filtering features. It can perform quality control, adapter trimming,
+quality filtering, per-read quality pruning and many other operations with
+a single scan of the FASTQ data. 
+
+This tool is developed in C++ and has multi-threading support. Based on
+our evaluation, fastp is 2–5 times faster than other FASTQ preprocessing
+tools such as Trimmomatic or Cutadapt despite performing far more operations
+than similar tools.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'OpenGene'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['42445973c57be9209c753027e99781261c69381013813c576ad447e413ff3d04']
+
+dependencies = [
+    ('libdeflate', '1.19'),
+    ('isa-l', '2.31.0'),
+]
+
+skipsteps = ['configure']
+
+buildopts = ' CXX=${CXX}'
+
+preinstallopts = 'mkdir -p %(installdir)s/bin && '
+
+installopts = 'PREFIX=%(installdir)s'
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = [('%(name)s', '--help')]
+
+moduleclass = 'bio'
