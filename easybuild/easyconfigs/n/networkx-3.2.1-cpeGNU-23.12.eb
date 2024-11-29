@@ -1,0 +1,41 @@
+easyblock = 'PythonPackage'
+
+name = 'networkx'
+version = '3.2.1'
+
+homepage = 'https://pypi.python.org/pypi/networkx'
+whatis = [
+    'Description: Network Analysis in Python. (Dependency purposes only.)',
+]
+description = """
+NetworkX is a Python package for the creation, manipulation and study of
+the structure, dynamics, and functions of complex networks.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+sources = [SOURCE_TAR_GZ]
+checksums = ['9f1bb5cf3409bf324e0a722c20bdb4c20ee39bf1c30ce8ae499c8502b0b5e0c6']
+
+builddependencies = [
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(name)s'],
+}
+
+use_pip = True
+download_dep_fail = True
+sanity_pip_check = True
+
+moduleclass = 'tools'
