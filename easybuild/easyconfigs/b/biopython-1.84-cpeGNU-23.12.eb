@@ -1,0 +1,59 @@
+# Updated from previous easyconfig
+# Author: Robert Mijakovic <robert.mijakovic@lxp.lu>
+# Update: Pavel Tománek (INUITS)
+# Modified for PDC by Karl Johan Westrin
+
+easyblock = 'PythonPackage'
+
+name = 'biopython'
+version = '1.84'
+
+homepage = 'https://www.biopython.org'
+whatis = [
+    'Description: Python Tools for Computational Molecular Biology. (Dependency purposes only.)',
+]
+
+description = """
+Biopython is a set of freely available tools for biological computation written
+in Python by an international team of developers. It is a distributed
+collaborative effort to develop Python libraries and applications which address
+the needs of current and future work in bioinformatics.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = ['https://biopython.org/DIST']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['60fbe6f996e8a6866a42698c17e552127d99a9aab3259d6249fbaabd0e0cc7b4']
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+# Run only tests that don't require internet connection
+runtest = 'python setup.py test --offline'
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/Bio',
+             'lib/python3.11/site-packages/BioSQL']
+}
+
+# extra check to ensure numpy dependency is available
+sanity_check_commands = ["python -c 'import Bio.MarkovModel'"]
+
+options = {'modulename': 'Bio'}
+
+moduleclass = 'bio'
