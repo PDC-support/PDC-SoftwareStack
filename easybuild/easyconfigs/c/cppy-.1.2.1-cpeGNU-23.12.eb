@@ -1,0 +1,48 @@
+easyblock = 'PythonPackage'
+
+name = 'cppy'
+version = '.1.2.1'
+
+homepage = "https://github.com/nucleic/cppy"
+whatis = [
+    'Description: A small C++ header library which makes it easier to write Python extension modules.',
+]
+description = """
+A small C++ header library which makes it easier to write Python extension modules.
+The primary feature is a PyObject smart pointer which automatically handles
+reference counting and provides convenience methods for performing common
+object operations.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+builddependencies = [
+    ('binutils', '2.37','',True),
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+]
+
+sources = ['%(name)s-1.2.1.tar.gz']
+patches = ['cppy-1.2.1-manual_version.patch']
+checksums = [
+    {'cppy-1.2.1.tar.gz': '83b43bf17b1085ac15c5debdb42154f138b928234b21447358981f69d0d6fe1b'},
+    {'cppy-1.2.1-manual_version.patch': '048aa0a86fd2e99c6896443b07ec83eaa369724297f639ef74c65c404b8f288f'},
+]
+
+download_dep_fail = True
+sanity_pip_check = True
+use_pip = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+moduleclass = 'tools'
