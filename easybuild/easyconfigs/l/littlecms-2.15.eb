@@ -1,0 +1,39 @@
+easyblock = 'ConfigureMake'
+
+name = 'littlecms'
+version = '2.15'
+
+homepage = 'https://www.littlecms.com/'
+whatis = [
+    'Description: A free, open source, CMM engine.',
+]
+description = """
+Little CMS intends to be an OPEN SOURCE small-footprint color management engine,
+with special focus on accuracy and performance. It uses the International Color
+Consortium standard (ICC), which is the modern standard when regarding to color
+management. The ICC specification is widely used and is referred to in many
+International and other de-facto standards. It was approved as an International
+Standard, ISO 15076-1, in 2005.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://sourceforge.net/projects/lcms/files/lcms/%s/' % '.'.join(version.split('.')[:2])]
+sources = ['lcms2-%(version)s.tar.gz']
+checksums = ['b20cbcbd0f503433be2a4e81462106fa61050a35074dc24a4e356792d971ab39']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('libjpeg-turbo', '3.0.1'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/jpgicc', 'bin/linkicc', 'bin/psicc', 'bin/transicc', 'include/lcms2.h', 'include/lcms2_plugin.h',
+              'lib/liblcms2.a', 'lib/liblcms2.%s' % SHLIB_EXT, 'lib/pkgconfig/lcms2.pc'],
+    'dirs': ['share/man'],
+}
+
+moduleclass = 'vis'
