@@ -1,0 +1,44 @@
+easyblock = 'CMakeMake'
+
+name = 'metaeuk'
+version = '6'
+local_commit = 'a5d39d9'
+
+homepage = 'https://metaeuk.soedinglab.org'
+whatis = [
+    'Description: MetaEuk: Sensitive, high-throughput gene discovery & annotation for eukaryotic metagenomics.',
+]
+description = """
+MetaEuk is a modular toolkit designed for large-scale gene discovery and annotation
+in eukaryotic metagenomic contigs. MetaEuk combines the fast and sensitive homology
+search capabilities of MMseqs2 with a dynamic programming procedure to recover
+optimal exons sets. It reduces redundancies in multiple discoveries of the same
+gene and resolves conflicting gene predictions on the same strand. MetaEuk is
+GPLv3-licensed open source software that is implemented in C++ and available for
+Linux and macOS. The software is designed to run efficiently on multiple cores.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'soedinglab'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%%(version)s-%s.tar.gz' % local_commit]
+checksums = ['be19c26f5bdb7dcdd7bc48172105afecf19e5a2e5555edb3ba0c4aa0e4aac126']
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('bzip2', '1.0.8'),
+    ('zlib', '1.3.1'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/metaeuk'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["metaeuk --help"]
+
+moduleclass = 'bio'
