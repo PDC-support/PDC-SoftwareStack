@@ -1,0 +1,46 @@
+# the 64-bit version is commercial
+# Modified for PDC by Karl Johan Westrin
+
+easyblock = 'PackedBinary'
+
+name = 'usearch'
+version = '11.0.667'
+
+homepage = 'https://www.drive5.com/usearch/index.html'
+whatis = [
+    'Description: Ultra-fast sequence analysis. (32-bit version.)',
+]
+description = """
+USEARCH is a unique sequence analysis tool which offers search and clustering
+algorithms that are often orders of magnitude faster than BLAST.
+
+USEARCH combines many different algorithms into a single package with outstanding
+documentation and support. This cuts your learning curve, reduces the number of
+steps you need to take for a given task, and slashes compute times. USEARCH will
+encourage you to explore your data, enabling new insights and suggesting new
+analyses that you might not have tried with slower tools.
+
+Licenses to use 32-bit USEARCH are offered at no charge for all users, including commercial.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['http://www.drive5.com/downloads']
+sources = ['usearch%(version)s_i86linux32.gz']
+checksums = ['1be0faa1380100296029064e4cf9665d723d43f03c794da444c5b1a6b6799ac2']
+
+local_usearch_bin = 'usearch%(version)s_i86linux32'
+
+postinstallcmds = [
+    "chmod +rx %%(installdir)s/%s" % local_usearch_bin,
+    "ln -s %%(installdir)s/%s %%(installdir)s/%%(namelower)s" % local_usearch_bin
+]
+
+sanity_check_paths = {
+    'files': ['%(namelower)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["usearch --version"]
+
+moduleclass = 'bio'
