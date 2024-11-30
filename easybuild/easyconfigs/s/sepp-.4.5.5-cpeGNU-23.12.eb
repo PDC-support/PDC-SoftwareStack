@@ -1,0 +1,70 @@
+# Author: Pavel Grochal (INUITS)
+# License: GPLv2
+# Updated to v4.5.1 by:
+# R.QIAO <rob.qiao@flinders.edu.au>
+# DeepThought, Flinders University
+# Modified for PDC by Karl Johan Westin
+easyblock = 'PythonPackage'
+
+name = 'sepp'
+version = '.4.5.5'
+
+homepage = 'https://github.com/smirarab/sepp'
+whatis = [
+    'Description: Ensemble of HMM methods (SEPP, TIPP, UPP). (Dependency purposes only.)',
+]
+description = """
+SATe-enabled Phylogenetic Placement - addresses the problem of phylogenetic
+placement of short reads into reference alignments and trees.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+# https://github.com/smirarab/sepp
+github_account = 'smirarab'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v4.5.5.tar.gz']
+checksums = [
+    {'v4.5.5.tar.gz': 'af6b985bc16c96cd7c57bf78b3decce448f976aea612b3fad07b91697e4e1cfd'},
+]
+
+builddependencies = [
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('dendropy', '.4.6.1'),
+]
+
+use_pip = True
+download_dep_fail = True
+sanity_pip_check = True
+
+options = {'modulename': 'sepp'}
+
+# The below commands were supposed to be handled by EB_SEPP,
+# but EB_SEPP will break if using hidden name or version.
+preinstallopts = 'python setup.py config -c && '
+postinstallcmds = [
+    'sed -i "s@%(builddir)s/sepp-4.5.5@%(installdir)s/lib/python3.11/site-packages/sepp@g" '
+    '%(builddir)s/sepp-4.5.5/.sepp/main.config',
+    'mv %(builddir)s/sepp-4.5.5/.sepp %(installdir)s/lib/python3.11/site-packages/sepp',
+    'echo "%(installdir)s/lib/python3.11/site-packages/sepp/.sepp" >'
+    ' %(installdir)s/lib/python3.11/site-packages/home.path',
+]
+
+local_bin_files = ['run_sepp.py', 'run_upp.py', 'split_sequences.py']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % f for f in local_bin_files],
+    'dirs': ['lib/python3.11/site-packages/sepp']
+}
+
+sanity_check_commands = ["%s --help" % f for f in local_bin_files]
+
+moduleclass = 'bio'
