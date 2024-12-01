@@ -1,0 +1,40 @@
+# Contribution by
+# DeepThought, Flinders University
+# Updated to 0.9.1
+# R.QIAO <rob.qiao@flinders.edu.au>
+
+easyblock = 'ConfigureMake'
+
+name = 'capnproto'
+version = '1.0.1.1'
+
+homepage = 'https://capnproto.org'
+whatis = [
+    "Description: Cap’n Proto serialization/RPC system - core tools and C++ library",
+]
+description = """
+Cap’n Proto is an insanely fast data interchange format and capability-based RPC system.
+Think JSON, except binary. Or think Protocol Buffers, except faster. In fact,
+in benchmarks, Cap'n Proto is INFINITY TIMES faster than Protocol Buffers.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://capnproto.org/']
+sources = ['%(namelower)s-c++-%(version)s.tar.gz']
+checksums = ['b224e61d5b46f13967b7189860a7373b96d0c105e0d6170f29acba09a2d31f57']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+local_bins = ['capnp', 'capnpc', 'capnpc-c++', 'capnpc-capnp']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_bins],
+    'dirs': ['include/capnp', 'include/kj', 'lib'],
+}
+
+sanity_check_commands = ["%s --help" % x for x in local_bins]
+
+moduleclass = 'bio'
