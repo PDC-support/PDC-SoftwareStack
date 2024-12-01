@@ -4,28 +4,35 @@ name = 'megahit'
 version = '1.2.9'
 
 homepage = 'https://github.com/voutcn/megahit'
-description = """An ultra-fast single-node solution for large and complex
-metagenomics assembly via succinct de Bruijn graph"""
+whatis = [
+    'Description: Ultra-fast and memory-efficient (meta-)genome assembler',
+]
+description = """
+MEGAHIT is an ultra-fast and memory-efficient NGS assembler. It is optimized
+for metagenomes, but also works well on generic single genome assembly (small
+or mammalian size) and single-cell assembly.
+"""
 
 toolchain = SYSTEM
 
-source_urls = ['https://github.com/voutcn/%(namelower)s/archive/']
+github_account = 'voutcn'
+source_urls = [GITHUB_LOWER_SOURCE]
 sources = ['v%(version)s.tar.gz']
 checksums = ['09026eb07cc4e2d24f58b0a13f7a826ae8bb73da735a47cb1cbe6e4693118852']
 
 builddependencies = [
     ('binutils', '2.37'),
     ('cmake', '3.23.2'),
-    ('zlib', '1.3.1'),
 ]
 dependencies = [
     ('bzip2', '1.0.8'),
     ('gzip', '1.13'),
+    ('zlib', '1.3.1'),
 ]
 
 osdependencies = ['python3']
 
-preinstallopts = 'sed -i "/^#.*bin.*python$/s/python/python3/g" %(builddir)s/%(namelower)s-%(version)s/src/megahit && '
+preinstallopts = 'sed -i "/^#.*bin.*python$/s/python/python3/g" %(builddir)s/%(namelower)s-%(version)s/src/megahit &&'
 
 sanity_check_paths = {
     'files': [
