@@ -1,0 +1,46 @@
+easyblock = 'PythonPackage'
+
+name = 'lxml'
+version = '.4.9.2'
+
+homepage = 'https://lxml.de/'
+whatis = [
+    'Description: lxml - XML and HTML with Python. (Dependency purposes only.)',
+]
+description = """
+The lxml XML toolkit is a Pythonic binding for the C libraries libxml2 and libxslt.
+It is unique in that it combines the speed and XML feature completeness of these
+libraries with the simplicity of a native Python API, mostly compatible but
+superior to the well-known ElementTree API.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+sources = ['%(name)s-4.9.2.tar.gz']
+checksums = ['2455cfaeb7ac70338b3257f41e21f0724f4b5b0c0e7702da67ee6c3640835b67']
+
+builddependencies = [
+    ('binutils', '2.37','',True),
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('libxml2', '2.12.3','',True),
+    ('libxslt', '1.1.34','',True),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(name)s'],
+}
+
+moduleclass = 'lib'
