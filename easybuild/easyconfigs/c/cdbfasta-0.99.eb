@@ -1,0 +1,41 @@
+easyblock = 'MakeCp'
+
+name = 'cdbfasta'
+version = '0.99'
+local_commit = 'da8f5ba'
+
+homepage = 'http://compbio.dfci.harvard.edu/tgi'
+whatis = [
+    'Description: CDB (Constant DataBase) indexing and retrieval tools for FASTA files',
+]
+description = """
+This is a brief introduction to a couple of platform independent file-based
+hashing tools (cdbfasta and cdbyank) that can be used for creating indices for
+quick retrieval of any particular sequences from large  multi-FASTA files. The
+last version has the option to compress data records in order to save space.
+The index files are now architecture independent, the same index file can be
+created and used on many  different Unix platform (be it 32bit/64bit,
+big-endian or little-endian architectures) and even Windows.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'gpertea'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%s.tar.gz' % local_commit]
+checksums = ['19e67fa267b0acfe70acaabfe3db27ed96e85c345a9ca01fc704c084de9c91a9']
+
+dependencies = [('zlib', '1.3.1')]
+files_to_copy = [(['cdbfasta', 'cdbyank'], 'bin')]
+
+sanity_check_paths = {
+    'files': ['bin/cdbfasta', 'bin/cdbyank'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "cdbfasta -v",
+    "cdbyank -v",
+]
+
+moduleclass = 'bio'
