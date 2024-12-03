@@ -1,0 +1,47 @@
+easyblock = 'PythonPackage'
+
+name = 'scoary'
+version = '1.6.16'
+
+homepage = 'https://github.com/AdmiralenOla/Scoary'
+whatis = [
+    'Description: Pan-genome wide association studies. (No GUI version.)',
+]
+description = """
+Microbial pan-GWAS using the output from Roary. Scoary is designed to take the
+gene_presence_absence.csv file from Roary as well as a traits file created by the
+user and calculate the assocations between all genes in the accessory genome and
+the traits. It reports a list of genes sorted by strength of association per trait.
+
+NOTE: This version of Scoary is installed without GUI support.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+sources = ['scoary-%(version)s.tar.gz']
+checksums = ['f433343422c5805a70a20f7fe83851490ae3cdf07745c65680de5feea40a6dca'],
+
+builddependencies = [
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('ete', '.3.1.3', '-noqt'),
+]
+
+use_pip = True
+options = {'modulename' : 'scoary.methods'}
+
+postinstallcmds = [
+    'rm -f %(installdir)s/bin/scoary_GUI',
+]
+sanity_check_paths = {
+    'files': ['bin/scoary', 'bin/vcf2scoary'],
+    'dirs': ['lib/python3.11/site-packages/scoary'],
+}
+
+sanity_pip_check = False
+
+sanity_check_commands = [('scoary', '--version')]
+
+moduleclass = 'bio'
