@@ -1,0 +1,50 @@
+easyblock = 'CMakeMake'
+
+name = 'ngmlr'
+version = '0.2.7'
+
+homepage = 'https://github.com/philres/ngmlr'
+whatis = [
+    'Description: Ngmlr is a long-read mapper designed to align PacBilo or Oxford Nanopore to a'
+    'reference genome with a focus on reads that span structural variations.',
+]
+description = """
+coNvex Gap-cost alignMents for Long Reads (ngmlr) is a long-read mapper designed
+to sensitively align PacBio or Oxford Nanopore to (large) reference genomes.
+It was designed to quickly and correctly align the reads, including those
+spanning (complex) structural variations. Ngmlr uses an SV aware k-mer search to
+find approximate mapping locations for a read and then a banded Smith-Waterman
+alignment algorithm to compute the final alignment. Ngmlr uses a convex gap cost
+model that penalizes gap extensions for longer gaps less than for shorter ones to
+compute precise alignments. The gap model allows ngmlr to account for both the
+sequencing error and real genomic variations at the same time and makes it
+especially effective at more precisely identifying the position of breakpoints
+stemming from structural variations. The k-mer search helps to detect and split
+reads that cannot be aligned linearly, enabling ngmlr to reliably align reads to
+a wide range of different structural variations including nested SVs
+(e.g. inversions flanked by deletions).
+"""
+
+toolchain = SYSTEM
+
+github_account = 'philres'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['5126a6b3e726cac0da0713883daac688f38587f118428247a9a3ace5a55b29aa']
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('zlib', '1.3.1'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/ngmlr'],
+    'dirs': ['']
+}
+
+sanity_check_commands = ['%(name)s --help']
+
+moduleclass = 'bio'
