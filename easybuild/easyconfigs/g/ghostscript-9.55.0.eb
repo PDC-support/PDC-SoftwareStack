@@ -7,8 +7,17 @@ version = '9.55.0'
 local_downloadversion = version.replace('.','')
 
 homepage = 'http://ghostscript.com'
-description = """Ghostscript is a versatile processor for PostScript data with the ability to render PostScript to
- different targets. It used to be part of the cups printing stack, but is no longer used for that."""
+whatis = [
+    'Description: Interpreter for the PostScript language and for PDF',
+]
+description = """
+Ghostscript is an interpreter for PostScript® and Portable Document Format (PDF) files.
+
+Ghostscript consists of a PostScript interpreter layer, and a graphics library.
+The graphics library is shared with all the other products in the Ghostscript family,
+so all of these technologies are sometimes referred to as Ghostscript,
+rather than the more correct GhostPDL.
+"""
 
 toolchain = SYSTEM 
 toolchainopts = {'pic': True}
@@ -20,11 +29,31 @@ sources = [SOURCELOWER_TAR_GZ]
 dependencies = [
     ('fontconfig', '2.13.94'),
     ('freetype', '2.10.4'),
-    ('libpng', '1.6.37'),
-    ('libjpeg-turbo', '2.1.1'),
     ('libtiff', '4.3.0'),
 ]
 
-configopts = "--enable-dynamic"
+# Do not use local copies of zlib, jpeg, freetype, and png
+preconfigopts = "mv zlib zlib.no && mv jpeg jpeg.no && mv freetype freetype.no && mv libpng libpng.no && "
+preconfigopts += 'export LIBS="$LIBS -L$EBROOTZLIB/lib -lz" && '
+
+configopts = "--with-system-libtiff --enable-dynamic"
+
+# also build and install shared libs
+build_cmd_targets = ['', 'so']
+installopts = 'soinstall'
+
+postinstallcmds = [
+    # install header files
+    "mkdir -p %(installdir)s/include/%(namelower)s",
+    "install -v -m644 base/*.h %(installdir)s/include/%(namelower)s",
+    "install -v -m644 psi/*.h %(installdir)s/include/%(namelower)s",
+]
+
+sanity_check_paths = {
+    'files': ['bin/gs', 'lib/libgs.%s' % SHLIB_EXT],
+    'dirs': ['lib/%(namelower)s', 'include/%(namelower)s', 'share/man'],
+}
+
+sanity_check_commands = ["gs --help"]
 
 moduleclass = 'tools'
