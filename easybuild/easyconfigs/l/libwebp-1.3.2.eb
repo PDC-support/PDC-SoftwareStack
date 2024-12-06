@@ -30,8 +30,7 @@ builddependencies = [
     ('binutils', '2.37'),
 ]
 dependencies = [
-    ('libjpeg-turbo', '3.0.1'),
-    ('libpng', '1.6.40'),
+    ('libpng', '1.6.37'),
     ('libtiff', '4.3.0'),
     ('giflib', '5.2.1'),
 ]
