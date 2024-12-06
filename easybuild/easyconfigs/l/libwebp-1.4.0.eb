@@ -1,0 +1,63 @@
+easyblock = 'ConfigureMake'
+
+name = 'libwebp'
+version = '1.4.0'
+
+homepage = 'https://developers.google.com/speed/webp/'
+
+whatis = [
+    "Description: libwebp is a library to encode and decode images in WebP format"
+]
+
+description = """
+WebP is a modern image format that provides superior lossless and lossy
+compression for images on the web. Using WebP, webmasters and web developers
+can create smaller, richer images that make the web faster.
+"""
+
+software_license_urls = [
+    f'https://github.com/webmproject/libwebp/blob/{version}/COPYING',
+]
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+source_urls = ['https://storage.googleapis.com/downloads.webmproject.org/releases/webp']
+sources = [SOURCELOWER_TAR_GZ]
+#checksums = ['2a499607df669e40258e53d0ade8035ba4ec0175244869d1025d460562aa09b4']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+dependencies = [
+    ('libpng', '1.6.40'),
+    ('libtiff', '4.6.0'),
+    ('giflib', '5.2.1'),
+]
+
+configopts = '--enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder --enable-libwebpextras'
+
+local_headers, local_libs = (
+    ['decode.h', 'demux.h', 'encode.h', 'mux.h', 'mux_types.h', 'types.h'],
+    ['webp', 'webpdemux', 'webpmux']
+)
+
+sanity_check_paths = {
+    'files': (
+        ['include/webp/%s' % h for h in local_headers] +
+        ['lib/lib%s.a' % s for s in local_libs] +
+        ['lib/lib%s.%s' % (s, SHLIB_EXT) for s in local_libs]
+    ),
+    'dirs': ['lib/']
+}
+
+sanity_check_commands = [
+    'webpinfo -version',
+    'cwebp -h',
+    'dwebp -h',
+    'gif2webp -h',
+    'img2webp -h',
+    'webpmux -h',
+]
+
+moduleclass = 'lib'
