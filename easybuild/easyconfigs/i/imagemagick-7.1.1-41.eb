@@ -1,0 +1,40 @@
+# contributed by Luca Marsella (CSCS)
+easyblock = 'ConfigureMake'
+
+name = 'imagemagick'
+version = '7.1.1-41'
+
+homepage = 'http://www.imagemagick.org/'
+whatis = [
+    'Description: ImageMagick is a software suite to create, edit, compose, or convert bitmap images',
+]
+description = """
+ImageMagick is a free and open-source software suite, used for editing and manipulating
+digital images. It can be used to create, edit, compose, or convert bitmap images, and
+supports a wide range of file formats, including JPEG, PNG, GIF, TIFF, and PDF.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True, 'verbose': False}
+
+sources = ['ImageMagick-%(version)s.tar.xz']
+source_urls = ['https://download.imagemagick.org/archive/releases/']
+
+dependencies = [
+    ('x11', '20220504'),
+    ('ghostscript', '10.04.0'),
+]
+configopts = "--with-gslib --with-x --with-zstd --with-jpeg LDFLAGS='-L${EBROOTLIBJPEGMINTURBO}/lib -L${EBROOTZSTD}/lib' "
+
+sanity_check_paths = {
+    'files': ['bin/magick'],
+    'dirs': ['bin', 'etc/ImageMagick-%(version_major)s', 'include/ImageMagick-%(version_major)s', 'lib', 'share'],
+}
+
+sanity_check_commands = [
+    'magick --help',
+]
+
+modextravars = {'MAGICK_HOME': '%(installdir)s'}
+
+moduleclass = 'vis'
