@@ -1,0 +1,40 @@
+easyblock = 'CMakeMake'
+
+name = 'libharu'
+version = '2.4.4'
+
+homepage = 'https://libharu.org/'
+whatis = [
+    'Description: libharu - free PDF library',
+]
+description = """
+libHaru is a free, cross platform, open source library for generating PDF files.
+At this moment libHaru does not support reading and editing existing PDF files
+and it's unlikely this support will ever appear.
+"""
+
+toolchain = SYSTEM
+
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['227ab0ae62979ad65c27a9bc36d85aa77794db3375a0a30af18acdf4d871aee6']
+
+builddependencies = [
+    ('binutils', '2.37'),
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('libpng', '1.6.40'),
+]
+
+parallel = 1
+
+configopts = ['-DBUILD_SHARED_LIBS=ON','-DBUILD_SHARED_LIBS=OFF']
+
+sanity_check_paths = {
+    'files': ['lib/libhpdf.%s' %SHLIB_EXT, 'lib/libhpdf.a', 'include/hpdf.h'],
+    'dirs': ['include', 'lib']
+}
+
+moduleclass = 'lib'
