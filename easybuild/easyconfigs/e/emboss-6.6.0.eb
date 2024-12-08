@@ -1,0 +1,70 @@
+# authors: Kenneth Hoste (Ghent University)
+#          George Tsouloupas <g.tsouloupas@cyi.ac.cy>
+#          Fotis Georgatos <fotis@cern.ch>
+#
+# This work implements a part of the HPCBIOS project and is a component
+#  of the policy:
+# http://hpcbios.readthedocs.org/en/latest/HPCBIOS_2012-94.html
+# foss-2016b modified by:
+# Adam Huffman
+# The Francis Crick Institute
+# foss-2021a modified by:
+# Sebastien Moretti
+# SIB Swiss Institute of Bioinformatics
+# Modified for PDC by Karl Johan Westrin
+easyblock = 'ConfigureMake'
+
+name = 'emboss'
+version = '6.6.0'
+
+homepage = 'http://emboss.sourceforge.net/'
+whatis = [
+    'Description: EMBOSS - the European Molecular Biology Open Software Suite.',
+]
+description = """
+The European Molecular Biology Open Software Suite (EMBOSS) is a high quality,
+well documented package of open source software tools for molecular biology.
+It includes over 200 applications for molecular sequence analysis and other common
+tasks in bioinformatics. It integrates the core applications with a range of popular
+third party software packages under a consistent and powerful command line interface.
+The software has many useful features; for example, it automatically copes with data in
+a variety of formats and allows for transparent retrieval of sequence data from the web.
+"""
+
+toolchain = SYSTEM
+
+source_urls = [
+    'ftp://emboss.open-bio.org/pub/EMBOSS/',
+    'ftp://emboss.open-bio.org/pub/EMBOSS/old/%(version_major_minor)s.0',
+]
+sources = ['EMBOSS-%(version)s.tar.gz']
+patches = ['EMBOSS-%(version)s_disable-embossupdate.patch']
+checksums = [
+    '7184a763d39ad96bb598bfd531628a34aa53e474db9e7cac4416c2a40ab10c6e',  # EMBOSS-6.6.0.tar.gz
+    '7e0a7deffd76f60093be9c5253605f2d6d2e3b0c2d3c9365035cc6bda43eb46c',  # EMBOSS-6.6.0_disable-embossupdate.patch
+]
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('x11', '20220504'),
+    ('libharu', '2.4.4'),
+    ('java', '17.0.4'),
+]
+
+configopts = " --with-hpdf=$EBROOTLIBHARU "
+
+# jemboss.jar does not build in a parallel build
+parallel = 1
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['seqret', 'aligncopy', 'profit', 'prophet']] +
+             ['lib/lib%s.a' % x for x in ['acd', 'ajax', 'ajaxdb', 'ajaxg', 'eexpat', 'ensembl',
+                                          'epcre', 'eplplot', 'ezlib', 'nucleus']] +
+             ['share/EMBOSS/jemboss/lib/jemboss.jar'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
