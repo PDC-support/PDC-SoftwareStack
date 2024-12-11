@@ -1,0 +1,52 @@
+easyblock = 'PythonPackage'
+
+name = 'xopen'
+version = '.1.7.0'
+
+homepage = 'https://github.com/pycompression/xopen'
+whatis = [
+    'Description: Open compressed files in Python. (Dependency purposes only.)',
+]
+
+description = """
+This Python module provides an xopen function that works like Python’s built-in
+open function but also transparently deals with compressed files. xopen selects
+the most efficient method for reading or writing a compressed file.
+
+Supported compression formats are:
+ * gzip (.gz)
+ * bzip2 (.bz2)
+ * xz (.xz)
+ * Zstandard (.zst) (optional)
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = [PYPI_LOWER_SOURCE]
+sources = ['xopen-1.7.0.tar.gz']
+checksums = ['901f9c8298e95ed74767a4bd76d9f4cf71d8de27b8cf296ac3e7bc1c11520d9f']
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('py-isal', '.1.1.0'),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s']
+}
+
+sanity_check_commands = ["python -c 'import xopen'"]
+
+moduleclass = 'bio'
