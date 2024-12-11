@@ -6,8 +6,16 @@ name = 'py-isal'
 version = '.1.1.0'
 
 homepage = 'https://github.com/pycompression/python-isal'
-description = """Faster zlib and gzip compatible compression and decompression
- by providing python bindings for the isa-l library.
+whatis = [
+    'Description: Python bindings for the isa-l library. (Dependency purposes only.)',
+]
+description = """
+Faster zlib and gzip compatible compression and decompression by providing
+python bindings for the isa-l library.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
 """
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
