@@ -1,0 +1,49 @@
+easyblock = 'PythonPackage'
+
+name = 'cython'
+version = '.3.0.10'
+
+homepage = 'https://cython.org/'
+whatis = [
+    'Description: C-Extensions for Python. (Dependency purposes only.)',
+]
+description = """
+Cython is an optimising static compiler for both the Python programming
+language and the extended Cython programming language (based on Pyrex).
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+docurls = [
+    'https://cython.org/#documentation',
+    'https://github.com/cython/cython',
+]
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+source_urls = ['https://pypi.python.org/packages/source/C/Cython']
+sources = ['Cython-3.0.10.tar.gz']
+checksums = ['dcc96739331fb854dcf503f94607576cfe8488066c61ca50dfd55836f132de99']
+
+builddependencies = [
+    ('binutils', '2.37','',True),
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5',EXTERNAL_MODULE),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': ['bin/cygdb', 'bin/cython', 'bin/cythonize'],
+    'dirs': ['lib/python3.11/site-packages'],
+}
+
+sanity_check_commands = ["cython --version"]
+
+moduleclass = 'lang'
