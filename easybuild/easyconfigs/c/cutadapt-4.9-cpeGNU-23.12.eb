@@ -44,7 +44,7 @@ builddependencies = [
 dependencies = [
     ('pigz', '2.8','',SYSTEM),
     ('cray-python/3.11.5', EXTERNAL_MODULE),
-    ('py-isal', '.1.1.0'),
+    ('xopen', '.1.7.0'),
 ]
 
 use_pip = True
@@ -52,10 +52,6 @@ sanity_pip_check = True
 download_dep_fail = True
 
 exts_list = [
-    # note: newer xopen versions require newer python-isal
-    ('xopen', '1.7.0', {
-        'checksums': ['901f9c8298e95ed74767a4bd76d9f4cf71d8de27b8cf296ac3e7bc1c11520d9f'],
-    }),
     ('dnaio', '1.2.1', {
         'checksums': ['4786dc63614b9f3011463d9ea9d981723dd38d1091a415a557f71d8c74400f38'],
     }),
