@@ -5,10 +5,14 @@ name = 'charm++'
 version = '6.10.2'
 
 homepage = 'http://charm.cs.illinois.edu/research/charm/'
+whatis = [
+    'Charm++ is a machine independent parallel programming system.'
+]
+
 description = """
-    Charm++ is a machine independent parallel programming system. Programs
-    written using this system will run unchanged on MIMD machines with or
-    without a shared memory.
+Charm++ is a machine independent parallel programming system. Programs
+written using this system will run unchanged on MIMD machines with or
+without a shared memory.
 """
 
 toolchain = {'name': 'cpeGNU', 'version': '22.06'}
