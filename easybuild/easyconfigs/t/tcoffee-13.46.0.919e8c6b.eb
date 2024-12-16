@@ -1,0 +1,67 @@
+easyblock = "Tarball"
+
+name = 'tcoffee'
+version = '13.46.0.919e8c6b'
+
+homepage = 'https://www.tcoffee.org/'
+whatis = [
+    'Description: A collection of tools for Multiple Alignments of DNA, RNA, Protein Sequence,',
+]
+description = """
+T-Coffee is a multiple sequence alignment package. You can use T-Coffee to align
+sequences or to combine the output of your favorite alignment methods (Clustal,
+Mafft, Probcons, Muscle...) into one unique alignment (M-Coffee).
+
+T-Coffee can align Protein, DNA and RNA sequences. It is also able to combine
+sequence information with protein structural information (3D-Coffee/Expresso),
+profile information (PSI-Coffee) or RNA secondary structures (R-Coffee).
+
+T-Coffee may require some envirnment variables to be set for cache, temporary file and
+lock file directory locations.  THESE ARE NOT SET BY THIS MODULE.  These variables each
+indicate the name of a directory which already exists.  They include:
+
+    CACHE_4_TCOFFEE     : for cache files
+    TMP_4_TCOFFEE : for temporary files
+    LOCKDIR_4_TCOFFEE   : for lock files
+
+T-Coffee may also require an email address to be set for some web services.  THIS IS
+ALSO NOT SET BY THIS MODULE.
+
+    EMAIL_4_TCOFFEE
+
+Study any error messages produced by the t_coffee executable to learn whether one or
+more of these must be set to meet your requirements.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://s3.eu-central-1.amazonaws.com/tcoffee-packages/Archives/']
+sources = ['T-COFFEE_installer_Version_%(version)s_linux_x64.tar.gz']
+checksums = ['53b63a470fbed5023128be037a3700ac69d8ee3b962550c69a510bada500c0e6']
+
+sanity_check_paths = {
+    'files': ['bin/t_coffee'],
+    'dirs': ['mcoffee', 'perl', 'plugins', 'src'],
+}
+
+sanity_check_commands = ["t_coffee --help"]
+
+modextrapaths = {
+    'PATH': 'perl/bin',
+    'PERL5LIB': 'perl/lib/perl5',
+}
+
+# optionally set extra variables
+# default DIR_4_TCOFFEE is $HOME/.t_coffee
+# see https://tcoffee.readthedocs.io/en/latest/tcoffee_technical_documentation.html#setting-up-the-variables
+_tcoffee_dir = '/tmp/.t_coffee'
+modextravars = {
+    'DIR_4_TCOFFEE': _tcoffee_dir,
+    'TMP_4_TCOFFEE': _tcoffee_dir + '/tmp',
+    'CACHE_4_TCOFFEE': _tcoffee_dir + '/cache',
+    'PLUGINS_4_TCOFFEE': _tcoffee_dir + '/plugins',
+    'MAX_N_PID_4_TCOFFEE': '4194304',  # see issue https://github.com/cbcrg/tcoffee/issues/27
+    # 'PDB_DIR': <path-to-pdb-dir>,
+}
+
+moduleclass = 'bio'
