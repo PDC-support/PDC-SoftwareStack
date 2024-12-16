@@ -16,17 +16,11 @@ T-Coffee can align Protein, DNA and RNA sequences. It is also able to combine
 sequence information with protein structural information (3D-Coffee/Expresso),
 profile information (PSI-Coffee) or RNA secondary structures (R-Coffee).
 
-T-Coffee may require some envirnment variables to be set for cache, temporary file and
-lock file directory locations.  THESE ARE NOT SET BY THIS MODULE.  These variables each
-indicate the name of a directory which already exists.  They include:
+T-Coffee may require a environment variable to be set for lock file directory
+locations or an email address to be set for some web services.
+THESE ARE NOT SET BY THIS MODULE:
 
-    CACHE_4_TCOFFEE     : for cache files
-    TMP_4_TCOFFEE : for temporary files
     LOCKDIR_4_TCOFFEE   : for lock files
-
-T-Coffee may also require an email address to be set for some web services.  THIS IS
-ALSO NOT SET BY THIS MODULE.
-
     EMAIL_4_TCOFFEE
 
 Study any error messages produced by the t_coffee executable to learn whether one or
