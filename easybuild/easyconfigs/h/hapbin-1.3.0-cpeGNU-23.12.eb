@@ -1,0 +1,52 @@
+# Built by Karl Johan Westrin (westrin@kth.se) for PDC, KTH, Stockholm
+easyblock = 'CMakeMake'
+
+name = 'hapbin'
+version = '1.3.0'
+
+homepage = 'https://github.com/evotools/hapbin'
+whatis = [
+    'Description: Efficient program for calculating Extended Haplotype Homozygosity (EHH) and Integrated Haplotype Score (iHS).',
+]
+description = """
+Understanding how the genome is shaped by selective processes forms an integral
+part of modern biology. However, as genomic datasets continue to grow larger it
+is becoming increasingly difficult to apply traditional statistics for detecting
+signatures of selection to these cohorts. There is therefore a pressing need for
+the development of the next generation of computational and analytical tools for
+detecting signatures of selection in large genomic datasets.
+
+Hapbin is an efficient multithreaded implementation of extended haplotype
+homzygosity-based statistics for detecting selection, which is up to 3,400 times
+faster than the current fastest implementations of these algorithms.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'evotools'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['2443cb1783a5f40c042d02e84eece97220c38530e8d887b2d3c5e9354400f92d']
+
+builddependencies = [
+    ('cmake', '3.27.7','',True),
+]
+
+start_dir = 'src'
+
+preconfigopts = 'sed -i.bak -e "/include_.*MPI_CXX_INCLUDE_PATH/d" -e "/VERSION_SHORT/s/SHORT.*$/SHORT \"%(version)s\"\)/g" ../%(namelower)s-%(version)s/src/CMakeLists.txt && '
+
+configopts = '-DUSE_MPI=ON'
+
+local_binaries = ['ehhbin', 'ihsbin', 'xpehhbin', 'hapbinconv']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_binaries],
+    'dirs': ['include', 'lib'],
+}
+
+sanity_check_commands = [
+    '%s --help' % x for x in local_binaries
+]
+
+moduleclass = 'bio'
