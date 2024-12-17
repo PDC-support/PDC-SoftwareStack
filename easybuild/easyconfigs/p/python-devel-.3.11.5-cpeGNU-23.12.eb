@@ -614,6 +614,21 @@ exts_list = [
         'checksums': ['6506eee9b93bf461ccc3cd239096707d0b86a5cbe5af08e82e7bd616271d55c6'],
     }),
     # end edlib
+    ('humanfriendly', '10.0', {
+        'checksums': ['6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc'],
+    }),
+    ('coloredlogs', '15.0.1', {
+        'checksums': ['7c991aa71a4577af2f82600d8f8f3a89f936baeaf9b50a9c197da014e5bf16b0'],
+    }),
+    ('humanize', '4.9.0', {
+        'checksums': ['582a265c931c683a7e9b8ed9559089dea7edcf6cc95be39a3cbc2c5d5ac2bcfa'],
+    }),
+    ('pyaml_env', '1.2.1', {
+        'checksums': ['6d5dc98c8c82df743a132c196e79963050c9feb05b0a6f25f3ad77771d3d95b0'],
+    }),
+    ('typeguard', '4.2.0', {
+        'checksums': ['2aeae510750fca88d0a2ceca3e86de7f71aa43b6c3e6c267737ce1f5effc4b34'],
+    }),
 
     # ('', '', {
     #     'checksums': [''],
