@@ -1,0 +1,57 @@
+easyblock = 'ConfigureMake'
+
+name = 'trnascan-se'
+version = '2.0.12'
+
+homepage = 'https://github.com/UCSC-LoweLab/tRNAscan-SE'
+whatis = [
+    'Description: tRNAscan-SE: An improved tool for transfer RNA detection',
+]
+description = """
+tRNAscan-SE predicts tRNA genes from input DNA or RNA sequences 
+in FASTA format. tRNA predictions are output in standard tabular format,
+secondary structure file, FASTA file, BED file, and GTF file.
+
+tRNAscan-SE pioneers the large-scale use of covariance models to
+annotate tRNA genes in genomes. A covariance model is an implementation of
+a stochastic context-free grammar, able to integrate both primary
+sequence and secondary structure information, and is trained on an
+aligned, structurally annotated set of RNAs. Any given sequence can be
+searched for tRNAs by alignment to a tRNA covariance model. tRNAscan-SE 2.0
+combines the use of the latest Infernal v1.1 (1) as the covariance model
+search engine and covariance models specifically trained and built
+using tRNA sequences from available genomes in the three domains of life
+for gene prediction. The method replaces the original use of COVE (2)  
+with two prefilters - tRNAscan 1.3 (3) and an implementation of an
+algorithm described by Pavesi and colleagues (4) for searching eukaryotic
+pol III tRNA promoters (our implementation referred to as EufindtRNA),
+which is still available as a backward compatible option. Predicted
+tRNA genes will then be assessed using a set of isotype-specific covariance
+models. Comparative analysis among these models enables better annotation,
+particularly of atypical tRNAs, some of which may produce recoding
+events due to mutations in the anticodon. The new tRNAscan-SE also enables
+better recognition of tRNA-derived SINEs that are abundant in many
+eukaryotic genomes by using a post quality filter.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'UCSC-LoweLab'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['4b255c2c5e0255381194166f857ab2ea21c55aa7de409e201333ba615aa3dc61']
+
+dependencies = [
+    ('perl', '5.34.0'),
+]
+
+fix_perl_shebang_for = ['bin/*']
+
+sanity_check_paths = {
+    'files': ['bin/covels-SE', 'bin/tRNAscan-SE'],
+    'dirs': ['include', 'lib/tRNAscan-SE'],
+}
+
+sanity_check_commands = ["tRNAscan-SE --help"]
+
+moduleclass = 'bio'
