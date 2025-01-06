@@ -1,0 +1,38 @@
+# Created for Dardel by Johan Hellsvik (PDC)
+easyblock = 'PythonPackage'
+
+local_craypython_version =  '3.11.5'
+local_craypython_maj_min = '.'.join( local_craypython_version.split('.')[:2] )
+
+name = 'flit_core'
+version = '3.9.0'
+versionsuffix = '-cray-python%s' % local_craypython_maj_min
+
+homepage = 'https://pypi.python.org/pypi/flit-core'
+
+whatis = ['Description: a package to build and manipulate Python wheels']
+
+description = """
+Flit-core provides a PEP 517 build backend for packages using Flit.
+"""
+
+toolchain = SYSTEM
+
+sources = [SOURCE_TAR_GZ]
+
+checksums = [
+    '72ad266176c4a3fcfab5f2930d76896059851240570ce9a98733b658cb786eba', # flit-core-3.9.0.tar.gz
+]
+
+use_pip = True
+
+dependencies = [
+    ('cray-python/%s' % local_craypython_version, EXTERNAL_MODULE)
+]
+
+sanity_check_paths = {
+    'files': ['lib/python%s/site-packages/flit_core/config.py' % local_craypython_maj_min],
+    'dirs': ['lib/python%s/site-packages/flit_core' % local_craypython_maj_min],
+}
+
+moduleclass = 'tools'
