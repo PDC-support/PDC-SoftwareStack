@@ -1,0 +1,37 @@
+# Built by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'ConfigureMake'
+
+name = 'blast+'
+version = '2.15.0'
+
+homepage = 'https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download'
+whatis = [
+    'Description: Basic Local Alignment Search Tool (BLAST) for searching sequences.'
+]
+
+description = """
+The Basic Local Alignment Search Tool (BLAST) finds regions of local
+similarity between sequences. The program compares nucleotide or
+protein sequences to sequence databases and calculates the statistical
+significance of matches. BLAST can be used to infer functional and
+evolutionary relationships between sequences as well as
+help identify members of gene families.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.07'}
+toolchainopts = {'usempi': True}
+
+source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/%(version)s/']
+sources = ['ncbi-blast-%(version)s+-src.tar.gz']
+
+dependencies = [
+    ('glib', '2.78.0','',SYSTEM),
+    ('sqlite', '3.43.1','',SYSTEM),
+]
+
+sanity_check_paths = {
+    'files': ['bin/blastn', 'bin/blastp', 'bin/blastx'],
+    'dirs': []
+}
+
+moduleclass = 'bio'

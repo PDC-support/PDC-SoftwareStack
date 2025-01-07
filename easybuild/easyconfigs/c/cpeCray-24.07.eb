@@ -1,0 +1,36 @@
+easyblock = 'CrayPEToolchain'
+
+name =    'cpeCray'
+version = '24.07'
+
+homepage = 'https://pubs.cray.com/discover'
+description = """Toolchain using Cray compiler wrapper, using PrgEnv-cray."""
+
+toolchain = SYSTEM
+
+PrgEnv_load   = False
+PrgEnv_family = 'PrgEnv'
+CPE_load      = None
+
+cray_targets = [
+    'craype-x86-rome',
+    'craype-accel-host',
+    'craype-network-ofi'
+    ]
+
+dependencies = [
+    ('cce/18.0.0', EXTERNAL_MODULE),
+    ('craype/2.7.32', EXTERNAL_MODULE),
+    ('cray-mpich/8.1.30', EXTERNAL_MODULE),
+    ('cray-libsci/24.07.0', EXTERNAL_MODULE),
+    ('cray-dsmml/0.3.0', EXTERNAL_MODULE),
+    ('perftools-base/24.07.0', EXTERNAL_MODULE),
+    ('cray-pmi/6.1.15', EXTERNAL_MODULE),
+]
+
+postinstallcmds = [
+    "export PE_ENV='CRAY'",
+]
+
+moduleclass = 'toolchain'
+
