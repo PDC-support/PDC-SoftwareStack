@@ -35,17 +35,23 @@ cray_targets = [
     ]
 
 dependencies = [
-    ('gcc-native/13.2', EXTERNAL_MODULE),
+    ('gcc-native/12.3', EXTERNAL_MODULE),
     ('craype/2.7.32', EXTERNAL_MODULE),
     ('cray-mpich/8.1.30', EXTERNAL_MODULE),
     ('cray-libsci/24.07.0', EXTERNAL_MODULE),
     ('cray-dsmml/0.3.0', EXTERNAL_MODULE),
     ('perftools-base/24.07.0', EXTERNAL_MODULE),
+    ('xpmem', EXTERNAL_MODULE),
     ('cray-pmi/6.1.15', EXTERNAL_MODULE),
 ]
 
 postinstallcmds = [
     "export PE_ENV='GNU'",
 ]
+
+modluafooter = """
+-- Prepend fake gcc custom directory to PATH
+prepend_path("PATH", "/pdc/software/tools/redirect")
+"""
 
 moduleclass = 'toolchain'

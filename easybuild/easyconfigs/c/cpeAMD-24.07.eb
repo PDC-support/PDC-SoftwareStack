@@ -26,6 +26,7 @@ dependencies = [
     ('cray-libsci/24.07.0', EXTERNAL_MODULE),
     ('cray-dsmml/0.3.0', EXTERNAL_MODULE),
     ('perftools-base/24.07.0', EXTERNAL_MODULE),
+    ('xpmem', EXTERNAL_MODULE),
     ('cray-pmi/6.1.15', EXTERNAL_MODULE),
 
 ]
