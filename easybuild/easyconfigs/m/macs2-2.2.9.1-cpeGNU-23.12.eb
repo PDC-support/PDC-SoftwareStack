@@ -1,0 +1,55 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'PythonPackage'
+
+name = 'macs2'
+version = '2.2.9.1'
+
+homepage = 'https://github.com/taoliu/MACS'
+whatis = [
+    'Description: Model Based Analysis for ChIP-Seq data',
+]
+description = """
+With the improvement of sequencing techniques, chromatin immunoprecipitation
+followed by high throughput sequencing (ChIP-Seq) is getting popular to study
+genome-wide protein-DNA interactions. To address the lack of powerful ChIP-Seq
+analysis method, we presented the Model-based Analysis of ChIP-Seq (MACS),
+for identifying transcript factor binding sites.
+
+MACS captures the influence of genome complexity to evaluate the significance
+of enriched ChIP regions and MACS improves the spatial resolution of binding
+sites through combining the information of both sequencing tag position and
+orientation. MACS can be easily used for ChIP-Seq data alone, or with a control
+sample with the increase of specificity. Moreover, as a general peak-caller,
+MACS can also be applied to any “DNA enrichment assays” if the question to be asked
+is simply: where we can find significant reads coverage than the random background.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+sources = ['MACS2-%(version)s.tar.gz']
+checksums = ['8d56bc37fb823fc6387d78138ce968405c54a0a8cd9776682705fd0983252d16']
+
+builddependencies = [
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+]
+
+use_pip = True
+download_dep_fail = True
+
+sanity_check_paths = {
+    'files': ['bin/macs2'],
+    'dirs': ['lib/python3.11/site-packages'],
+}
+
+sanity_check_commands = [('%(namelower)s --version')]
+
+options = {'modulename': 'MACS2'}
+
+sanity_pip_check = True
+
+moduleclass = 'bio'
