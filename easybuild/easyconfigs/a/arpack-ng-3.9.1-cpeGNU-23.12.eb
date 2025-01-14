@@ -4,7 +4,16 @@ name = 'arpack-ng'
 version = '3.9.1'
 
 homepage = 'http://forge.scilab.org/index.php/p/arpack-ng/'
-description = """ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems."""
+whatis = [
+    'Description: ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems.',
+]
+description = """
+ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems.
+
+This module is compiled without OpenMP support and should not be combined with other packages
+that use LibSci but are compiled with OpenMP support as otherwise a conflict with multiple
+LibSci libraries will occur.
+"""
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
 toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
