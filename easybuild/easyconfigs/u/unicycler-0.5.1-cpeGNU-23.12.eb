@@ -1,0 +1,58 @@
+easyblock = 'PythonPackage'
+
+name = 'unicycler'
+version = '0.5.1'
+
+homepage = 'https://github.com/rrwick/Unicycler'
+whatis = [
+    'Description: Unicycler - hybrid assembly pipeline for bacterial genomes',
+]
+description = """
+Unicycler is an assembly pipeline for bacterial genomes. It can assemble Illumina-only
+read sets where it functions as a SPAdes-optimiser. It can also assembly long-read-only
+sets (PacBio or Nanopore) where it runs a miniasm+Racon pipeline.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'rrwick'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Unicycler-0.5.0_available-cpus.patch']
+checksums = [
+   {'v0.5.1.tar.gz': 'c6b04923363719d7672c8c0b39a357712328ab8471175a2f172effbd9584448e'},
+   {'Unicycler-0.5.0_available-cpus.patch': '4c99e889826924b375e07f264b8a8a875a094d63127d5b39c3ebfaab267ce235'},
+]
+
+builddependencies = [
+    ('wheel','.0.41.2'),   
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('spades', '4.0.0'),
+    ('racon', '1.5.0','',True),
+    ('blast+', '2.15.0'),
+]
+
+download_dep_fail = True
+use_pip = True
+
+_test_cmd = 'unicycler -t %(parallel)s -1 short_reads_1.fastq.gz -2 short_reads_2.fastq.gz -o outdir'
+postinstallcmds = [
+    ' '.join([
+        "cd %(builddir)s/Unicycler-%(version)s/sample_data &&",
+        "PYTHONPATH=%(installdir)s/lib/python3.11/site-packages:$PYTHONPATH",
+        "PATH=%(installdir)s/bin:$PATH",
+        _test_cmd,
+    ]),
+]
+
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': ['bin/unicycler'],
+    'dirs': ['lib/python3.11/site-packages/unicycler']
+}
+
+moduleclass = 'bio'
