@@ -1,0 +1,60 @@
+# @author: Henric Zazzi
+
+easyblock = 'CMakeMake'
+
+name = 'amber'
+version = '24'
+versionsuffix = '-ambertools-%(version)s'
+
+homepage = 'https://ambermd.org/amber.html'
+
+description = """
+Amber (originally Assisted Model Building with Energy Refinement) is software for performing
+molecular dynamics and structure prediction."""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.07'}
+toolchainopts = {'usempi': True, 'openmp': True}
+
+sources = [
+    '/pdc/software/eb_repo/sources/%(name)s/Amber%(version)s.tar.bz2',
+    '/pdc/software/eb_repo/sources/%(name)s/AmberTools%(version)s.tar.bz2',
+]
+
+builddependencies = [
+    ('cmake', '3.31.2', '', True),
+    ('boost', '1.85.0')
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5-parallel', EXTERNAL_MODULE),
+    ('cray-parallel-netcdf', EXTERNAL_MODULE),
+    ('cray-netcdf-hdf5parallel', EXTERNAL_MODULE)
+]
+
+patches = [
+     'ambertools-22_fix_missing_MPI_LIBRARY_error.patch',
+     'amber-22_remove_undeclared_redundant_variable.patch',
+     'Amber-24_remove_open-pal-link.patch',
+     'Amber-24_cusparse_LinearSolvers_ugly_fix.patch',
+]
+
+configopts =  '-DCMAKE_C_COMPILER=cc -DCMAKE_CXX_COMPILER=CC -DCMAKE_FC_COMPILER=ftn -DCOMPILER=CRAY -DMPI=TRUE -DOPENMP=TRUE ' 
+configopts += '-DCHECK_UPDATES=FALSE -DAPPLY_UPDATES=FALSE -DBUILD_QUICK=FALSE '
+configopts += '-DDOWNLOAD_MINICONDA=FALSE -DBUILD_PYTHON=FALSE '
+configopts += '-DFORCE_EXTERNAL_LIBS="netcdf;fftw;blas;lapack;pnetcdf" -DTRUST_SYSTEM_LIBS=TRUE '
+# Cray LibSci
+configopts += '-DBLAS_LIBRARIES=$CRAY_LIBSCI_PREFIX_DIR/lib/libsci_gnu.so -DLAPACK_LIBRARIES=$CRAY_LIBSCI_PREFIX_DIR/lib/libsci_gnu.so '
+# NetCDF
+configopts += '-DNetCDF_INCLUDES=$CRAY_NETCDF_HDF5PARALLEL_PREFIX/include -DNetCDF_INCLUDES_F90=$CRAY_NETCDF_HDF5PARALLEL_PREFIX/include ' 
+configopts += '-DNetCDF_LIBRARIES_F90=$CRAY_NETCDF_HDF5PARALLEL_PREFIX/lib/libnetcdff.so '
+configopts += '-DNetCDF_LIBRARIES_F77=$CRAY_NETCDF_HDF5PARALLEL_PREFIX/lib/libnetcdff.so '
+configopts += '-DNetCDF_LIBRARIES_C=$CRAY_NETCDF_HDF5PARALLEL_PREFIX/lib/libnetcdf.so  '
+# Parallel NetCDF
+configopts += '-DPnetCDF_LIBRARY=$CRAY_PARALLEL_NETCDF_PREFIX/lib/libpnetcdf.so -DPnetCDF_INCLUDE_DIR=$CRAY_PARALLEL_NETCDF_PREFIX/include '
+
+modextravars = {'AMBERHOME': '%(installdir)s'}
+
+moduleclass = 'chem'
+
