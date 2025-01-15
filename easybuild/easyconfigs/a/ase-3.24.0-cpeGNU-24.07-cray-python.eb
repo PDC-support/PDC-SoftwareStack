@@ -1,0 +1,35 @@
+# contributed by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+easyblock = 'PythonPackage'
+
+name = 'ase'
+version = '3.24.0'
+versionsuffix = '-cray-python'
+
+homepage = 'https://wiki.fysik.dtu.dk/ase/'
+description = """ASE is a python package providing an open source Atomic Simulation Environment
+ in the Python scripting language."""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.07'}
+
+source_urls = ['https://pypi.python.org/packages/source/a/ase']
+sources = ['%(name)s-%(version)s.tar.gz']
+
+dependencies = [
+    ('cray-python/3.11.7', EXTERNAL_MODULE),
+]
+
+postinstallcmds = ['cp -r %(builddir)s/%(namelower)s-%(version)s/ase %(installdir)s/']
+
+allow_prepend_abs_path = True
+# The extra pythonpath is needed as there are different format in the egg package. See to it to adapt to the right anaconda version
+modextrapaths = {'PYTHONPATH': ['%(installdir)s'],
+	'PYTHONPATH': ['%(installdir)s/lib64/python3.11/site-packages/ase-%(version)s-py3.11.egg']
+}
+
+sanity_check_paths = {
+    'files': ['bin/ase'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'chem'
