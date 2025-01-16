@@ -1,0 +1,61 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'CMakeMake'
+
+name = 'nextgenmap'
+version = '0.5.5'
+
+homepage = 'http://cibiv.github.io/NextGenMap/'
+whatis = [
+    'Description: A mapping method for Next Generation Sequencing reads',
+]
+description = """
+NextGenMap is a flexible highly sensitive short read mapping tool that handles
+much higher mismatch rates than comparable algorithms while still outperforming
+them in terms of runtime.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+github_account = 'Cibiv'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['c205e6cb312d2f495106435f10fb446e6fb073dd1474f4f74ab5980ba9803661']
+
+builddependencies = [
+    ('cmake', '3.27.7'),
+]
+
+dependencies = [
+    ('bamtools', '2.5.2'),
+    ('zlib', '1.3.1'),
+]
+
+skipsteps = ['install']
+
+preconfigopts = r"sed -i.bak '/director.*\(bamtools\|zlib\).*/d' ../NextGenMap-%(version)s/CMakeLists.txt && "
+preconfigopts += "sed -i.bak 's/BamTools-static/bamtools/g' ../NextGenMap-%(version)s/{src,utils}/CMakeLists.txt && "
+preconfigopts += "sed -i.bak 's/zlibstatic/z/g' ../NextGenMap-%(version)s/{src,utils}/CMakeLists.txt && "
+
+buildopts = ' && cp -r ../NextGenMap-%(version)s/bin/ngm-%(version)s/. %(installdir)s/bin/'
+
+postinstallcmds = [
+    # avoid hard overwriting of $LD_LIBRARY_PATH in ngm wrapper script
+    r"sed -i 's/\(LD_LIBRARY_PATH=[^ ]*\)\"/\1:$LD_LIBRARY_PATH\"/g' %(installdir)s/bin/ngm",
+    # fix execution permissions for ngm* binaries/scripts
+    "chmod a+x %(installdir)s/bin/ngm*",
+    # link `libOpenCL.so.1` to the `lib` directory (required when using RPATH linking)
+    'cd %(installdir)s && mkdir -p lib && ln -rfs bin/opencl/lib/libOpenCL.so.1 lib/libOpenCL.so.1',
+]
+
+sanity_check_paths = {
+    'files': ['lib/libOpenCL.so.1'] + ['bin/%s' % x for x in ['ngm', 'ngm-core', 'ngm-log', 'ngm-utils', 'oclTool']],
+    'dirs': ['bin/opencl']
+}
+
+sanity_check_commands = [
+    "ngm --help 2>&1 | grep 'Usage:[ ]*ngm'",
+]
+
+moduleclass = 'bio'
