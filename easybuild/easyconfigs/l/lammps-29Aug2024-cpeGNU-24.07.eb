@@ -17,14 +17,15 @@ sources = ['%s.tar.gz' % _release]
 
 builddependencies = [
     ('cmake', '3.31.3', '', ('system', '')),
-    ('cray-fftw', EXTERNAL_MODULE),
 ]
 
 dependencies = [
     ('cray-python', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
     ('ffmpeg', '5.0.1', '', ('system', '')),
-    ('plumed', '2.9.2'),
     ('zstd', '1.5.5', '', ('system', '')),
+    ('libvori', '220621'),
+    ('plumed', '2.9.2'),
 ]
 
 _pkgdir = f'%(builddir)s/%(namelower)s-{_release}'
