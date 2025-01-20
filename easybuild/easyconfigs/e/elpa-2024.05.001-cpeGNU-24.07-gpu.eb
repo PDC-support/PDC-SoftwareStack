@@ -1,12 +1,14 @@
 # Contributed by Luca Marsella (CSCS)
 # Some adaptations by Kurt Lust (University of Antwerpen and LUMI consortium)
-# Updated to 2024.05.001 by Johan Hellsvik
+# GPU version adapted for LUMI
+# Adapted for Dardel by Johan Hellsvik (PDC)
 easyblock = 'ConfigureMake'
 
 local_ELPA_version = '2024.05.001'
 
 name = 'elpa'
 version = local_ELPA_version
+versionsuffix = '-gpu'
 
 homepage = 'https://elpa.mpcdf.mpg.de'
 
@@ -30,7 +32,7 @@ docurls = [
 ]
 
 toolchain = {'name': 'cpeGNU', 'version': '24.07'}
-toolchainopts = {'usempi': True, 'openmp': True}
+toolchainopts = {'usempi': True, 'openmp': False}
 
 source_urls = ['https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/%(version)s/']
 sources = ['elpa-%(version)s.tar.gz']
@@ -41,32 +43,50 @@ builddependencies = [
     ('autotools', '20220317', '', True),
 ]
 
-#preconfigopts  = './autogen.sh && '
-preconfigopts = " CC=cc CXX=CC FC=ftn CPP=cpp && "
-
-local_commonopts = ' FCFLAGS="$FCFLAGS" CPP=cpp --disable-generic --disable-sse --disable-avx --enable-avx2 --disable-avx512 --enable-static '
-configopts = [
-    local_commonopts + ' --enable-openmp ',
-    local_commonopts + ' --disable-openmp '
+dependencies = [
+    ('cray-libsci', EXTERNAL_MODULE),
+    ('rocm', EXTERNAL_MODULE),
 ]
 
-prebuildopts = " make clean && "
+configopts = ' '.join([
+    'CPP=cpp CC=cc CXX=hipcc FC=ftn',
+    'CFLAGS="-g $CFLAGS"',
+    'FCFLAGS="-g $FCFLAGS"',
+    'CXXFLAGS="-g --offload-arch=gfx90a -std=c++17 -I$ROCM_PATH/include/hip -I$ROCM_PATH/include/ -I$ROCM_PATH/include/rocsolver -I$CRAY_MPICH_DIR/include"',
+    '--enable-static',
+    '--disable-generic',
+    '--disable-sse',
+    '--disable-avx',
+    '--enable-avx2',
+    '--disable-avx512',
+    '--enable-amd-gpu-kernels',
+    '--with-AMD-gpu-support-only',
+    '--enable-gpu-streams=amd',
+    '--enable-hipcub',
+    '--enable-single-precision ',
+    '--disable-openmp',
+    '--with-mpi=yes',
+    '--enable-cuda-aware-mpi',
+# Disable hipblas because detection of the v3 api is a completly broken test
+# copy-pasted from the rocblas one, with the wrong include and floating point type.
+#    '--enable-marshalling-hipblas-library',
+])
+
+prebuildopts = 'export CPATH=$ROCM_PATH/include/hipblas && make clean && '
 maxparallel = 16
 
 sanity_check_paths = {
-    'files': ['lib/libelpa.a', 'lib/libelpa.so', 'lib/libelpa_openmp.a', 'lib/libelpa_openmp.so'],
+    'files': ['lib/libelpa.a', 'lib/libelpa.so'],
     'dirs':  ['bin', 'lib/pkgconfig',
-              'include/%(namelower)s-%(version)s/%(namelower)s', 'include/%(namelower)s-%(version)s/modules',
-              'include/%(namelower)s_openmp-%(version)s/%(namelower)s', 'include/%(namelower)s_openmp-%(version)s/modules']
+              'include/%(namelower)s-%(version)s/%(namelower)s', 'include/%(namelower)s-%(version)s/modules',]
 }
 
 modextrapaths = {
-    'CPATH': ['include/elpa_openmp-%(version)s', 'include/elpa-%(version)s']
+    'CPATH': ['include/elpa-%(version)s']
 }
 
 modextravars = {
     'ELPA_INCLUDE_DIR': '%(installdir)s/include/elpa-%(version)s',
-    'ELPA_OPENMP_INCLUDE_DIR': '%(installdir)s/include/elpa_openmp-%(version)s'
 }
 
 moduleclass = 'math'
