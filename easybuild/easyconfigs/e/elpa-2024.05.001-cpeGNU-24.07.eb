@@ -3,9 +3,9 @@
 # Updated to 2024.05.001 by Johan Hellsvik
 easyblock = 'ConfigureMake'
 
-local_ELPA_version =           '2024.05.001'
+local_ELPA_version = '2024.05.001'
 
-name =    'elpa'
+name = 'elpa'
 version = local_ELPA_version
 
 homepage = 'https://elpa.mpcdf.mpg.de'
@@ -33,9 +33,11 @@ toolchain = {'name': 'cpeGNU', 'version': '24.07'}
 toolchainopts = {'usempi': True, 'openmp': True}
 
 source_urls = ['https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/%(version)s/']
-sources =     ['elpa-%(version)s.tar.gz']
+sources = ['elpa-%(version)s.tar.gz']
+checksums = ['9caf41a3e600e2f6f4ce1931bd54185179dade9c171556d0c9b41bbc6940f2f6']
 
-builddependencies = [ # We use the system Python and Perl.
+builddependencies = [
+    ('automake','1.16.5', '', True),
     ('autotools', '20220317', '', True),
 ]
 
@@ -49,6 +51,7 @@ configopts = [
 ]
 
 prebuildopts = " make clean && "
+maxparallel = 16
 
 sanity_check_paths = {
     'files': ['lib/libelpa.a', 'lib/libelpa.so', 'lib/libelpa_openmp.a', 'lib/libelpa_openmp.so'],
