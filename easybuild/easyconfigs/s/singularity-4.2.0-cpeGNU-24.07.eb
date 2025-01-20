@@ -1,0 +1,37 @@
+# Created by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+
+easyblock = 'ConfigureMake'
+
+name = 'singularity'
+version = '4.2.0'
+
+homepage = 'https://sylabs.io/singularity/'
+description = """Singularity is a container platform. It allows you to create and run containers that package up pieces of software in a way that is portable and reproducible. You can build a container using Singularity on your laptop, and then run it on many of the largest HPC clusters in the world, local university or company clusters, a single server, in the cloud, or on a workstation down the hall. Your container is a single file, and you don’t have to worry about how to install all the software you need on each different operating system and system.
+https://sylabs.io/docs/
+""" 
+
+toolchain = {'name': 'cpeGNU', 'version': '24.07'}
+
+source_urls = ['https://github.com/sylabs/singularity/releases/download/v%(version)s/']
+sources = ['%(name)s-ce-%(version)s.tar.gz']
+
+dependencies = [
+    ('go','1.22.2.linux-amd64', '', True),
+#    ('cray-python', '3.9.13.1', '', True),
+]
+
+configure_cmd = './mconfig'
+configopts = '--without-squashfuse --without-conmon --without-seccomp --without-suid'
+prebuildopts = 'cd builddir &&'
+preinstallopts = 'cd builddir &&'
+
+sanity_check_paths = {
+    'files': ['bin/singularity'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    'singularity --version',
+]
+
+moduleclass = 'tools'
