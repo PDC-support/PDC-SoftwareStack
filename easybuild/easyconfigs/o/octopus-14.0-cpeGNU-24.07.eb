@@ -1,0 +1,46 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'ConfigureMake'
+
+name = 'octopus'
+version = '14.0'
+
+homepage = 'https://octopus-code.org/'
+description = """Octopus is a scientific program aimed at the ab initio virtual experimentation
+on a hopefully ever-increasing range of system types. Electrons are described quantum-mechanically
+within density-functional theory (DFT), in its time-dependent form (TDDFT) when doing simulations
+in time. Nuclei are described classically as point particles. Electron-nucleus interaction is
+ described within the pseudopotential approximation."""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.07'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['https://octopus-code.org/download/%(version)s/']
+sources = [SOURCELOWER_TAR_GZ]
+
+#patches = ['%(name)s-%(version)s.patch']
+
+dependencies = [
+    ('cray-libsci', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('libxc', '6.2.2'),
+    ('gsl', '2.8')
+]
+
+configopts = 'CFLAGS="-Ofast -march=native -mtune=native -fomit-frame-pointer -fopenmp -ffpe-summary=none -fallow-argument-mismatch" '
+configopts += 'FCFLAGS="-Ofast -march=native -mtune=native -fomit-frame-pointer -fopenmp -ffpe-summary=none -fallow-argument-mismatch" '
+configopts += '--enable-mpi '
+configopts += '--enable-openmp '
+configopts += '--with-gsl-prefix="${EBROOTGSL}" '
+configopts += '--with-libxc-prefix="${EBROOTLIBXC}" '
+configopts += '--with-fft-flavor=fftw3 FFTW3_LIBS="-L${FFTW_ROOT} -lfftw3f -lfftw3" '
+
+# 'make check' to run the test suite
+# Tests inactivated as it requires launching with srun
+#runtest = "check"
+
+sanity_check_paths = {
+    'files': ['bin/octopus','bin/oct-xyz-anim', 'bin/oct-wannier90','lib/liboct.a'],
+    'dirs': ['bin','lib','include'],
+}
+
+moduleclass = 'chem'
