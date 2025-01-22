@@ -1,0 +1,55 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au>
+# License::     MIT
+#
+# Notes::       Modified for PDC by Karl Johan Westrin <westrin@kth.se>
+##
+
+easyblock = 'Tarball'
+
+name = 'graphlan'
+version = '1.1.3'
+
+homepage = 'https://segatalab.github.io/tools/graphlan'
+whatis = [
+    'Description: High-quality circular representations of taxonomic and phylogenetic trees.',
+]
+description = """
+GraPhlAn is a software tool for producing high-quality circular representations
+of taxonomic and phylogenetic trees. It focuses on concise, integrative,
+informative and publication-ready representations of phylogenetically- and
+taxonomically-driven investigation.
+
+NOTE: Make sure to load the modules biopython and matplotlib before loading graphlan!
+"""
+
+toolchain = SYSTEM
+
+github_account = 'biobakery'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['%(version)s.tar.gz']
+patches = ['GraPhlAn-1.1.3-py3-matplotlib-3.8.patch']
+checksums = [
+    {'%(version)s.tar.gz': 'dddca54ec308506924cc46482338a9ab93f430b4d1ea479bd8bc30eb91edaf22'},
+    {'GraPhlAn-1.1.3-py3-matplotlib-3.8.patch': '74762b6bc3cedda2f92cfe758e4fe0fe326bddd0ec42861a6b22e0fbeba7942e'},
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('biopython', EXTERNAL_MODULE),
+    ('matplotlib', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+    'files': ['graphlan.py', 'graphlan_annotate.py'],
+    'dirs': [''],
+}
+
+sanity_check_commands = ["graphlan.py --help", "graphlan_annotate.py --help"]
+
+modextrapaths = {'PATH': ['']}
+
+moduleclass = 'bio'
