@@ -1,0 +1,75 @@
+# Created by Karl Johan Westrin, PDC
+
+easyblock = 'MakeCp'
+
+name = 'ngstools'
+version = '20240827'
+
+homepage = 'https://github.com/mfumagalli/ngsTools'
+whatis = [
+    'Description: Programs to analyse NGS data for population genetics purposes.',
+]
+description = """
+ngsTools is a collection of programs for population genetics analyses from NGS data,
+taking into account data statistical uncertainty. The methods implemented in these
+programs do not rely on SNP or genotype calling, and are particularly suitable for
+low sequencing depth data. An application note illustrating its application
+has published (Fumagalli et al. 2014).
+
+This module provides the following programs:
+
+- ngsSim
+- ngsF
+- ngsPopGen:
+  + ngsFst
+  + ngsCovar
+  + ngs2dSFS
+  + ngsStat
+- ngsUtils:
+  + GetMergedGeno
+  + GetSubGeno
+  + GetSubSim
+  + GetSwitchedGeno
+- ngsDist
+- ngsF-HMM
+- ngsLD
+
+"""
+
+toolchain = SYSTEM
+
+local_commit = 'b38ea272c9f68822e74efd6bcb3495a08df42181'
+sources = [{
+    'filename': SOURCE_TAR_GZ,
+    'git_config': {
+        'url': 'https://github.com/mfumagalli',
+        'repo_name': 'ngsTools',
+        'commit': local_commit,
+        'recursive': True,
+        'keep_git_dir': True,        
+    }
+}]
+patches = ['ngsTools-ext-hts-angsd.patch']
+builddependencies = [
+    ('angsd', '0.940'),
+]
+dependencies = [
+    ('gsl', '2.7.1'),
+]
+
+files_to_copy = [
+    (['ngsDist/ngsDist','ngsSim/ngsSim', 'ngsF/ngsF', 'ngsF/ngsF.sh', 'ngsF-HMM/ngsF-HMM', 'ngsF-HMM/ngsF-HMM.sh',
+      'ngsLD/ngsLD', 'ngsPopGen/ngs2dSFS', 'ngsPopGen/ngsCovar', 'ngsPopGen/ngsFST', 'ngsPopGen/ngsStat',
+      'ngsSim/ngsSim', 'ngsUtils/GetSubGeno', 'ngsUtils/GetSubSim', 'ngsUtils/GetMergedGeno',
+      'ngsUtils/GetSwitchedGeno'], 'bin'),
+    'Scripts',
+]
+
+sanity_check_paths = {
+    'files': ['bin/ngsDist'],
+    'dirs': ['Scripts'],
+}
+
+sanity_check_commands = ["ngsSim",'ngsDist 2>&1 | grep -i call_thresh: > /dev/null']
+
+moduleclass = 'bio'

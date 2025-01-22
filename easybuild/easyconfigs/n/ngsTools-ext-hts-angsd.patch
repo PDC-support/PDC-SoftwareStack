@@ -1,0 +1,27 @@
+make use of external libraries for hts (and angsd).
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN ngsTools.orig/Makefile ngsTools/Makefile
+--- ngsTools.orig/Makefile	2025-01-22 13:29:14.735112738 +0100
++++ ngsTools/Makefile	2025-01-22 13:35:40.735115374 +0100
+@@ -1,12 +1,11 @@
+ 
+-export HTSSRC=../htslib/
++export HTSSRC=$(EBROOTHTSLIB)/lib
+ 
+-EXT = htslib angsd
+ TOOLS = ngsSim ngsPopGen ngsUtils ngsDist ngsLD ngsF ngsF-HMM
+ 
+-all: $(EXT) $(TOOLS)
++all: $(TOOLS)
+ 
+-.PHONY: $(EXT) $(TOOLS)
++.PHONY: $(TOOLS)
+ $(EXT) $(TOOLS):
+ 	@$(MAKE) -C $@
+ 
+@@ -14,4 +13,4 @@
+ 	@for i in $(TOOLS); do $(MAKE) -C $$i test; done
+ 
+ clean:
+-	@for i in $(EXT) $(TOOLS); do $(MAKE) -C $$i clean; done
++	@for i in $(TOOLS); do $(MAKE) -C $$i clean; done
