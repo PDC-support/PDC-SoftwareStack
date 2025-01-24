@@ -7,7 +7,7 @@ version = 'b0.13.1'
 homepage = 'https://atomsk.univ-lille.fr/'
 
 whatis = [
-    'Atomsk: A tool for manipulating and converting atomic data files'
+    'Description: Atomsk: A tool for manipulating and converting atomic data files',
 ]
 
 description = """
