@@ -1,0 +1,46 @@
+# contributed by Johan Hellsvik (PDC)
+easyblock = 'MakeCp'
+
+name = 'atomsk'
+version = 'b0.13.1'
+
+homepage = 'https://atomsk.univ-lille.fr/'
+
+whatis = [
+    'Atomsk: A tool for manipulating and converting atomic data files'
+]
+
+description = """
+Atomsk is a free, Open Source command-line program dedicated to the creation,
+manipulation, and conversion of data files for atomic-scale simulations in the field
+of computational materials sciences.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+sources = ['https://github.com/pierrehirel/atomsk/archive/refs/tags/Beta-0.13.1.tar.gz']
+
+patches = [
+   {'name': 'atomsk.patch', 'level': 0},
+]
+
+build_cmd = "cd src && make atomsk "
+
+test_cmd=''
+
+dependencies = [
+     ('cray-libsci', EXTERNAL_MODULE),
+]
+
+files_to_copy = [
+    (['src/atomsk'], './bin/'),
+    (['tools/*.sh'], './bin/'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/atomsk'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'phys'
