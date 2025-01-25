@@ -1,0 +1,63 @@
+# contributed by Luca Marsella (CSCS)
+#
+# This file is an EasyBuild reciPY as per https://github.com/hpcugent/easybuild
+#
+# Copyright:: Copyright 2012-2013 University of Luxembourg, Ghent University
+# Authors::   Fotis Georgatos <fotis@cern.ch>, Kenneth Hoste (Ghent University)
+# License::   MIT/GPL
+# $Id$
+#
+# This work implements a part of the HPCBIOS project and is a component of the policy:
+# http://hpcbios.readthedocs.org/en/latest/HPCBIOS_2012-97.html
+#
+easyblock = 'ConfigureMake'
+
+name = 'udunits'
+version = '2.2.26'
+
+homepage = 'http://www.unidata.ucar.edu/software/udunits/'
+whatis = [
+    "Description: UDUNITS is a toolset to work with various unit systems",
+    "This module provides both static and shared libraries, and a command line utility",
+]
+
+description = """
+The UDUNITS package supports units of physical quantities. Its C library provides
+for arithmetic manipulation of units and for conversion of numeric values between
+compatible units. The package contains an extensive unit database, which is in
+XML format and user-extendable. The package also contains a command-line utility
+for investigating units and converting values.
+
+This module provides both static and shared libraries, and a command line
+utility.
+"""
+
+docurls = [
+    "The package supports the info command (info udunits2, info udunits2prog, info udunits2lib)"
+]
+
+software_license_urls = [
+    'https://github.com/Unidata/UDUNITS-2/blob/master/COPYRIGHT,'
+]
+
+toolchain = SYSTEM
+toolchainopts = {'opt': True, 'pic': True}
+
+source_urls = [
+    'https://artifacts.unidata.ucar.edu/repository/downloads-%(namelower)s',
+    'https://sources.easybuild.io/u/UDUNITS'
+]
+sources = [SOURCELOWER_TAR_GZ]
+
+builddependencies = [
+    ('expat', '2.4.6'),
+]
+
+parallel = 1
+
+sanity_check_paths = {
+    'files': ['bin/udunits2', 'include/converter.h', 'include/udunits2.h', 'include/%(namelower)s.h', 'lib/libudunits2.a', 'lib/libudunits2.so'],
+    'dirs': ['share'],
+}
+
+moduleclass = 'phys'
