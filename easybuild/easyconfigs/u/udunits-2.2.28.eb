@@ -16,8 +16,29 @@ name = 'udunits'
 version = '2.2.28'
 
 homepage = 'http://www.unidata.ucar.edu/software/udunits/'
-description = """UDUNITS supports conversion of unit specifications between formatted and binary forms,
- arithmetic manipulation of units, and conversion of values between compatible scales of measurement."""
+whatis = [
+    "Description: UDUNITS is a toolset to work with various unit systems",
+    "This module provides both static and shared libraries, and a command line utility",
+]
+
+description = """
+The UDUNITS package supports units of physical quantities. Its C library provides
+for arithmetic manipulation of units and for conversion of numeric values between
+compatible units. The package contains an extensive unit database, which is in
+XML format and user-extendable. The package also contains a command-line utility
+for investigating units and converting values.
+
+This module provides both static and shared libraries, and a command line
+utility.
+"""
+
+docurls = [
+    "The package supports the info command (info udunits2, info udunits2prog, info udunits2lib)"
+]
+
+software_license_urls = [
+    'https://github.com/Unidata/UDUNITS-2/blob/master/COPYRIGHT,'
+]
 
 toolchain = SYSTEM
 toolchainopts = {'opt': True, 'pic': True}
@@ -28,8 +49,8 @@ source_urls = [
 ]
 sources = [SOURCELOWER_TAR_GZ]
 
-dependencies = [
-    ('expat', '2.4.6'),
+builddependencies = [
+    ('expat', '2.5.0'),
 ]
 
 parallel = 1
