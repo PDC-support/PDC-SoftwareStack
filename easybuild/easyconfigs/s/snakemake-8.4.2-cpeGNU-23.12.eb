@@ -1,0 +1,39 @@
+easyblock = 'PythonPackage'
+
+name = 'snakemake'
+version = '8.4.2'
+
+homepage = 'https://snakemake.readthedocs.io'
+whatis = [
+    'Description: Snakemake: A framework for reproducible data analysis.',
+]
+description = """
+The Snakemake workflow management system is a tool to create reproducible and
+scalable data analyses. Workflows are described via a human readable, Python
+based language. They can be seamlessly scaled to server, cluster, grid and cloud
+environments, without the need to modify the workflow definition. Finally,
+Snakemake workflows can entail a description of required software, which will be
+automatically deployed to any execution environment.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel', '.3.11.5'),
+    ('pulp', '.2.8.0'),
+]
+
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['ea9273d7a27706b635fafae87bb21100dad02275570e138fdcff125cb3cba4f4']
+
+use_pip = True
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': ['bin/snakemake'],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+sanity_check_commands = ['snakemake --help']
+
+moduleclass = 'tools'
