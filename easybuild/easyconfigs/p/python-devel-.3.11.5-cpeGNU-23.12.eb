@@ -637,6 +637,32 @@ exts_list = [
         'checksums': ['cf0496f3651bc65d7174ac1b7d043eff454892c708a87d1b683e57b569927ffd'],
     }),
     # end jedi
+    # ipython deps
+    ('traitlets', '5.13.0', {
+        'checksums': ['9b232b9430c8f57288c1024b34a8f0251ddcc47268927367a0dd3eeaca40deb5'],
+    }),
+    ('pure_eval', '0.2.2', {
+        'checksums': ['2b45320af6dfaa1750f543d714b6d1c520a1688dec6fd24d339063ce0aaa9ac3']
+    }),
+    ('executing', '1.2.0', {
+        'checksums': ['19da64c18d2d851112f09c287f8d3dbbdf725ab0e569077efb6cdcbd3497c107']
+    }),
+    ('asttokens', '2.2.1', {
+        'checksums': ['4622110b2a6f30b77e1473affaa97e711bc2f07d3f10848420ff1898edbe94f3']
+    }),
+    ('stack_data', '0.6.2', {
+        'checksums': ['32d2dd0376772d01b6cb9fc996f3c8b57a357089dec328ed4b6553d037eaf815']
+    }),
+    ('prompt_toolkit', '3.0.39', {
+        'checksums': ['04505ade687dc26dc4284b1ad19a83be2f2afe83e7a828ace0c72f3a1df72aac']
+    }),
+    ('pickleshare', '0.7.5', {
+        'checksums': ['87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca']
+    }),
+    ('backcall', '0.2.0', {
+        'checksums': ['5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e']
+    }),
+    # end ipython deps
 
     # ('', '', {
     #     'checksums': [''],
