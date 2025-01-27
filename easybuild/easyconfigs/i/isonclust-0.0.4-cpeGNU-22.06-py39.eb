@@ -1,29 +1,46 @@
 easyblock = 'PythonPackage'
 
 name = 'isonclust'
-version = '0.0.4'
-versionsuffix = '-py39'
+version = '0.0.6.1'
 
 homepage = 'https://github.com/ksahlin/isONclust'
-description = """isONclust is a tool for clustering either PacBio Iso-Seq reads, or Oxford Nanopore reads into clusters, where each cluster represents all reads that came from a gene. Output is a tsv file with each read assigned to a cluster-ID."""
+whatis = [
+    'Description: De novo clustering of long transcript reads into genes',
+]
+description = """
+isONclust is a tool for clustering either PacBio Iso-Seq reads or Oxford Nanopore reads
+into clusters, where each cluster represents all reads that came from a gene.
+Output is a tsv file with each read assigned to a cluster-ID.
+"""
 
-toolchain = {'name': 'cpeGNU', 'version': '22.06'}
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
 
 source_urls = ['https://github.com/ksahlin/isONclust/archive']
-sources = ['%(version)s.tar.gz']
-checksums = ['9f71edcd1291cd5121ee3c41865ab63522ceaf4e4b854b65be2c8c4d2d50f8f2']
+local_commit = 'c40d3bf6191483fb4f8d8a9c61515c14c1b87759'
+sources = [{'download_filename': '%s.tar.gz' % local_commit, 'filename': SOURCE_TAR_GZ}]
+checksums = ['d7de8fc842622536b220c2f9a1534c2bd3fa84b06067270190824a01290d3b5b']
 
-install_src = '%(name)s==%(version)s'
-
-dependencies = [
-    ('pysam', '0.19.1','-py39'),
-    ('python-parasail', '1.3.4','-py39',SYSTEM),
+builddependencies = [
+    ('wheel','.0.41.2'),
 ]
 
-download_dep_fail = False
+dependencies = [
+    ('pysam', '0.22.1'),
+    ('python-parasail', '.1.3.4'),
+]
+
+download_dep_fail = True
 use_pip = True
-sanity_pip_check = False
-skipsteps = ['sanity_check','sanitycheck']
-sanity_check_commands = []
+sanity_pip_check = True
+
+sanity_check_commands = ['isONclust --version']
+
+# isONclust does not actually provide any importable module
+options = {'modulename': 'os'}
+
+sanity_check_paths = {
+    'files': ['bin/isONclust'],
+    'dirs': ['lib/python3.11/site-packages'],
+}
 
 moduleclass = 'bio'
