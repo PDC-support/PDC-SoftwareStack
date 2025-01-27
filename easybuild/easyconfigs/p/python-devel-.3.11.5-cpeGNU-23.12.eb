@@ -742,6 +742,33 @@ exts_list = [
         'checksums': ['9e8d902230261beba74083aae12c2c5a395e29b408469fefadc8aaf51ee441e5'],
     }),
     # end snakemake deps
+    # snakemake executors
+    ('snakemake-executor-plugin-slurm-jobstep', '0.1.10', {
+        'modulename': 'snakemake_executor_plugin_slurm_jobstep',
+        'source_tmpl': 'snakemake_executor_plugin_slurm_jobstep-%(version)s.tar.gz',
+        'checksums': ['321b6bdf7883a8fb40ff4aeeb88633502e4db8394e40b6628db41a430c2eae2b'],
+    }),
+    ('snakemake-executor-plugin-flux', '0.1.0', {
+        'modulename': 'snakemake_executor_plugin_flux',
+        'source_tmpl': 'snakemake_executor_plugin_flux-%(version)s.tar.gz',
+        'checksums': ['92b1944dcf9ea163519a8879d4d638df2b3d0cd83ea6e8397d26046897811214'],
+    }),
+    ('snakemake-executor-plugin-slurm', '0.2.1', {
+        'modulename': 'snakemake_executor_plugin_slurm',
+        'source_tmpl': 'snakemake_executor_plugin_slurm-%(version)s.tar.gz',
+        'checksums': ['dd484fcb136612a3f2bdcccf15ca4ebffc2f5fcdfa7f1fcc14416dd272812999'],
+    }),
+    ('snakemake-executor-plugin-cluster-sync', '0.1.3', {
+        'modulename': 'snakemake_executor_plugin_cluster_sync',
+        'source_tmpl': 'snakemake_executor_plugin_cluster_sync-%(version)s.tar.gz',
+        'checksums': ['c30fca6ccb98a3f7ca52ca8a95414c71360a3d4a835bd4a097a13445d6fce2ac'],
+    }),
+    ('snakemake-executor-plugin-cluster-generic', '1.0.7', {
+        'modulename': 'snakemake_executor_plugin_cluster_generic',
+        'source_tmpl': 'snakemake_executor_plugin_cluster_generic-%(version)s.tar.gz',
+        'checksums': ['093808e63cc48294a9d1eb0b620cdff8cc970806294a2f6ba127a49f8a81d473'],
+    }),
+    # end snakemake executors
 
     # ('', '', {
     #     'checksums': [''],
