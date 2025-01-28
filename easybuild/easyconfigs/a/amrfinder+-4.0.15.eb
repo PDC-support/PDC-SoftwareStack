@@ -1,0 +1,63 @@
+easyblock = 'MakeCp'
+
+name = 'amrfinder+'
+version = '4.0.15'
+
+homepage = 'https://www.ncbi.nlm.nih.gov/pathogens/antimicrobial-resistance/AMRFinder/'
+whatis = [
+    'Description: AMRFinder+: NCBI Antimicrobial Resistance Gene Finder',
+]
+description = """
+This software and the accompanying database are designed to find acquired antimicrobial
+resistance genes and some point mutations in protein or assembled nucleotide sequences
+as well as known resistance-associated point mutations for several taxa. With
+AMRFinderPlus we added select members of additional classes of genes such as
+virulence factors, biocide, heat, acid, and metal resistance genes.
+
+This version of amrfinder+ does also contain StxTyper, which is used to determine
+stx type from nucleotide sequence. Stx (Shiga-toxin) genes are found in some
+strains of Escherichia coli and code for powerful toxins that can cause severe
+illness. StxTyper is software to classify these genes from assembled sequence
+using a standard algorithm.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'ncbi'
+sources = [{
+    'filename': SOURCE_TAR_GZ,
+    'git_config': {
+        'url': 'https://github.com/%(github_account)s',
+        'repo_name': 'amr',
+        'tag': 'amrfinder_v%(version)s',
+        'recursive': True,
+        'keep_git_dir': True,        
+    }
+}]
+
+dependencies = [
+    ('blast+', EXTERNAL_MODULE),
+    ('hmmer', EXTERNAL_MODULE),
+    ('curl', '7.78.0','',True),
+]
+
+# Binaries are installed to the root of the installation, so add that root to the PATH:
+modextrapaths = {'PATH': ''}
+
+# a list of binary files that will be produced
+local_binaries = ['amr_report', 'amrfinder', 'amrfinder_update', 'dna_mutation', 'fasta2parts', 'fasta_check',
+                  'fasta_extract', 'gff_check', 'mutate']
+
+files_to_copy = local_binaries + ['stx/stxtyper']
+
+sanity_check_paths = {
+    'files': local_binaries + ['stxtyper'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    ('amrfinder', '-h'),
+    ('stxtyper', '-h'),
+]
+
+moduleclass = 'bio'
