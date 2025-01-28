@@ -614,6 +614,13 @@ exts_list = [
         'checksums': ['6506eee9b93bf461ccc3cd239096707d0b86a5cbe5af08e82e7bd616271d55c6'],
     }),
     # end edlib
+    ('networkx', '3.2.1', {
+        'checksums': ['9f1bb5cf3409bf324e0a722c20bdb4c20ee39bf1c30ce8ae499c8502b0b5e0c6'],
+    }),
+    # multiqc deps
+    ('colormath', '3.0.0', {
+        'checksums': ['3d4605af344527da0e4f9f504fad7ddbebda35322c566a6c72e28edb1ff31217'],
+    }),
     ('humanfriendly', '10.0', {
         'checksums': ['6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc'],
     }),
@@ -626,9 +633,13 @@ exts_list = [
     ('pyaml_env', '1.2.1', {
         'checksums': ['6d5dc98c8c82df743a132c196e79963050c9feb05b0a6f25f3ad77771d3d95b0'],
     }),
+    ('spectra', '0.0.11', {
+        'checksums': ['8eb362a5187cb63cee13cd01186799c0c791a3ad3bec57b279132e12521762b8'],
+    }),
     ('typeguard', '4.2.0', {
         'checksums': ['2aeae510750fca88d0a2ceca3e86de7f71aa43b6c3e6c267737ce1f5effc4b34'],
     }),
+    # end multiqc deps
     # jedi
     ('parso', '0.8.3', {
         'checksums': ['8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0'],
