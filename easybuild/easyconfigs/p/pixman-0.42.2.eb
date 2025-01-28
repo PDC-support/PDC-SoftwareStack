@@ -4,12 +4,28 @@ name = 'pixman'
 version = '0.42.2'
 
 homepage = 'http://www.pixman.org/'
+whatis = [
+    'Description: A low-level library for pixel manipulation',
+    'The module includes both static and dynamic libraries and supports pkg-config'
+]
+
 description = """
- Pixman is a low-level software library for pixel manipulation, providing
- features such as image compositing and trapezoid rasterization. Important
- users of pixman are the cairo graphics library and the X server.
+Pixman is a low-level software library for pixel manipulation, providing
+features such as image compositing and trapezoid rasterization. Important users
+of pixman are the cairo graphics library and the X server.
+
+Pixman is implemented as a library in the C programming language. It runs on
+many platforms, including Linux, BSD Derivatives, MacOS X, and Windows.
+
+Pixman is free and open source software. It is available to be redistributed
+and/or modified under the terms of the MIT license.
+
+Documentation is inexistent.
 """
 
+software_license_urls = [
+    'https://cgit.freedesktop.org/pixman/tree/COPYING', # TODO: The site was down when adding this, is a versioned link possible?
+]
 toolchain = SYSTEM
 
 source_urls = ['https://cairographics.org/releases/']
