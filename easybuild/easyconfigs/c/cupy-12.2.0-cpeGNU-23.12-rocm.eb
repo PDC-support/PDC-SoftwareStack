@@ -29,9 +29,7 @@ checksums = [
 ]
 
 builddependencies = [
-    #('buildtools-python', '%(toolchain_version)s', '-cray-python3.11', True),
-    #('wheel', '%(toolchain_version)s', '-cray-python3.11', True),
-    ('wheel', '0.40.0', '-cray-python3.11', True),
+    ('wheel', '.0.41.5'),
 ]
 
 dependencies = [
