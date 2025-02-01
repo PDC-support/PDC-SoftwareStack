@@ -7,6 +7,9 @@ name = 'sra-tools'
 version = '3.1.1'
 
 homepage = 'https://github.com/ncbi/sra-tools'
+whatis = [
+    'Description: The SRA Toolkit and SDK from NCBI.',
+]
 description = """
 The SRA Toolkit, and the source-code SRA System Development Kit (SDK),
 will allow you to programmatically access data housed within SRA
