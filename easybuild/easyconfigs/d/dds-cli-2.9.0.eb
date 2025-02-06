@@ -27,15 +27,17 @@ sources = [{
 checksums = ['919f53955626b79813aea346377b7dfc024476d439d278a6a97b619c470ef4dc']
 
 install_cmd = 'mkdir -p %(installdir)s/bin && cp dds_cli-v%(version)s %(installdir)s/bin/dds-cli'
+install_cmd+= ' && chmod a+rx %(installdir)s/bin/dds-cli && cd %(installdir)s/bin && ln -s dds-cli dds'
 
 sanity_check_paths = {
-    'files': ['bin/dds-cli'],
+    'files': ['bin/dds-cli', 'bin/dds'],
     'dirs': [],
 }
 
 sanity_check_commands = [
     'dds-cli --help',
     'dds-cli --version | grep "version %(version)s$"',
+    'dds --version',
 ]
 
 moduleclass = 'tools'
