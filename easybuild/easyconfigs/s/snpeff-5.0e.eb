@@ -1,0 +1,41 @@
+easyblock = 'Tarball'
+
+name = 'snpeff'
+version = '5.0e'
+
+homepage = 'https://pcingola.github.io/SnpEff/'
+whatis = [
+    'Description: Genomic variant annotations and functional effect prediction toolbox.',
+]
+description = """
+SnpEff is a variant annotation and effect prediction tool. It annotates and
+predicts the effects of genetic variants (such as amino acid changes).
+
+SnpSift is a toolbox that allows you to filter and manipulate annotated files.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://snpeff.blob.core.windows.net/versions/']
+sources = ['snpEff_v%s_core.zip' % version.replace('.', '_')]
+checksums = ['85d907b5dd9e9008a0cf245956e3c9077a31e45f21a1b580d9b98a53fd8dcb9d']
+
+dependencies = [
+    ('java', '17.0.4', '', SYSTEM),
+    ('perl', '5.34.0', '', SYSTEM),
+]
+
+osdependencies = ['python']
+
+fix_perl_shebang_for = ['scripts/*.pl']
+
+sanity_check_paths = {
+    'files': ['snpEff.jar', 'SnpSift.jar', 'scripts/snpEff'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["snpEff -version"]
+
+modextrapaths = {'PATH': 'scripts'}
+
+moduleclass = 'bio'
