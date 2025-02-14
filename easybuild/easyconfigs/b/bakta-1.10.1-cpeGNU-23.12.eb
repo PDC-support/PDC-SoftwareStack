@@ -52,8 +52,11 @@ exts_list = [
         'checksums': ['3e226f743c960d4d30c46ae6868aff7e2a6b98f8d837cfbd2637568569b21f78'],
     }),
     (name, version, {
-        'source_tmpl': SOURCE_PY3_WHL,
-        'checksums': ['82967b4eefd2a1084743211fe955fa394972c2d2c878c6682e00b13dabc5a445'],
+        'patches': ['bakta-1.10.1-db_correct_version_handling.patch'],
+        'checksums': [
+            'f0d60a04a6793cf35a79b9585ab853c99f910cbcdb36c55031195f115e30e808',
+            '4ada78cf512c83d44d1186650f672ee1fb6f77a88974cb3819162702e6907acd',
+        ],
     }),
 ]
 
