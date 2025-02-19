@@ -1,0 +1,54 @@
+easyblock = 'PythonPackage'
+
+name = 'smc++'
+version = '1.15.3'
+
+homepage = 'https://github.com/popgenmethods/smcpp'
+whatis = [
+    'Description: SMC++ infers population history from whole-genome sequence data.',
+]
+description = """
+SMC++ is a program for estimating the size history of populations from
+whole genome sequence data.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel', '.3.11.5'),
+    ('matplotlib', '3.8.2'),
+    ('pysam', '0.22.1'),
+    ('mpfr', '4.1.0','',True),
+    ('msprime', '1.2.0'), # provides gsl
+]
+
+use_pip = True
+
+sources= [{
+    'filename': SOURCE_TAR_GZ,
+    'git_config': {
+        'url': 'https://github.com/popgenmethods',
+        'repo_name': 'smcpp',
+        'tag': 'v%(version)s',
+        'keep_git_dir': True,
+    },
+}]
+
+options = {'modulename': 'smcpp'}
+
+download_dep_fail = True
+sanity_pip_check = True
+
+postinstallcmds = ['cd %(installdir)s/lib/python3.11/site-packages/smcpp && sed -i "s/seaborn-ticks/seaborn-v0_8-ticks/g" commands/posterior.py plotting.py']
+
+sanity_check_paths = {
+    'files': ['bin/smc++'],
+    'dirs': ['lib/python3.11/site-packages/smcpp'],
+}
+
+sanity_check_commands = [
+    "smc++ version",
+    "smc++ -h",
+]
+
+moduleclass = 'bio'
