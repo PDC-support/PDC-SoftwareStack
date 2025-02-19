@@ -1,0 +1,45 @@
+easyblock = 'PythonPackage'
+
+name = 'msprime'
+version = '1.2.0'
+
+homepage = 'https://msprime.readthedocs.io'
+whatis = [
+    'Description: Simulate genealogical trees and genomic sequence data using population genetic models.',
+]
+description = """
+msprime is a population genetics simulator based on tskit. Msprime can simulate
+random ancestral histories for a sample of individuals (consistent with a given
+demographic model) under a range of different models and evolutionary processes.
+Msprime can also simulate mutations on a given ancestral history (which can be
+produced by msprime or other programs supporting tskit) under a variety
+of genome sequence evolution models.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel', '.3.11.5'),
+    ('gsl', '2.7.1'),
+]
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['60025ad9fd30d827a72ae6e760b6cff07a1d0e169b2c1da1024cb0fc23e4a7aa']
+
+sanity_check_paths = {
+    'files': ['bin/msp', 'bin/mspms'],
+    'dirs': ['lib/python3.11/site-packages/msprime'],
+}
+
+sanity_check_commands = [
+    'demes --help',
+    'tskit --help',
+    'msp --help',
+    'mspms --help',
+]
+
+moduleclass = 'bio'
