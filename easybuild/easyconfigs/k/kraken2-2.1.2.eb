@@ -71,4 +71,10 @@ sanity_check_commands = [
     'classify -h',
 ]
 
+modextravars = {
+    'KRAKEN2_DB':'/sw/data/Kraken2_data/prebuilt',
+}
+
+modloadmsg = '%(name)s/%(version)s: NOTE: Prebuilt databases for kraken2 are found at $KRAKEN2_DB'
+
 moduleclass = 'bio'
