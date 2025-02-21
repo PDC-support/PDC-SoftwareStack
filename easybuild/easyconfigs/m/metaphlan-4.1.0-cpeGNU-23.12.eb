@@ -1,0 +1,57 @@
+# Contribution by
+# DeepThought, Flinders University
+# R.QIAO <rob.qiao@flinders.edu.au>
+
+easyblock = 'PythonBundle'
+
+name = 'metaphlan'
+version = '4.1.0'
+
+homepage = 'https://github.com/biobakery/MetaPhlAn'
+whatis = [
+    'Description: MetaPhlAn: Metagenomic Phylogenetic Analysis.',
+]
+description = """
+MetaPhlAn is a computational tool for species-level microbial profiling (bacteria,
+archaea, eukaryotes, and viruses) from metagenomic shotgun sequencing data.
+StrainPhlAn (available within MetaPhlAn) allows strain-level microbial population genomics.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel', '.3.11.5'),
+    ('dendropy', '.4.6.1'),
+    ('pysam', '0.22.1'),
+    ('biom-format', '.2.1.16'), # provides h5py
+    ('phylophlan', '3.0.3'), # provides biopython
+    ('bowtie2', '2.5.4', '', True),
+    ('samtools', '1.20', '', True),
+    ('raxml', '8.2.12'),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+exts_list = [
+    ('hclust2', '1.0.0', {
+        'checksums': ['9667f1d16628940aedd3d1d571b956a6f77795018e3ea4dd83f234419eb0096d'],
+    }),
+    ('MetaPhlAn', version, {
+        'checksums': ['b6df31352f9230ac0463c571d827e80506b7ee1c428c4eab5f361a7cca95bf51'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['%(namelower)s', 'strainphlan']],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+sanity_check_commands = ['metaphlan -h']
+
+modextravars = {
+    'METAPHLAN_DB_DIR': '/sw/data/metaphlan_db',
+}
+
+moduleclass = 'bio'
