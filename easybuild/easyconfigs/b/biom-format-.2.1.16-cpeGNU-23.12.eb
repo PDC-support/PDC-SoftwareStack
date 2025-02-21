@@ -1,0 +1,58 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au>
+# License::     Revised BSD
+#
+# Notes:: updated by Kenneth Hoste (HPC-UGent) for foss/2021b
+##
+# Updated: Petr Král (INUITS)
+# Updated: Lara Peeters (Ghent University)
+
+easyblock = 'PythonPackage'
+
+name = 'biom-format'
+version = '.2.1.16'
+
+homepage = 'https://biom-format.org'
+whatis = [
+    'Description: The Biological Observation Matrix (BIOM) format. (Dependency purposes only.)',
+]
+description = """
+The BIOM file format (canonically pronounced biome) is designed to be
+a general-use format for representing biological sample by observation
+contingency tables. BIOM is a recognized standard for the Earth Microbiome
+Project and is a Genomics Standards Consortium supported project.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'usempi': True}
+
+sources = ['%(name)s-2.1.16.tar.gz']
+checksums = ['47f88d57a94ecaa4d06f3578ca394e78db6d12e46ab0886634743181e67dcfc9']
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('h5py', '3.11.0'),
+]
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+sanity_check_paths = {
+    'files': ['bin/biom'],
+    'dirs': ['lib'],
+}
+
+options = {'modulename': 'biom'}
+
+moduleclass = 'bio'
