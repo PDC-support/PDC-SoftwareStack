@@ -1,0 +1,56 @@
+# Created by Karl Johan Westrin, PDC
+easyblock = 'PythonPackage'
+
+name = 'dbcan'
+version = '4.1.4'
+
+homepage = 'https://bcb.unl.edu/dbCAN2'
+whatis = [
+    'Description: run_dbcan - Standalone Tool of dbCAN3.',
+]
+description = """
+run_dbcan is the standalone version of the dbCAN3 annotation tool for automated
+CAZyme annotation. This tool, known as run_dbcan, incorporates HMMER, Diamond and
+dbCAN_sub for annotating CAZyme families, and integrates
+Cazyme Gene Clusters (CGCs) and substrate predictions.
+
+For usage discussions, visit our issue tracker. To learn more, read the dbcan doc.
+If you're interested in contributing, whether through issues or pull requests,
+please review our contribution guide.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+github_account = 'linnabrown'
+source_urls = ['https://github.com/%(github_account)s/run_dbcan/releases/download/%(version)s']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['12dc906b56c3b1bfea667aa617d46d3f292857fc360730e4fe1d35f5b5557215']
+
+dependencies = [
+    ('python-devel', '.3.11.5'), # provides tqdm, openpyxl, requests, prodigal, natsort, hatchling
+    ('biopython', '1.84'),
+    ('matplotlib', '3.8.2'), # provides seaborn, pillow
+    ('pyhmmer', '.0.10.15'),
+    ('blast+', '2.15.0'),
+    ('diamond', '2.1.10', '', SYSTEM),
+]
+
+download_dep_fail = True
+use_pip = True
+sanity_pip_check = True
+
+local_db_dir = '/sw/data/dbCAN/12'
+
+modextravars = {'DBCAN_ROOT': local_db_dir}
+
+sanity_check_paths = {
+    'files': ['bin/run_dbcan'],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+sanity_check_commands = [
+    'run_dbcan --help',
+    'ls %s/stp.hmm* 2> /dev/null || dbcan_build --db-dir %s' % (local_db_dir, local_db_dir),
+]
+
+moduleclass = 'lib'
