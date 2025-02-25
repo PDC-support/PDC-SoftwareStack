@@ -905,6 +905,22 @@ exts_list = [
         'checksums': ['a6f5977418eff3b2d5500d54d9db50c8277a368436f4e4f8ddb1be3422870184'],
     }),
     # end openpyxl
+    # gffutils deps
+    ('six', '1.16.0', {
+        'checksums': ['1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926'],
+    }),
+    ('argh', '0.31.3', {
+        'source_tmpl': SOURCE_PY3_WHL,
+        'checksums': ['2edac856ff50126f6e47d884751328c9f466bacbbb6cbfdac322053d94705494'],
+    }),
+    ('argcomplete', '3.5.0', {
+        'source_tmpl': SOURCE_PY3_WHL,
+        'checksums': ['d4bcf3ff544f51e16e54228a7ac7f486ed70ebf2ecfe49a63a91171c76bf029b'],
+    }),
+    ('intbitset', '3.0.2', {
+        'checksums': ['a300b2d5a4989857ff1d0c3971624766a89a751e315aa080c07865031ae637a7'],
+    }),
+    # end gffutils deps
     # msprime deps
     ('svgwrite', '1.4.3', {
         'source_tmpl': '%(name)s-%(version)s.zip',
@@ -927,6 +943,15 @@ exts_list = [
         'checksums': ['5610335826c0afd35afe66ebbacba0881e69f25097418c2f08456be629be6eac'],
     }),
     # end msprime deps
+    ('texttable', '1.7.0', {
+        'checksums': ['2d2068fb55115807d3ac77a4ca68fa48803e84ebb0ee2340f858107a36522638'],
+    }),
+    ('peewee', '3.15.4', {
+        'checksums': ['2581520c8dfbacd9d580c2719ae259f0637a9e46eda47dfc0ce01864c6366205'],
+    }),
+    ('taxadb', '0.12.1', {
+        'checksums': ['eca577cd0f4ff2f26c7d8f68d7f5a0d2f7a2f73e623139ded2493e429b23cecd'],
+    }),
     # ('', '', {
     #     'checksums': [''],
     # }),
