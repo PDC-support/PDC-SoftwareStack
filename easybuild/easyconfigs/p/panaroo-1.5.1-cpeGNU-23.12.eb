@@ -1,0 +1,51 @@
+easyblock = 'PythonPackage'
+
+name = 'panaroo'
+version = '1.5.1'
+
+homepage = 'https://gtonkinhill.github.io/panaroo/'
+whatis = [
+    'Description: A pangenome analysis pipeline.',
+]
+description = """
+A Bacterial Pangenome Analysis Pipeline.
+
+ * Shares information between genomes to correct errors
+ * Can call large structural variants
+ * Fast and scalable to over 10k bacterial genomes
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel','.3.11.5'),
+    ('cd-hit', '4.8.1','',True),
+    ('prank', '170427','',True),
+    ('biopython', '1.84'),
+    ('prokka', '1.14.5','',True),
+    ('mafft','7.526','',True),
+    ('mash','2.3','',True),
+    ('matplotlib','3.8.2'),
+    ('gffutils','.0.13'),
+    ('dendropy','.4.6.1'),
+    ('biocode','.0.11.0'),
+]
+
+github_account = 'gtonkinhill'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+sanity_check_commands = [
+    "panaroo --version"
+]
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s'],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+moduleclass = 'bio'
