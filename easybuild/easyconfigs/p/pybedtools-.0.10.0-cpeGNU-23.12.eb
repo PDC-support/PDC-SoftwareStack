@@ -1,0 +1,44 @@
+easyblock = 'PythonPackage'
+
+name = 'pybedtools'
+version = '.0.10.0'
+
+homepage = 'https://daler.github.io/pybedtools'
+whatis = [
+    'Description: Python wrapper -- and more -- for BEDTools. (Dependency purposes only.)',
+]
+description = """
+The BEDTools suite of programs is widely used for genomic interval manipulation
+or “genome algebra”. pybedtools wraps and extends BEDTools and offers
+feature-level manipulations from within Python.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+sources = ['%(namelower)s-0.10.0.tar.gz']
+checksums = ['1a6fbaad23b013becc741d7d5922a2df03e391bc44ff92772ffb7dd456711161']
+
+builddependencies = [
+    ('wheel', '.0.41.2'),
+]
+
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('bedtools', '2.31.0','',True),
+    ('pysam', '0.22.1'),
+]
+
+use_pip = True
+download_dep_fail = True
+sanity_pip_check = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s']
+}
+
+moduleclass = 'bio'
