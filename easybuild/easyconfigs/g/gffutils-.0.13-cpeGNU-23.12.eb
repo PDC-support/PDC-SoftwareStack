@@ -1,0 +1,45 @@
+easyblock = 'PythonPackage'
+
+name = 'gffutils'
+version = '.0.13'
+
+homepage = 'http://daler.github.io/gffutils'
+whatis = [
+    'Description: GFF and GTF file manipulation and interconversion. (Dependency purposes only.)',
+]
+description = """
+Gffutils is a Python package for working with and manipulating the GFF and GTF
+format files typically used for genomic annotations. Files are loaded into a sqlite3
+database, allowing much more complex manipulation of hierarchical features
+(e.g., genes, transcripts, and exons) than is possible with plain-text methods alone.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel', '.3.11.5'),
+    ('biopython', '1.84'),
+    ('pybedtools', '.0.10.0'),
+    ('py-igraph', '.0.11.8')
+]
+
+use_pip = True
+sanity_pip_check = True
+
+sources = ['%(namelower)s-0.13-py3-none-any.whl']
+checksums = ['58e7bb579796fff70e728380ef2d8ffd4a3bc895e53e6529855a0cf87ba6a77a']
+
+sanity_check_commands = [
+    "python -c 'from gffutils import helpers'"
+]
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s']
+}
+
+moduleclass = 'bio'
