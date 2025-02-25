@@ -1,0 +1,38 @@
+easyblock = 'PythonPackage'
+
+name = 'biocode'
+version = '.0.11.0'
+
+homepage = 'https://gtonkinhill.github.io/panaroo/'
+whatis = [
+    'Description: Bioinformatics code libraries and scripts. (Dependency purposes only.)',
+]
+description = """
+This is a collection of bioinformatics scripts many have found useful and code
+modules which make writing new ones a lot faster.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('py-igraph','.0.11.8'),
+]
+
+sources = ['%(namelower)s-0.11.0.tar.gz']
+
+preinstallopts = 'sed -i "s/python-igraph/igraph/" setup.py &&'
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s','bin'],
+}
+
+moduleclass = 'bio'
