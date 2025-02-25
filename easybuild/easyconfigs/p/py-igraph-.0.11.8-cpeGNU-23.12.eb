@@ -1,0 +1,55 @@
+easyblock = 'PythonPackage'
+
+name = 'py-igraph'
+version = '.0.11.8'
+
+homepage = 'https://igraph.org/python'
+whatis = [
+    'Description: Python interface for igraph. (Dependency purposes only.)',
+]
+description = """
+Python interface to the igraph high performance graph library, primarily aimed
+at complex network research and analysis. It can be used to:
+
+ * Create, manipulate, and analyze networks.
+ * Convert graphs from/to networkx, graph-tool and many file formats.
+ * Plot networks using matplotlib and/or plotly.
+
+NOTE: This module does NOT provide the ability to plot usinc the Cairo library.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+dependencies = [
+    ('python-devel','.3.11.5'),
+    ('igraph', '0.10.15'),
+    ('matplotlib', '3.8.2'),
+]
+
+use_pip = True
+sanity_pip_check = True
+download_dep_fail = True
+
+source_urls = ['https://pypi.python.org/packages/source/i/igraph/']
+sources = ['igraph-0.11.8.tar.gz']
+checksums = ['d7dc1404567ba3b0ea1bf8b5fa6e101617915c8ad11ea5a9f925a40bf4adad7d']
+
+preinstallopts = 'IGRAPH_USE_PKG_CONFIG=1'
+
+# use matplotlib as default for plotting instead of cairo
+postinstallcmds = [
+    'sed -i "/plotting.backend/s/cairo/matplotlib/g" %(installdir)s/lib/python3.11/site-packages/igraph/configuration.py',
+]
+
+sanity_check_paths = {
+    'files': ['bin/igraph'],
+    'dirs': ['lib/python3.11/site-packages/igraph']
+}
+
+options = {'modulename': 'igraph'}
+
+moduleclass = 'lib'
