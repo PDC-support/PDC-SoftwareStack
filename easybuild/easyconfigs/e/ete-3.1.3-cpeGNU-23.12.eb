@@ -1,12 +1,11 @@
 easyblock = 'PythonPackage'
 
 name = 'ete'
-version = '.3.1.3'
-versionsuffix = '-noqt'
+version = '3.1.3'
 
 homepage = 'http://etetoolkit.org'
 whatis = [
-    'Description: A Python framework for the analysis and visualization of trees. (Dependency purposes only.)',
+    'Description: A Python framework for the analysis and visualization of trees.',
 ]
 description = """
 ETE (Environment for Tree Exploration) is a toolkit that assists in the automated
@@ -14,11 +13,7 @@ manipulation, analysis and visualization of trees. It is mainly written in Pytho
 and includes many extra functionalities for phylogenetic trees.
 
 NOTE: This version of ete is installed without a GUI, and is thus missing the binary
-executable file, which requires Qt to be run.
-
-NOTE: This module is ONLY to be used as dependency of other modules. If you are
-a user, you should use the module miniconda3 and create your own python environment
-instead of loading this module.
+executable file (treeview), which requires Qt to be run.
 """
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
@@ -37,8 +32,7 @@ builddependencies = [
 
 dependencies = [
     ('cray-python/3.11.5', EXTERNAL_MODULE),
-    ('lxml', '.4.9.2'),
-#    ('pyqt5', '.5.15.10'),
+    ('pyqt5', '.5.15.10'),
 ]
 
 download_dep_fail = True
@@ -46,16 +40,14 @@ use_pip = True
 
 options = {'modulename': 'ete3'}
 
-# Since this is installed without Qt, remove the binary executable
-# which requires pyqt to be able to execute
-postinstallcmds = [
-    'rm -rf %(installdir)s/bin',
-]
-
 sanity_check_paths = {
-    'files': ['ete3/tools/ete_build.cfg'],
+    'files': ['ete3/tools/ete_build.cfg','bin/ete3'],
     'dirs': ['lib/python3.11/site-packages/ete3'],
 }
+
+sanity_check_commands = [
+    'ete3 -h',
+]
 
 sanity_pip_check = True
 
