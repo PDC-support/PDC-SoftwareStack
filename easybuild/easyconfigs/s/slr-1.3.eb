@@ -1,0 +1,51 @@
+# Created by Karl Johan Westrin, PDC
+
+easyblock = 'PackedBinary'
+
+name = 'slr'
+version = '1.3'
+
+homepage = 'https://www.ebi.ac.uk/goldman-srv/SLR'
+whatis = [
+    'Description: SLR: Sitewise Likehood Ratio estimation of selection.',
+    'This module provides one executable.',
+]
+description = """
+SLR[1] is a program to detect sites in coding DNA that are unusually conserved
+and/or unusually variable (that is, evolving under purify or positive selection)
+by analysing the pattern of changes for an alignment of sequences on an
+evolutionary tree. The strength of selection at each site is determined by comparing
+the rate of nonsynonymous (amino acid changing) substitutions to that of synonymous
+(silent) substituions, the latter assumed to be invisible to selection and so
+evolving in a strictly neutral fashion.
+
+SLR performs an explicit likelihood-ratio test for selection at each site in
+the alignment, making few assumptions about the distribution of selection and
+potentially allowing every site to be under a different level of evolutionary
+constraint. SLR is a direct test of whether a particular site is evolving in a
+non-neutral fashion; the many sitewise tests are then corrected for multiple
+comparisons to indicate which sites have strong evidence of purifying or positive
+selection and so whether there is any reliable evidence for the presence of
+selection in the alignment. Alternatively SLR can restricted to only detect
+unusually variable sites, indicating such sites and providing evidence for the
+presence of positive selection in the alignment.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://www.ebi.ac.uk/goldman-srv/SLR/download/v%(version)s']
+sources = [{
+    'download_filename': 'slr_linux.tgz',
+    'filename': 'slr_linux_%(version)s.tgz',
+}]
+
+postinstallcmds = ['cd %(installdir)s && mv bin/Slr_shared Slr']
+
+sanity_check_paths = {
+    'files': ['Slr'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['Slr | grep -i version']
+
+moduleclass = 'bio'
