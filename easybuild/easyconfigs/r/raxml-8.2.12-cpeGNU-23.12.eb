@@ -4,18 +4,35 @@ name = 'raxml'
 version = '8.2.12'
 
 homepage = 'https://github.com/stamatak/standard-RAxML'
-description = "RAxML search algorithm for maximum likelihood based inference of phylogenetic trees."
+whatis = [
+    'Description: RAxML search algorithm for maximum likelihood based inference of phylogenetic trees.',
+]
+description = """
+RAxML (Randomized Axelerated Maximum Likelihood) is a program for sequential and
+parallel Maximum Likelihood based inference of large phylogenetic trees. It can
+also be used for post-analyses of sets of phylogenetic trees, analyses of
+alignments and, evolutionary placement of short reads.
+
+It has originally been derived from fastDNAml which in turn was derived from
+Joe Felsentein’s dnaml which is part of the PHYLIP package.
+"""
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
 toolchainopts = {'usempi': True}
 
-source_urls = ['https://github.com/stamatak/standard-RAxML/archive/']
+github_account = 'stamatak'
+source_urls = ['https://github.com/%(github_account)s/standard-RAxML/archive/']
 sources = ['v%(version)s.zip']
 checksums = ['abe6978c6027e897ebed67066836e4eadd57ecd0d042045634424dd001e86105']
 
-buildopts = '-f Makefile.AVX2.HYBRID.gcc CC="$CC"'
+buildopts = [
+    '-f Makefile.AVX2.HYBRID.gcc CC="$CC"',
+    '-f Makefile.AVX2.PTHREADS.gcc CC="$CC"',
+    '-f Makefile.AVX2.MPI.gcc CC="$CC"',
+    '-f Makefile.AVX2.gcc CC="$CC"',
+]
 
-files_to_copy = [(["raxmlHPC-HYBRID-AVX2"], "bin"), "usefulScripts", "README", "manual"]
+files_to_copy = [(["raxmlHPC-*"], "bin"), "usefulScripts", "README", "manual"]
 
 postinstallcmds = ["cd %(installdir)s/bin && ln -s raxmlHPC-HYBRID-AVX2 raxmlHPC"]
 
