@@ -52,4 +52,11 @@ sanity_check_commands = [
     "ktImportText",
 ]
 
+modextravars = {
+    'KRONATOOLS_DB': '/sw/data/kronatools_data/latest',
+    'KRONATOOLS_OLD_DB': '/sw/data/kronatools_data',
+}
+
+modloadmsg = '%(name)s/%(version)s: NOTE: Taxonomy databases from NCBI are found at $KRONATOOLS_DB' 
+
 moduleclass = 'bio'
