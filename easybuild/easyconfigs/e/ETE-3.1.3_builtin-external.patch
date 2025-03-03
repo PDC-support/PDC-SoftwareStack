@@ -1,0 +1,107 @@
+use external third-party software (from loaded moduels) in PATH instead of builtin legacy tools
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN ete.orig/ete3/tools/ete_build_lib/apps.py ete/ete3/tools/ete_build_lib/apps.py
+--- ete.orig/ete3/tools/ete_build_lib/apps.py   2025-03-03 20:15:03.273035687 +0100
++++ ete/ete3/tools/ete_build_lib/apps.py        2025-03-03 21:38:23.259606947 +0100
+@@ -61,32 +61,31 @@
+ 
+ # How to call applications
+ builtin_apps = {
+-    'muscle'             : "%BIN%/muscle",
+-    'mafft'              : "MAFFT_BINARIES=%BIN%  %BIN%/mafft --thread %CORES%",
+-    #'mafft'              : "%BIN%/mafft --thread %CORES%",
+-    'clustalo'           : "%BIN%/clustalo --threads %CORES%",
+-    'trimal'             : "%BIN%/trimal",
+-    'readal'             : "%BIN%/readal",
+-    'tcoffee'            : "export HOME=/tmp MAFFT_BINARIES=%BIN% TMP_4_TCOFFEE=%TMP% LOCKDIR_4_TCOFFEE=%TMP% PLUGINS_4_TCOFFEE=%BIN%/ && %BIN%/t_coffee",
+-    'phyml'              : "%BIN%/phyml",
+-    'iqtree'             : "%BIN%/iqtree -nt %CORES%",
+-    'raxml-pthreads'     : "%BIN%/raxmlHPC-PTHREADS-SSE3 -T%CORES%",
+-    'raxml'              : "%BIN%/raxmlHPC-SSE3",
+-    'pmodeltest'         : "python %BIN%/pmodeltest.py --nprocs %CORES% --phyml %BIN%/phyml",
+-    'dialigntx'          : "%BIN%/dialign-tx %BIN%/dialigntx_conf",
+-    'fasttree'           : "export OMP_NUM_THREADS=%CORES%; %BIN%/FastTree",
+-    'statal'             : "%BIN%/statal",
+-    'prank'              : "%BIN%/prank",
+-    'probcons'           : "%BIN%/probcons",
+-    'kalign'             : "%BIN%/kalign",
+-    'codeml'             : "%BIN%/codeml",
+-    'slr'                : "%BIN%/Slr",
++    'muscle'             : "muscle",
++    'mafft'              : "mafft --thread %CORES%",
++    'clustalo'           : "clustalo --threads %CORES%",
++    'trimal'             : "trimal",
++    'readal'             : "readal",
++    'tcoffee'            : "t_coffee",
++    'phyml'              : "phyml",
++    'iqtree'             : "iqtree2 -nt %CORES%",
++    'raxml-pthreads'     : "raxmlHPC-PTHREADS-AVX2 -T%CORES%",
++    'raxml'              : "raxmlHPC-AVX2",
++    'pmodeltest'         : "python pmodeltest.py --nprocs %CORES% --phyml phyml",
++    'dialigntx'          : "dialign-tx dialigntx_conf",
++    'fasttree'           : "export OMP_NUM_THREADS=%CORES%; FastTree",
++    'statal'             : "statal",
++    'prank'              : "prank",
++    'probcons'           : "probcons",
++    'kalign'             : "kalign",
++    'codeml'             : "codeml",
++    'slr'                : "Slr",
+     }
+ 
+ # options and arguments necessary to run each program and return one line
+ # containing information about its version
+ app2version = {
+-    'muscle'              : "-version|grep MUSCLE",
++    'muscle'              : "-version|grep -i MUSCLE",
+     'mafft'               : "--noflagavailable 2>&1 |grep MAFFT",
+     'clustalo'            : "--version",
+     'trimal'              : "--version|grep -i trimal",
+@@ -101,7 +100,7 @@
+     'pmodeltest'          : "--version 2>&1|grep 'pmodeltest.py v'",
+ #    'prank'               : "|grep 'prank v'",
+ #    'probcons'            : "2>&1 |grep -i version",
+-    'kalign'              : "2>&1 |grep -i version",
++    'kalign'              : "--version",
+     'codeml'              : " /dev/null 2>&1|grep -i version && rm rub rst rst1",
+     'slr'                 : " 2>&1 |grep -i version",
+     'iqtree'              : " -h |grep -i version|grep IQ",
+@@ -139,7 +138,6 @@
+     bin_path = apps_path 
+     tmp_path = os.path.join(exec_path, "tmp")
+     #apps_base = apps_path.rstrip("/x86-64").rstrip("/x86-32")
+-    cmd = re.sub("%BIN%", bin_path, cmd)
+     cmd = re.sub("%BASE%", os.path.join(apps_path, "src"), cmd)
+     cmd = re.sub("%TMP%", tmp_path, cmd)
+     cmd = re.sub("%CORES%", cores, cmd)
+diff -ruN ete.orig/ete3/tools/ete_build.py ete/ete3/tools/ete_build.py
+--- ete.orig/ete3/tools/ete_build.py    2025-03-03 20:15:03.269702353 +0100
++++ ete/ete3/tools/ete_build.py 2025-03-03 21:08:13.692974763 +0100
+@@ -658,28 +658,9 @@
+         
+     ETEHOMEDIR = os.path.expanduser("~/.etetoolkit/")
+ 
+-    if len(arguments) == 1:
+-        if not pexist(APPSPATH):
+-            print(colorify('\nWARNING: external applications not found', "yellow"), file=sys.stderr)
+-            print(colorify('Install using conda (recomended):', "lgreen"), file=sys.stderr)
+-            print(colorify(' conda install -c etetoolkit ete_toolchain', "white"), file=sys.stderr)
+-            print(colorify('or manually compile from:', "lgreen"), file=sys.stderr)
+-            print(colorify(' https://github.com/etetoolkit/ete_toolchain', "white"), file=sys.stderr)
+-            print()
+-
+-
+     if len(arguments) > 1:
+         _config_path = pjoin(BASEPATH, 'ete_build.cfg')
+         if arguments[1] == "check":
+-            if not pexist(APPSPATH):
+-                print(colorify('\nWARNING: external applications not found', "yellow"), file=sys.stderr)
+-                print(colorify('Install using conda (recomended):', "lgreen"), file=sys.stderr)
+-                print(colorify(' conda install -c etetoolkit ete_toolchain', "white"), file=sys.stderr)
+-                print(colorify('or manually compile from:', "lgreen"), file=sys.stderr)
+-                print(colorify(' https://github.com/etetoolkit/ete_toolchain', "white"), file=sys.stderr)
+-                print()
+-                sys.exit(0)
+-
+             try:
+                 toolchain_version = open(pjoin(APPSPATH, "__version__")).readline()
+             except IOError:
