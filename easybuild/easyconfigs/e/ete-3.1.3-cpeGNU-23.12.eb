@@ -13,7 +13,10 @@ manipulation, analysis and visualization of trees. It is mainly written in Pytho
 and includes many extra functionalities for phylogenetic trees.
 
 NOTE: This version of ete is installed without a GUI, and is thus missing the binary
-executable file (treeview), which requires Qt to be run.
+      executable file (treeview), which requires Qt to be run.
+NOTE: This module is installed without the extra, optional dependencies, only required
+      to run ete-build or ete-evol. To execute these commands, these dependecies
+      has to be loaded manually.
 """
 
 toolchain = {'name': 'cpeGNU', 'version': '23.12'}
