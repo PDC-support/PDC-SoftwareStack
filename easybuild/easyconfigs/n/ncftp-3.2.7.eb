@@ -1,0 +1,46 @@
+# Built by Karl Johan Westrin (westrin@kth.se) for PDC, KTH, Stockholm
+easyblock = 'ConfigureMake'
+
+name = 'ncftp'
+version = '3.2.7'
+
+homepage = 'https://www.ncftp.com'
+description = """
+NcFTP Client (also known as just NcFTP) is a set of FREE application programs
+implementing the File Transfer Protocol (FTP).
+
+The program has been in service on UNIX systems since 1991 and is a popular
+alternative to the standard FTP program, /usr/bin/ftp. NcFTP offers many
+ease-of-use and performance enhancements over the stock ftp client and runs
+on a wide variety of UNIX platforms as well as operating systems
+such as Microsoft Windows and Apple Mac OS X.
+""" 
+
+whatis = [
+    'Description: A set of free application programs implementing FTP',
+    'This module provides a number of executables.',
+]
+
+toolchain = SYSTEM
+
+source_urls = ['https://www.ncftp.com/public_ftp/ncftp']
+sources = ['%(namelower)s-%(version)s-src.tar.xz']
+patches = ['NcFTP-reproducible.patch']
+checksums = [
+    {'%(namelower)s-%(version)s-src.tar.xz': 'd41c5c4d6614a8eae2ed4e4d7ada6b6d3afcc9fb65a4ed9b8711344bef24f7e8'},
+    {'NcFTP-reproducible.patch': '1f067ef67145e508bc277d54c337b4d68849dae31ec2da12ae1a955d2a587bee'},
+]
+dependencies = [
+    ('ncurses', '6.4'),
+]
+
+preconfigopts = 'export CFLAGS="${CFLAGS} -fcommon -lncurses -L${EBROOTNCURSES}/lib" CPP=/usr/bin/cpp && '
+
+sanity_check_commands = ['ncftp -v 2>&1 | grep "NcFTP %(version)s"']
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in ['ncftp','ncftpget','ncftpput','ncftpbatch']],
+    'dirs': [],
+}
+
+moduleclass = 'tools'
