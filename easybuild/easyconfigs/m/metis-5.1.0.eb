@@ -3,9 +3,27 @@ version = '5.1.0'
 easyblock = 'EB_METIS'
 
 homepage = 'http://glaros.dtc.umn.edu/gkhome/metis/metis/overview'
-description = """METIS is a set of serial programs for partitioning graphs, partitioning finite element meshes,
- and producing fill reducing orderings for sparse matrices. The algorithms implemented in METIS are based on the
- multilevel recursive-bisection, multilevel k-way, and multi-constraint partitioning schemes."""
+
+whatis = [
+    'Description: METIS - Serial Graph Partitioning and Fill-reducing Matrix Ordering'
+]
+
+description = """
+METIS is a set of serial programs for partitioning graphs, partitioning finite
+element meshes, and producing fill reducing orderings for sparse matrices. The
+algorithms implemented in METIS are based on the multilevel recursive-bisection,
+multilevel k-way, and multi-constraint partitioning schemes.
+
+This module has been compiled with 32-bit indices and double precision floating
+point which is the default build for EasyBuild.
+
+METIS is distributed under the Apache License Version 2.0.
+"""
+
+software_license_urls = [
+    'http://www.apache.org/licenses/LICENSE-2.0',
+    'http://glaros.dtc.umn.edu/gkhome/metis/metis/faq',
+]
 
 toolchain = SYSTEM
 toolchainopts = {'optarch': True, 'pic': True}
