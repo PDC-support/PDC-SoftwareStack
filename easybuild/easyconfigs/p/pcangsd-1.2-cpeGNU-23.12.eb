@@ -1,0 +1,61 @@
+easyblock = 'PythonPackage'
+
+name = 'pcangsd'
+version = '1.2'
+
+homepage = "https://www.popgen.dk/software/index.php/PCAngsd"
+whatis = [
+    'Description: Framework for analyzing low depth NGS data in heterogeneous populations using PCA.',
+]
+description = """
+Framework for analyzing low-depth next-generation sequencing (NGS) data in
+heterogeneous/structured populations using principal component analysis (PCA).
+Population structure is inferred by estimating individual allele frequencies
+in an iterative approach using a truncated SVD model. The covariance matrix
+is estimated using the estimated individual allele frequencies as prior
+information for the unobserved genotypes in low-depth NGS data.
+
+The estimated individual allele frequencies can further be used to account
+for population structure in other probabilistic methods. pcangsd can be used
+for the following analyses:
+ * Covariance matrix
+ * Admixture estimation
+ * Inbreeding coefficients (both per-sample and per-site)
+ * HWE test
+ * Genome-wide selection scans
+ * Genotype calling
+ * Estimate NJ tree of samples
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+builddependencies = [
+    ('wheel','.0.41.2'),
+]
+
+dependencies = [
+    ('cython', '.3.0.10'),
+]
+
+use_pip = True
+sanity_pip_check = True
+
+github_account = 'Rosemeis'
+
+sources = ['v%(version)s.tar.gz']
+source_urls = [GITHUB_LOWER_SOURCE]
+checksums = ['286f09851c37e380c9abf5859595e7cd0ad8cb49f1d48b1b0ae409aab0eae62e']
+
+options = {'modulename': False}
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python3.11/site-packages/'],
+}
+
+
+sanity_check_commands = [
+    'pcangsd --help',
+]
+
+moduleclass = 'bio'
