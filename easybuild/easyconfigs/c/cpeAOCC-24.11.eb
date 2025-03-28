@@ -1,0 +1,36 @@
+easyblock = 'CrayPEToolchain'
+
+name = 'cpeAOCC'
+version = '24.11'
+
+homepage = 'https://pubs.cray.com/discover'
+description = """Toolchain using AMD compiler wrapper.\n"""
+
+toolchain = SYSTEM
+
+PrgEnv_load   = False
+PrgEnv_family = 'PrgEnv'
+CPE_load      = None
+
+cray_targets = [
+    'craype-x86-rome',
+    'craype-accel-host',
+    'craype-network-ofi'
+    ]
+
+dependencies = [
+    ('aocc/4.2.0', EXTERNAL_MODULE),
+    ('craype/2.7.33', EXTERNAL_MODULE),
+    ('cray-mpich/8.1.31', EXTERNAL_MODULE),
+    ('cray-libsci/24.11.0', EXTERNAL_MODULE),
+    ('cray-dsmml/0.3.0', EXTERNAL_MODULE),
+    ('perftools-base/24.11.0', EXTERNAL_MODULE),
+    ('xpmem', EXTERNAL_MODULE),
+    ('cray-pmi/6.1.15', EXTERNAL_MODULE),
+
+]
+
+# LD_LIBRARY_PATH is now updated by production.git/login/daint.footer
+
+moduleclass = 'toolchain'
+
