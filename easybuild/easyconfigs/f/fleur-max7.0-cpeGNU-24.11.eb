@@ -1,0 +1,42 @@
+easyblock = 'MakeCp'
+
+name = 'fleur'
+version = 'max7.0'
+
+homepage = 'https://www.flapw.de/MaX-7.0/'
+description = """
+FLEUR, a feature-full, freely available FLAPW (full-potential linearized augmented planewave) code, based on density-functional theory.
+The FLAPW-Method is an all-electron method which within density functional theory is universally applicable to all atoms of the periodic table and to systems with compact as well as open structures. It is widely considered to be the most precise electronic structure method in solid state physics.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'opt': True, 'usempi': True, 'verbose': False, 'pic': True, 'dynamic': False, 'openmp': True}
+
+#source_urls = ['http://www.flapw.de/pm/uploads/FLEUR/']
+#sources = ['%(name)s%(version)s.tgz']
+sources = ['https://iffgit.fz-juelich.de/fleur/fleur/-/archive/MaX-R7.0/fleur-MaX-R7.0.tar.gz']
+
+builddependencies = [
+	('cmake', '3.31.3', '', ('system', '')),
+	('libxml2', '2.12.3', '', ('system', '')),
+	('zlib', '1.3.1', '', ('system', '')),
+	('cray-hdf5-parallel', EXTERNAL_MODULE)
+]
+
+with_configure = True
+configure_cmd = './configure.sh'
+prefix_opt = '-flags \"-fallow-argument-mismatch\" && echo '
+prebuildopts = 'cd build && '
+install_cmd = ""
+
+files_to_copy = [(['*'], '%(installdir)s')]
+postinstallcmds = [
+    "ln -s %(installdir)s/build %(installdir)s/bin"
+]
+
+sanity_check_paths = {
+    	'files': ["build/fleur_MPI", "build/inpgen"],
+	'dirs': [],
+}
+
+moduleclass = 'phys'
