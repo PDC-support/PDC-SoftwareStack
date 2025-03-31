@@ -1,0 +1,60 @@
+# contributed by Johan Hellsvik (PDC)
+
+easyblock = 'CMakeMake'
+
+name =    'heffte'
+version = '2.4.1'
+versionsuffix = '-gpu'
+
+homepage = 'https://github.com/icl-utk-edu/heffte'
+
+whatis = [
+    "The Highly Efficient FFT for Exascale (heFFTe) library"
+]
+
+description = """
+The Highly Efficient FFT for Exascale (heFFTe) library is being developed as part of the Exascale Computing Project (ECP), which is a joint project of the U.S. Department of Energy's Office of Science and National Nuclear Security Administration (NNSA). HeFFTe delivers algorithms for distributed fast-Fourier transforms in on a heterogeneous systems, targeting the upcoming exascale machines.
+"""
+
+docurls = [
+    'Manual: https://icl-utk-edu.github.io/heffte/'
+]
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'opt': True}
+
+source_urls = ['https://github.com/icl-utk-edu/%(name)s/archive/refs/tags/']
+sources =     ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '3.31.3', '', True),
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),    
+    ('rocm', EXTERNAL_MODULE),
+]
+
+prebuildopts = 'module load craype-accel-amd-gfx90a && module load rocm/6.3.1 &&'
+parallel = 16
+
+configopts = [
+    ' -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS=ON \
+    -DHeffte_ENABLE_AVX=ON \
+    -DHeffte_ENABLE_PYTHON=ON \
+    -DHeffte_ENABLE_FORTRAN=ON \
+    -DMPI_CXX_COMPILER=CC \
+    -DCMAKE_CXX_COMPILER=hipcc \
+    -DCMAKE_CXX_FLAGS="--offload-arch=gfx90a" \
+    -DHeffte_ROCM_ROOT=${CRAY_ROCM_DIR} \
+    -DHeffte_ENABLE_ROCM=ON '
+]
+
+sanity_check_paths = {
+    'files': ['lib/libheffte.so.2.4.1', 'include/heffte.h'],
+    'dirs':  ['lib', 'include'],
+}
+
+moduleclass = 'math'
