@@ -26,6 +26,7 @@ dependencies = [
     ('zstd', '1.5.5', '', ('system', '')),
     ('libvori', '220621'),
     ('plumed', '2.9.2'),
+    ('n2p2', '2.3.0'),
 ]
 
 _pkgdir = f'%(builddir)s/%(namelower)s-{_release}'
@@ -33,6 +34,8 @@ _commonopts = f' -C {_pkgdir}/cmake/presets/most.cmake '
 _commonopts += ' -DBUILD_MPI=yes -DCMAKE_CXX_COMPILER:STRING=CC -DMPICXX=CC '
 _commonopts += ' -DPKG_PLUMED=yes -DDOWNLOAD_PLUMED=no -DPLUMED_MODE=shared '
 _commonopts += ' -DPKG_MPIIO=yes -DPKG_PYTHON=yes '
+_commonopts += ' -DML-HDNNP=yes '
+_commonopts += ' -DN2P2_DIR=${EBROOTN2P2} '
 
 configopts = [
     _commonopts + ' -DBUILD_OMP=no -DPKG_OPENMP=no -DLAMMPS_MACHINE=mpi ',
