@@ -1,0 +1,53 @@
+# Contributed by Luca Marsella (CSCS)
+# Modified for Dardel by Johan Hellsvik (PDC)
+easyblock = 'CMakeMake'
+
+name = 'lammps'
+version = '4Feb2025'
+_release = 'patch_%s' % version
+
+homepage = 'http://lammps.sandia.gov/'
+description = "LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator) is a classical molecular dynamics simulation code designed to run efficiently on parallel computers."
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'openmp': True, 'usempi': True, 'verbose': False}
+
+source_urls = ['https://github.com/%(name)s/%(namelower)s/archive/refs/tags/']
+sources = ['%s.tar.gz' % _release]
+
+builddependencies = [
+    ('cmake', '3.31.3', '', ('system', '')),
+]
+
+dependencies = [
+    ('cray-python', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('ffmpeg', '5.0.1', '', ('system', '')),
+    ('zstd', '1.5.5', '', ('system', '')),
+    ('libvori', '220621', '', ('system', '')),
+    ('plumed', '2.9.0'),
+    ('n2p2', '2.3.0'),
+]
+
+_pkgdir = f'%(builddir)s/%(namelower)s-{_release}'
+_commonopts = f' -C {_pkgdir}/cmake/presets/most.cmake '
+_commonopts += ' -DBUILD_MPI=yes -DCMAKE_CXX_COMPILER:STRING=CC -DMPICXX=CC '
+_commonopts += ' -DPKG_PLUMED=yes -DDOWNLOAD_PLUMED=no -DPLUMED_MODE=shared '
+_commonopts += ' -DPKG_MPIIO=yes -DPKG_PYTHON=yes '
+_commonopts += ' -DML-HDNNP=yes '
+_commonopts += ' -DN2P2_DIR=${EBROOTN2P2} '
+
+configopts = [
+    _commonopts + ' -DBUILD_OMP=no -DPKG_OPENMP=no -DLAMMPS_MACHINE=mpi ',
+    _commonopts + ' -DBUILD_OMP=yes -DPKG_OPENMP=yes -DLAMMPS_MACHINE=omp '
+]
+
+# folder with CMakeLists.txt relative to the unpacked tarball
+srcdir = 'cmake'
+
+sanity_check_paths = {
+    'files': ['bin/lmp_mpi', 'bin/lmp_omp'],
+    'dirs': ['bin']
+}
+
+moduleclass = 'chem'
