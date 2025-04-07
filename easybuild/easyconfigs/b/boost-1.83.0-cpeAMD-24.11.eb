@@ -1,0 +1,65 @@
+# contributed by Luca Marsella (CSCS)
+# Adapted by Kurt Lust (kurt.lust@uantwerpen.be) for the LUMI consortium
+# Adapted by Henric Zazzi (hzazzi@kth.se) for PDC, KTH, Stockholm
+easyblock = 'EB_BoostCPE'
+
+name = 'boost'
+version = '1.83.0'
+
+homepage = 'http://www.boost.org/'
+
+whatis = [
+    'Description: Boost provides free peer-reviewed portable C++ source libraries.'
+]
+
+description = """
+Boost provides free peer-reviewed portable C++ source libraries.
+
+We emphasize libraries that work well with the C++ Standard Library. Boost
+libraries are intended to be widely useful, and usable across a broad spectrum
+of applications. The Boost license encourages both commercial and non-commercial
+use.
+
+We aim to establish "existing practice" and provide reference implementations so
+that Boost libraries are suitable for eventual standardization. Ten Boost
+libraries are included in the C++ Standards Committee's Library Technical Report
+(TR1) and in the new C++11 Standard. C++11 also includes several more Boost
+libraries in addition to those from TR1. More Boost libraries are proposed for
+standardization in C++17.
+
+This module includes static and shared libraries, compiled with MPI support.
+The library boost_python is build for the system Python.
+
+This version of the module does not include support for Cray Python.
+The module does inlude single-threaded (suffix -x86) and multithreaded (suffix
+-mt-x86) versions of the libraries. The default names (without suffix) link
+to the multithreaded versions.
+"""
+
+software_license_urls = [
+    'https://www.boost.org/users/license.html',
+    f'https://github.com/boostorg/boost/blob/boost-{version}/LICENSE_1_0.txt',
+]
+
+toolchain = {'name': 'cpeAMD', 'version': '24.11'}
+toolchainopts = {'usempi': True, 'pic': True, 'verbose': False}
+
+source_urls = [SOURCEFORGE_SOURCE]
+sources = ['%(name)s_%(version_major)s_%(version_minor)s_0.tar.bz2']
+
+dependencies = [
+    ('bzip2', '1.0.8', '', ('system', '')),
+    ('zlib', '1.3.1', '', ('system', '')),
+]
+
+# Make sure b2 build actually uses the CC wrapper rather than any hardcoded toolset
+preconfigopts = 'sed -i.bak "/build.sh.*TOOLSET/s/$/ --cxx=CC/g" bootstrap.sh && '
+
+configopts = '--without-libraries=python'
+
+# also build boost_mpi
+boost_mpi = True
+
+modextravars = {'BOOST_ROOT': '%(installdir)s'}
+
+moduleclass = 'devel'
