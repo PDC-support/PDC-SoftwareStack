@@ -36,7 +36,7 @@ source_urls = ["https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/"]
 sources =     ["v%(version)s.tar.gz"]
 
 dependencies = [
-    ('boost', '1.87.0'),
+    ('boost', '1.83.0'),
     ('cray-python/3.11.7', EXTERNAL_MODULE),
     ('rocm/6.3.1', EXTERNAL_MODULE),
     ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
@@ -45,6 +45,10 @@ dependencies = [
 builddependencies = [
     ('cmake', '3.31.3', '', True),
 ]
+
+preconfigopts  = 'export PATH=${ROCM_PATH}/llvm/bin:$PATH && '
+preconfigopts += 'export C_INCLUDE_PATH=$ROCM_PATH/llvm/include && '
+preconfigopts += 'export CPLUS_INCLUDE_PATH=$ROCM_PATH/llvm/include && '
 
 configopts  = '-DROCM_PATH=$ROCM_PATH '
 configopts += '-DWITH_ACCELERATED_CPU=ON '
@@ -61,6 +65,11 @@ configopts += '-DCMAKE_C_COMPILER=${ROCM_PATH}/llvm/bin/clang '
 configopts += '-DCMAKE_CXX_COMPILER=${ROCM_PATH}/llvm/bin/clang++ '
 configopts += '-DLLVM_DIR=${ROCM_PATH}/llvm/lib/cmake/llvm/ '
 configopts += '-DACPP_VERSION_SUFFIX={} '.format(versionsuffix)
+configopts += '-DACPP_TARGETS="gfx90a" '
+configopts += '-DBoost_NO_BOOST_CMAKE=TRUE '
+configopts += '-DBoost_NO_SYSTEM_PATHS=TRUE '
+configopts += '-DLLVM_DIR=${ROCM_PATH}/llvm/lib/cmake/llvm/ '
+configopts += '-DHIPSYCL_ALLOW_INSTANT_SUBMISSION=1 '
 
 sanity_check_paths = {
     'files': ['bin/acpp', 'include/AdaptiveCpp/sycl/sycl.hpp',
@@ -76,6 +85,7 @@ sanity_check_commands = [
 
 modextravars = {
     'ACPP_TARGETS': 'hip:gfx90a',
+
 }
 
 moduleclass = 'compiler'
