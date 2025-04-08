@@ -27,8 +27,7 @@ sources = [SOURCELOWER_TAR_GZ]
 
 # optional dependencies 
 dependencies = [
-    ('fontconfig', '2.15.0'),
-    ('freetype', '2.13.2'),
+    ('fontconfig', '2.15.0'), # provides freetype
     ('libtiff', '4.6.0'),
 ]
 
