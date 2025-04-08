@@ -2,7 +2,6 @@ easyblock = 'Bundle'
 
 local_bzip2_version =        '1.0.8'         # http://www.bzip.org/downloads.html
 local_fontconfig_version =   '2.15.0'        # https://www.freedesktop.org/software/fontconfig/release/
-local_freetype_version =     '2.13.2'        # https://download.savannah.gnu.org/releases/freetype/
 local_intltool_version =     '0.51.0'        # https://launchpad.net/intltool/+download
 local_libpciaccess_version = '0.17'          # https://cgit.freedesktop.org/xorg/lib/libpciaccess/
 local_xorg_macros_version =  '1.20.0'        # https://cgit.freedesktop.org/xorg/util/macros
@@ -10,7 +9,6 @@ local_zlib_version =         '1.3.1'        # https://zlib.net/
 local_autotools_version =    '20220317'
 local_bison_version =        '3.8.2'
 local_gettext_version =      '0.22.4'
-local_ninja_version =        '1.11.1'
 local_meson_version =        '0.61.5'
 local_doxygen_version =      '1.9.5'
 
@@ -66,8 +64,7 @@ source_urls = [
 
 dependencies = [
     ('bzip2',        local_bzip2_version),
-    ('fontconfig',   local_fontconfig_version),
-    ('freetype',     local_freetype_version),
+    ('fontconfig',   local_fontconfig_version), # provides freetype
     ('zlib',         local_zlib_version),
     ('libpciaccess', local_libpciaccess_version),
     ('xorg-macros',  local_xorg_macros_version),  # Why here? To not have to add it as a build dependency in other packages???
@@ -77,8 +74,7 @@ builddependencies = [
     ('autotools',    local_autotools_version),
     ('bison',        local_bison_version),
     ('gettext',      local_gettext_version),
-    ('ninja',        local_ninja_version),
-    ('meson',        local_meson_version),
+    ('meson',        local_meson_version), # provides ninja
     ('doxygen',      local_doxygen_version),
     ('intltool',     local_intltool_version),
 ]
