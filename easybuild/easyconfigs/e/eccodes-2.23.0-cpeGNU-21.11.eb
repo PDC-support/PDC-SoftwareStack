@@ -30,8 +30,7 @@ builddependencies = [
 dependencies = [
     ('cray-hdf5', EXTERNAL_MODULE),
     ('cray-netcdf', EXTERNAL_MODULE),
-    ('jasper', '2.0.33','',True),
-    ('libjpeg-turbo', '2.1.1','',True),
+    ('jasper', '2.0.33','',True), # provides libjpeg-turbo
 ]
 
 configopts = " -DCMAKE_C_COMPILER=cc  -DCMAKE_Fortran_COMPILER=ftn -DBUILD_SHARED_LIBS=BOTH -DENABLE_JPG=OFF -DENABLE_PNG=OFF -DENABLE_FORTRAN=ON "
