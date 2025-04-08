@@ -13,12 +13,12 @@ whatis = [
 ]
 
 description = """
-COSMA is a parallel, high-performance, GPU-accelerated, matrix-matrix 
-multiplication algorithm that is communication-optimal for all combinations 
-of matrix dimensions, number of processors and memory sizes, without the 
-need for any parameter tuning. The key idea behind COSMA is to first derive 
-a tight optimal sequential schedule and only then parallelize it, preserving 
-I/O optimality between processes. 
+COSMA is a parallel, high-performance, GPU-accelerated, matrix-matrix
+multiplication algorithm that is communication-optimal for all combinations
+of matrix dimensions, number of processors and memory sizes, without the
+need for any parameter tuning. The key idea behind COSMA is to first derive
+a tight optimal sequential schedule and only then parallelize it, preserving
+I/O optimality between processes.
 """
 
 docurls = [
@@ -28,8 +28,8 @@ docurls = [
 toolchain = {'name': 'cpeGNU', 'version': '24.11'}
 toolchainopts = {'opt': True}
 
-source_urls = ['https://github.com/eth-cscs/%(name)s/releases/download/v%(version)s/']
-sources =     ['cosma.tar.gz']
+source_urls = ['https://github.com/eth-cscs/%(name)s/archive/refs/tags/']
+sources =     ['v%(version)s.tar.gz']
 
 builddependencies = [
     ('cmake', '3.31.3', '', ('system', '')),
