@@ -88,3 +88,4 @@ setenv("SPACK_DISABLE_LOCAL_CONFIG","true")
 
 -- Add Spack's modules
 prepend_path("MODULEPATH", installdir .. "/modules/tcl/linux-sles15-zen")
+prepend_path("MODULEPATH", installdir .. "/modules/tcl/linux-sles15-zen2")
