@@ -5,6 +5,9 @@ name = 'llvm'
 version = '18.1.4'
 
 homepage = 'http://llvm.org/'
+whatis = [
+    'Description: The LLVM module provides the LLVM core libraries.',
+]
 description = """The LLVM Core libraries provide a modern source- and
 target-independent optimizer, along with code generation support for many
 popular CPUs (as well as some less common ones!) These libraries are built
