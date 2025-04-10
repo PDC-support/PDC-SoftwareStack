@@ -31,10 +31,10 @@ compilers:
       - libfabric
       environment:
         set:
-          CPATH: /opt/rocm-6.3.0/include
-          LIBRARY_PATH: /opt/rocm-6.3.0/lib
+          CPATH: /opt/rocm-6.3.3/include
+          LIBRARY_PATH: /opt/rocm-6.3.3/lib
         prepend_path:
-          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.15/lib:/opt/rocm-6.3.0/lib
+          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.15/lib:/opt/rocm-6.3.3/lib
           PKG_CONFIG_PATH: /usr/lib64/pkgconfig
       extra_rpaths: []
   - compiler:
@@ -55,13 +55,13 @@ compilers:
       environment:
         set:
           RFE_811452_DISABLE: '1'
-          LIBRARY_PATH: /opt/rocm-6.3.0/lib
-          CPATH: /opt/rocm-6.3.0/include
+          LIBRARY_PATH: /opt/rocm-6.3.3/lib
+          CPATH: /opt/rocm-6.3.3/include
         append_path:
           LD_LIBRARY_PATH: /opt/cray/pe/gcc-libs:/opt/cray/libfabric/1.15.2.0/lib64
           PKG_CONFIG_PATH: /usr/lib64/pkgconfig
         prepend_path:
-          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.15/lib:/opt/rocm-6.3.0/lib
+          LD_LIBRARY_PATH: /opt/cray/pe/pmi/6.1.15/lib:/opt/rocm-6.3.3/lib
       extra_rpaths:
       - /opt/cray/pe/gcc-libs
       - /opt/cray/gcc-libs

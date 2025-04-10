@@ -34,6 +34,24 @@ packages:
         modules:
         - cray-fftw/3.3.10.9
       buildable: false
+    hdf5:
+      externals:
+      - spec: hdf5@1.12.2.9
+        modules:
+        - cray-hdf5/1.12.2.9
+      buildable: false
+    cray-hdf5-parallel:
+      externals:
+      - spec: cray-hdf5-parallel@1.12.2.9
+        modules:
+        - cray-hdf5-parallel/1.12.2.9
+      buildable: false
+    cray-parallel-netcdf:
+      externals:
+      - spec: cray-parallel-netcdf@1.12.3.9
+        modules:
+        - cray-parallel-netcdf/1.12.3.9
+      buildable: false
     gcc:
       externals:
       - spec: gcc@7.5.0 languages=c,c++,fortran
