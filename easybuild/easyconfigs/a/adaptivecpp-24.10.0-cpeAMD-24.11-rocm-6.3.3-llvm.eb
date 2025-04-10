@@ -4,7 +4,7 @@ easyblock = 'CMakeMake'
 
 name =    'adaptivecpp'
 version = '24.10.0'
-versionsuffix = '-rocm-6.3.1-llvm'
+versionsuffix = '-rocm-6.3.3-llvm'
 
 homepage = 'https://adaptivecpp.github.io/'
 
@@ -38,7 +38,7 @@ sources =     ["v%(version)s.tar.gz"]
 dependencies = [
     ('boost', '1.83.0'),
     ('cray-python/3.11.7', EXTERNAL_MODULE),
-    ('rocm/6.3.1', EXTERNAL_MODULE),
+    ('rocm/6.3.3', EXTERNAL_MODULE),
     ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
 ]
 
