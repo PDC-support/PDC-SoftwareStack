@@ -36,7 +36,7 @@ dependencies = [
     ('rocm', EXTERNAL_MODULE),
 ]
 
-prebuildopts = 'module load craype-accel-amd-gfx90a && module load rocm/6.3.1 &&'
+prebuildopts = 'module load craype-accel-amd-gfx90a && module load rocm/6.3.3 &&'
 parallel = 16
 
 configopts = [
