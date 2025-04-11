@@ -1,0 +1,43 @@
+# Created by Karl Johan Westrin, PDC
+
+easyblock = 'Binary'
+
+name = 'dds-cli'
+version = '2.10.1'
+
+homepage = 'https://scilifelabdatacentre.github.io/dds_cli/'
+whatis = [
+    'Description: SciLifeLab Data Delivery System: CLI.',
+]
+description = """
+The Data Delivery System (DDS) is a cloud-based system for all SciLifeLab platforms
+where data generated throughout each project can be delivered to the research groups
+in a fast, secure and simple way. The CLI makes requests to the API (see badge below
+for link) in order to use the API functionality.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'ScilifelabDataCentre'
+source_urls = ['https://github.com/%(github_account)s/dds_cli/releases/download/v%(version)s/']
+sources = [{
+    'download_filename': 'dds_cli_ubuntu-20.04_x86_64',
+    'filename': 'dds_cli-v%(version)s',
+}]
+checksums = ['f9fb86634b83f6fde5377d065390f10aef442b7f57db1c05ddadfc4db55777ce']
+
+install_cmd = 'mkdir -p %(installdir)s/bin && cp dds_cli-v%(version)s %(installdir)s/bin/dds-cli'
+install_cmd+= ' && chmod a+rx %(installdir)s/bin/dds-cli && cd %(installdir)s/bin && ln -s dds-cli dds'
+
+sanity_check_paths = {
+    'files': ['bin/dds-cli', 'bin/dds'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    'dds-cli --help',
+    'dds-cli --version | grep "version %(version)s$"',
+    'dds --version',
+]
+
+moduleclass = 'tools'
