@@ -1,0 +1,52 @@
+easyblock = 'Tarball'
+
+name = 'beast2'
+version = '2.7.7'
+
+homepage = 'https://beast2.org'
+whatis = [
+    'Description: Beast2 - Bayesian evolutionary analysis by sampling trees',
+]
+description = """
+BEAST is a cross-platform program for Bayesian MCMC analysis of molecular sequences.
+It is entirely orientated towards rooted, time-measured phylogenies inferred using
+strict or relaxed molecular clock models. It can be used as a method of reconstructing
+phylogenies but is also a framework for testing evolutionary hypotheses without
+conditioning on a single tree topology. BEAST uses MCMC to average over tree space,
+so that each tree is weighted proportional to its posterior probability.
+"""
+
+toolchain = SYSTEM
+
+_archs = {'x86_64': 'x86', 'aarch64': 'aarch64'}
+
+github_account = 'CompEvol'
+source_urls = [GITHUB_RELEASE]
+sources = ['BEAST.v%%(version)s.Linux.%s.tgz' % _archs[ARCH]]
+checksums = [{
+    'BEAST.v2.7.7.Linux.x86.tgz': 'a866f3e5da4ef890a042f01849e32322aa0a8e16e3e1cb2c59f823de2611781a',
+    'BEAST.v2.7.7.Linux.aarch64.tgz': 'aa14e4a950fe2d9f3db24102a4e7365d8d42f79da1d9b1cdcf3016e927d18b9e',
+}]
+
+dependencies = [
+    ('java', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+    'files': ['bin/beast'],
+    'dirs': []
+}
+
+sanity_check_commands = ["beast -help"]
+
+modluafooter = """
+if mode() == "load" then
+if not ( isloaded("beagle-lib") ) then
+io.stderr:write([==[beast2/2.7.7: It is recommended (but optional) to load the library BEAGLE to use with Beast2!
+Please run `module spider beagle-lib` on how to load it and which versions of it that are available!
+]==])
+end
+end
+"""
+
+moduleclass = 'bio'
