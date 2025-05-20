@@ -1,0 +1,45 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+# Author: Pablo Escobar Lopez
+# Swiss Institute of Bioinformatics
+# Biozentrum - University of Basel
+
+easyblock = 'ConfigureMake'
+
+name = 'jags'
+version = '4.3.2'
+
+homepage = 'http://mcmc-jags.sourceforge.net/'
+whatis = [
+    'Description: JAGS -Just Another Gibbs Sampler.',
+]
+description = """
+JAGS is Just Another Gibbs Sampler.  It is a program for analysis of Bayesian
+hierarchical models using Markov Chain Monte Carlo (MCMC) simulation, not wholly
+unlike BUGS.  JAGS was written with three aims in mind:
+ * To have a cross-platform engine for the BUGS language
+ * To be extensible, allowing users to write their own functions, distributions and samplers.
+ * To be a platform for experimentation with ideas in Bayesian modelling
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+toolchainopts = {'openmp': True, 'usempi': False}
+
+source_urls = ['https://download.sourceforge.net/mcmc-jags']
+sources = ['JAGS-%(version)s.tar.gz']
+checksums = ['871f556af403a7c2ce6a0f02f15cf85a572763e093d26658ebac55c4ab472fc8']
+
+configopts = ' --with-blas="-fopenmp -L/opt/cray/pe/libsci/23.12.5/GNU/12.3/x86_64/lib -lsci_gnu_mp" --with-lapack="-Wl,-ydgetrf"'
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s', 'libexec/%(namelower)s-terminal', 'lib/libjags.%s' % SHLIB_EXT],
+    'dirs': [],
+}
+
+sanity_check_commands = ["echo 'list modules' | %(namelower)s"]
+
+modextrapaths = {
+    'JAGS_INCLUDE': 'include/%(name)s',
+    'JAGS_LIB': 'lib',
+}
+
+moduleclass = 'math'
