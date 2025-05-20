@@ -38,4 +38,6 @@ sanity_check_paths = {
 }
 sanity_check_commands = ["%(namelower)s help"]
 
+modloadmsg = '%(name)s/%(version)s: Databases for DIAMOND, built from BLAST databases, are found at /sw/data/blast_databases.\n'
+
 moduleclass = 'bio'
