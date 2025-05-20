@@ -1,0 +1,77 @@
+##
+# This is a contribution from DeepThought HPC Service, Flinders University, Adelaide, Australia
+# Homepage:     https://staff.flinders.edu.au/research/deep-thought
+#
+# Authors::     Robert Qiao <rob.qiao@flinders.edu.au>
+# License::     Custom
+#
+# Notes::
+##
+easyblock = 'MakeCp'
+
+name = 'trinity'
+version = '2.15.2'
+
+homepage = 'https://github.com/trinityrnaseq/trinityrnaseq/wiki'
+description = """
+Trinity RNA-Seq represents a novel method for the efficient and robust de novo reconstruction
+of transcriptomes from RNA-Seq data. Trinity combines three independent software modules: 
+Inchworm, Chrysalis, and Butterfly, applied sequentially to process large volumes of RNA-Seq reads.
+
+NOTE: Trinity\'s down-stream analysis scripts are provided by module "trinity-supplementals".
+"""
+
+whatis = [
+    'Description: Trinity RNA-Seq is a pipeline for de novo transcriptome assembly of short reads.',
+    'This module provides a number of executables and scripts.',
+]
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/trinityrnaseq/trinityrnaseq/releases/download/Trinity-v%(version)s']
+sources = ['trinityrnaseq-v%(version)s.FULL.tar.gz']
+patches = ['Trinity-eb.patch']
+checksums = [
+    {'trinityrnaseq-v%(version)s.FULL.tar.gz': 'baab87e4878ad097e265c46de121414629bf88fa9342022baae5cac12432a15c'},
+    {'Trinity-eb.patch': 'db93587c7a529bac681fcd603e168665748985b172497aa30aa03ef061aa915c'},
+]
+
+# for reference, list of dependencies in the container image used upstream:
+# https://github.com/trinityrnaseq/trinityrnaseq/blob/master/Docker/Dockerfile
+dependencies = [
+    ('inchworm','2.9.0'),
+    ('chrysalis','2.13.0'),
+    ('butterfly','2.14.0'),
+    ('parafly','0.1.0'),
+    ('bamsifter','2.15.2'),
+    ('seqtk-trinity','.2.12.0'),
+    ('picard', '3.3.0'),
+    ('trimmomatic','0.39'),
+    ('perl', '5.34.0'),
+    ('bowtie2', '2.5.4'),
+    ('jellyfish', '2.3.0'),
+    ('salmon', '1.10.1'),
+    ('samtools', '1.20'),
+    ('cd-hit','4.8.1'),
+]
+
+osdependencies = ['java','python']
+
+modextrapaths = {
+    'PERL5LIB':'PerlLib',
+    'PATH':'',
+}
+
+test_cmd = 'make test'
+
+files_to_copy = [
+    (['Trinity','Analysis','PerlLib','PyLib','util','Makefile'], ''),
+    (['trinity-plugins/[CDs][!ce]*'],'trinity-plugins'),
+]
+
+sanity_check_paths = {
+    'files': ['Trinity'],
+    'dirs': ['trinity-plugins','Analysis','PerlLib','PyLib','util'],
+}
+
+moduleclass = 'bio'
