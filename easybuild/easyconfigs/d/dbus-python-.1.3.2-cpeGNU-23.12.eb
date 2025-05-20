@@ -1,0 +1,53 @@
+easyblock = 'PythonPackage'
+
+name = 'dbus-python'
+version = '.1.3.2'
+
+homepage = 'https://dbus.freedesktop.org/doc/dbus-python/'
+whatis = [
+    'Description: dbus-python: Python bindings for D-Bus. (Dependency purposes only.)',
+]
+description = """
+dbus-python - the original Python binding for dbus, the reference implementation
+of the D-Bus protocol. dbus-python might not be the best D-Bus binding for you to use.
+dbus-python does not follow the principle of “In the face of ambiguity, refuse
+the temptation to guess”, and can’t be changed to not do so without seriously
+breaking compatibility.
+
+In addition, it uses libdbus (which has known problems with multi-threaded use)
+and attempts to be main-loop-agnostic (which means you have to select a suitable
+main loop for your application).
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '23.12'}
+
+sources = ['%(namelower)s-1.3.2.tar.gz']
+checksums = ['ad67819308618b5069537be237f8e68ca1c7fcc95ee4a121fe6845b1418248f8']
+
+builddependencies = [
+    ('binutils', '2.37','',True),
+    ('wheel','.0.41.2'),
+    ('ninja', '1.11.1','',True),
+    ('patchelf', '0.14.5','',True),
+]
+dependencies = [
+    ('cray-python/3.11.5', EXTERNAL_MODULE),
+    ('x11', '20220504','',True),
+]
+
+download_dep_fail = True
+sanity_pip_check = True
+use_pip = True
+
+sanity_check_paths = {
+    'files': ['include/python3.11/dbus-python/dbus-1.0/dbus/dbus-python.h'],
+    'dirs': ['lib/python3.11/site-packages/dbus'],
+}
+
+options = {'modulename': 'dbus'}
+
+moduleclass = 'vis'
