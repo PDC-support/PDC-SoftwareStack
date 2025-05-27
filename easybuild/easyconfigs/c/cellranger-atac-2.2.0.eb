@@ -1,0 +1,44 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+# Author: Victor E. Goitea
+# Email: victorg@bmb.sdu.dk
+ 
+easyblock = 'Tarball'
+ 
+name = 'cellranger-atac'
+version = '2.2.0'
+ 
+homepage = "https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/what-is-cell-ranger-atac"
+whatis = [
+    'Description: 10x Genomics Single Cell ATAC Analysis',
+]
+description = """
+Cell Ranger ATAC is a set of analysis pipelines that process Chromium
+Single Cell ATAC data.
+"""
+ 
+toolchain = SYSTEM
+
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['c616198bd9aaca393f99c71e07ae46b6']
+download_instructions = f"{name} requires manual download from "
+download_instructions += "https://support.10xgenomics.com/single-cell-atac/software/downloads/latest"
+download_instructions += f"\nRequired downloads: {' '.join(sources)}"
+ 
+dependencies = [
+    ('bcl2fastq2', '2.20.0'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/cellranger-atac', 'cellranger-atac'],
+    'dirs': ['bin/atac', 'lib'],
+}
+ 
+sanity_check_commands = ["cellranger-atac testrun --id=tiny"]
+
+modextravars = {
+    'PDC_CELLRANGER_ATAC_REFS':'/sw/data/cellranger-ATAC-data',
+}
+
+modloadmsg = '%(name)s/%(version)s: Databases/References for Cell Ranger ATAC are available at $PDC_CELLRANGER_ATAC_REFS.'
+
+moduleclass = 'bio'
