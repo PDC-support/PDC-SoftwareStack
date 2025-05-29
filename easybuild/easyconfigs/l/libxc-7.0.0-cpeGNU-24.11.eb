@@ -6,7 +6,7 @@ easyblock = 'CMakeMake'
 
 name =    'libxc'
 version = '7.0.0'
-homepage = 'https://www.tddft.org/programs/libxc/'
+homepage = 'https://libxc.gitlab.io/'
 
 whatis = [
     "Description: Libxc is a library of exchange-correlation and kinetic energy functionals "
@@ -29,8 +29,8 @@ from your use of Libxc, please cite:
 """
 
 docurls = [
-    'Manual: https://www.tddft.org/programs/libxc/manual/',
-    'Available functionals: https://www.tddft.org/programs/libxc/functionals/'
+    'Manual: https://libxc.gitlab.io/',
+    'Available functionals: https://libxc.gitlab.io/functionals/'
 ]
 
 toolchain = {'name': 'cpeGNU', 'version': '24.11'}
