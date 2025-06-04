@@ -1,0 +1,64 @@
+# Created for LUMI by Orian Louant
+# Modified for PDC by Karl Johan Westrin
+easyblock = 'PythonBundle'
+
+name = 'wheel'
+version = '.0.43.0'
+
+homepage = 'https://pypi.python.org/pypi/wheel'
+
+whatis = [
+    'Description: a package to build and manipulate Python wheels. (Dependency purposes only.)',
+]
+
+description = """
+The wheel library is the reference implementation of the Python wheel packaging
+standard, as defined in PEP 427.
+
+It has two different roles:
+
+ - a setuptools extension for building wheels that provides the bdist_wheel
+   setuptools command
+ - a command line tool for working with wheel files
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+docurls = ['https://wheel.readthedocs.io/en/stable/']
+software_license_urls = ['https://github.com/pypa/wheel/blob/main/LICENSE.txt']
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+
+use_pip = True
+
+dependencies = [
+    ('cray-python/3.11.7', EXTERNAL_MODULE),
+]
+
+exts_list = [
+    ('flit_core', '3.9.0', {
+        'checksums': ['72ad266176c4a3fcfab5f2930d76896059851240570ce9a98733b658cb786eba'],
+    }),
+    ('wheel', '0.43.0', {
+        'checksums': ['465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85'],
+    }),
+    ('tomli', '2.0.1', {
+        'checksums': ['de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['bin/wheel'],
+    'dirs': ['lib/python3.11/site-packages'],
+}
+
+sanity_pip_check = True
+
+modluafooter = """
+setenv("EBROOTPYTHON", os.getenv("CRAY_PYTHON_PREFIX"))
+setenv("EBVERSIONPYTHON", os.getenv("CRAY_PYTHON_VERSION"))
+"""
+
+moduleclass = 'tools'
