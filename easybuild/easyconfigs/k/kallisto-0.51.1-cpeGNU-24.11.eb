@@ -1,0 +1,67 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'CMakeMake'
+
+name = 'kallisto'
+version = '0.51.1'
+
+homepage = 'https://pachterlab.github.io/kallisto/'
+whatis = [
+    'Description: kallisto - Near-optimal RNA-Seq quantification.',
+    'This module provides two executeable binaries.',
+]
+description = """
+kallisto is a program for quantifying abundances of transcripts from bulk and
+single-cell RNA-Seq data, or more generally of target sequences using high-throughput
+sequencing reads. It is based on the novel idea of pseudoalignment for rapidly
+determining the compatibility of reads with targets, without the need for alignment.
+
+On benchmarks with standard RNA-Seq data, kallisto can quantify 30 million human reads
+in less than 3 minutes on a Mac desktop computer using only the read sequences and a
+transcriptome index that itself takes less than 10 minutes to build. Pseudoalignment
+of reads preserves the key information needed for quantification, and kallisto
+is therefore not only fast, but also as accurate as existing quantification tools.
+In fact, because the pseudoalignment procedure is robust to errors in the reads,
+in many benchmarks kallisto significantly outperforms existing tools.
+
+NOTE: The command lr-kallisto is the same as kallisto, but intended for quantifying
+      long reads, and is thus compiled with a max-k of 64 instead of 32.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+
+github_account = 'pachterlab'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['Kallisto-%(version)s_custom-exec-name.patch']
+checksums = [
+    {'v%(version)s.tar.gz': 'a8bcc23bca6ac758f15e30bb77e9e169e628beff2da3be2e34a53e1d42253516'},
+    {'Kallisto-%(version)s_custom-exec-name.patch': 'd1cb608e478e94703b908b545f106624d3aa2096df1f4461dd4a8f1f8143a822'},
+]
+
+builddependencies = [
+    ('autotools','20220317','',True),
+    ('cmake','3.14.5','',True),
+    ('cray-hdf5',EXTERNAL_MODULE),
+]
+
+local_configopts = "-DUSE_HDF5=ON -DHDF5_INCLUDE_DIRS=${HDF5_DIR}/include -DHDF5_LIBRARIES=${HDF5_DIR}/lib/libhdf5.so -DUSE_BAM=ON -DZLIBNG=ON"
+configopts = [
+    local_configopts,
+    local_configopts+' -DMAX_KMER_SIZE=64 -DKALLISTO_EXEC_NAME=lr-kallisto'
+]
+
+parallel = 1
+
+sanity_check_paths = {
+    'files': ['bin/kallisto', 'bin/lr-kallisto'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    "kallisto version",
+    "cd %(builddir)s/kallisto-%(version)s/test && kallisto index -i ts.idx transcripts.fasta.gz",
+    "cd %(builddir)s/kallisto-%(version)s/test && kallisto quant -i ts.idx -o out -b 100 reads_{1,2}.fastq.gz",
+]
+
+moduleclass = 'bio'
