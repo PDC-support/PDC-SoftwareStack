@@ -29,18 +29,23 @@ local_packages = [
     'regex',
     'anaconda-catalogs',
     'anaconda-client',
-    'anaconda-project',
-    'anaconda-navigator',
     'conda-build',
     'conda-pack',
     'conda-package-handling',
     'conda-package-streaming',
-    'conda-token',
-    'conda-verify',
 ]
 postinstallcmds = [
+    "sed -i -e '$aenvs_dirs:' -e '$a\  - $HOME/.conda/envs' -e '$aauto_update_conda: false' -e '/^$/d' "
+    "-e 's/defaults/conda-forge/g' %(installdir)s/.condarc",
     local_prep_env + 'conda install -p %(installdir)s --solver=classic conda-forge::conda-libmamba-solver conda-forge::libmamba conda-forge::libmambapy conda-forge::libarchive',
     local_prep_env + 'conda install -p %(installdir)s -c bioconda -c conda-forge {}'.format(' '.join(local_packages)),
+    'sed -i "/\#.*conda.*activate/s@conda@source@g" %(installdir)s/lib/python*/site-packages/conda/cli/*.py',
+    'sed -i "/raise.CondaError/{s/conda init/source activate/g;s/Run/On PDC dardel, run/g;s/before/instead of/g}" '
+    '%(installdir)s/lib/python*/site-packages/conda/cli/main_mock_activate.py',
+    'sed -i "/raise.CondaError/{s/conda init/source deactivate/g;s/Run/On PDC dardel, run/g;s/before/instead of/g}" '
+    '%(installdir)s/lib/python*/site-packages/conda/cli/main_mock_deactivate.py',
+    'sed -i "/DeprecationWarning/d" %(installdir)s/bin/*activate',
+    'sed -i "/def execute/a\    from .. import CondaError; raise CondaError(\x27Initialization of conda is disabled on PDC dardel\x27)" %(installdir)s/lib/python*/site-packages/conda/cli/main_init.py',
 ]
 
 # set this manually, as 2to3 does not exist anymore (sqlite3 is also missing, apperantly)
