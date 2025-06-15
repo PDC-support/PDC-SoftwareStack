@@ -27,7 +27,6 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('glib', '2.78.0'),
     ('libffi', '3.4.2'),
     ('util-linux', '2.39.3'),
 ]
