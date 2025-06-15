@@ -1,0 +1,42 @@
+easyblock = 'CMakeMake'
+
+name = 'arpack-ng'
+version = '3.9.1'
+
+homepage = 'http://forge.scilab.org/index.php/p/arpack-ng/'
+whatis = [
+    'Description: ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems.',
+]
+description = """
+ARPACK is a collection of Fortran77 subroutines designed to solve large scale eigenvalue problems.
+
+This module is compiled without OpenMP support and should not be combined with other packages
+that use LibSci but are compiled with OpenMP support as otherwise a conflict with multiple
+LibSci libraries will occur.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'opt': True, 'pic': True, 'usempi': True}
+
+source_urls = ['https://github.com/opencollab/arpack-ng/archive/']
+sources = ['%(version)s.tar.gz']
+checksums = ['f6641deb07fa69165b7815de9008af3ea47eb39b2bb97521fbf74c97aba6e844']
+
+builddependencies = [
+    ('autotools','20220317', '', True),
+    ('eigen', '3.4.0', '', True),
+]
+
+local_configopts = '-D EXAMPLES=OFF -D ICB=ON -D EIGEN=ON -D PYTHON3=OFF -DMPI=ON '
+
+configopts = [
+    local_configopts+' -DBUILD_SHARED_LIBS=OFF',
+    local_configopts+' -DBUILD_SHARED_LIBS=ON'
+]
+
+sanity_check_paths = {
+    'files': ['lib64/libarpack.%s' % SHLIB_EXT, 'lib64/libarpack.a'],
+    'dirs': []
+}
+
+moduleclass = 'numlib'
