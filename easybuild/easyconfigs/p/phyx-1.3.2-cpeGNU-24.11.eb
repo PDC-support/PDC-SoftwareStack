@@ -1,0 +1,56 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+easyblock = 'ConfigureMake'
+
+name = 'phyx'
+version = '1.3.2'
+
+homepage = 'https://github.com/FePhyFoFum/%(name)s'
+whatis = [
+    'Description: Phyx performs phylogenetics analyses on trees and sequences.',
+]
+description = """
+Phyx (pronounced ``fix'') is a set of data analysis programs modeled after POSIX-style
+command-line tools, to help them be easily incorporated in bioinformatic pipelines.
+The majority of Phyx programs focus on phylogenetic analyses, which includes a variety
+of programs to clean data matrices, simulate data, and perform basic phylogenetic analyses.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'pic': True}
+
+github_account = 'FePhyFoFum'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+patches = ['%(name)s-%(version)s_link_libsci.patch']
+checksums = [
+    {'v1.3.2.tar.gz': '2c4a80c73b8bbf2117c4a4686655c19f9e0a1f81921cd1ad201b1933e1c6ad14'},
+    {'phyx-1.3.2_link_libsci.patch': '4cedb772bd8bedb34b624b27a39944aa2abab87abcadb8eca4c03f109a775f13'},
+]
+
+builddependencies = [
+    ('autotools', '20220317','',True),
+]
+
+dependencies = [
+    ('armadillo', '14.0.3'),
+    ('nlopt', '2.7.1','',True),
+]
+
+start_dir = 'src'
+
+preconfigopts = "autoreconf -f -i && "
+
+preinstallopts = 'mkdir %(installdir)s/bin && '
+
+local_execs = ["pxaa2cdn", "pxbdfit", "pxbdsim", "pxboot", "pxbp", "pxcat", "pxclsq", "pxcltr", "pxcolt", "pxconsq",
+               "pxcontrates", "pxfqfilt", "pxlog", "pxlssq", "pxlstr", "pxmrca", "pxmrcacut", "pxmrcaname", "pxnw",
+               "pxrecode", "pxrevcomp", "pxrls", "pxrlt", "pxrmk", "pxrms", "pxrmt", "pxrr", "pxs2fa", "pxs2nex",
+               "pxs2phy", "pxseqgen", "pxssort", "pxsstat", "pxstrec", "pxsw", "pxt2new", "pxt2nex", "pxtcol",
+               "pxtcomb", "pxtlate", "pxtrt", "pxtscale", "pxvcf2fa"]
+
+sanity_check_paths = {
+    'files': ['bin/' + _exec for _exec in local_execs],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
