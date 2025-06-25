@@ -1,0 +1,63 @@
+##
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+#
+# Copyright:: Copyright 2013-2014 The Cyprus Institute
+# Authors::   Thekla Loizou <t.loizou@cyi.ac.cy>
+# License::   MIT/GPL
+# $Id$
+#
+##
+easyblock = 'PythonPackage'
+
+name = 'dendropy'
+version = '5.0.1'
+
+homepage = 'https://dendropy.org/'
+whatis = [
+    'Description: A Phylogenetic Computing Library in Python. (Dependency purposes only.)'
+]
+description = """
+DendroPy is a Python library for phylogenetic computing. It provides classes and
+functions for the simulation, processing, and manipulation of phylogenetic trees
+and character matrices, and supports the reading and writing of phylogenetic data
+in a range of formats, such as NEXUS, NEWICK, NeXML, Phylip, FASTA, etc. Application
+scripts for performing some useful phylogenetic operations, such as data conversion
+and tree posterior distribution summarization, are also distributed and installed
+as part of the libary. DendroPy can thus function as a stand-alone library for
+phylogenetics, a component of more complex multi-library phyloinformatic pipelines
+or as a scripting "glue" that assembles and drives such pipelines.
+
+NOTE: This module is ONLY to be used as dependency of other modules. If you are
+a user, you should use the module miniconda3 and create your own python environment
+instead of loading this module.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+
+sources = ['DendroPy-%(version)s.tar.gz']
+checksums = ['f2815e7649a6fe2924ff3fdf00a660c948dc6f3316e303b8b022f74cc75ca42e']
+
+builddependencies = [
+    ('binutils', '2.37','',True),
+    ('wheel','.0.43.0'),
+]
+
+dependencies = [
+    ('cray-python/3.11.7', EXTERNAL_MODULE),
+]
+
+download_dep_fail = True
+use_pip = True
+
+fix_python_shebang_for = ['bin/*.py']
+
+sanity_check_paths = {
+    'files': ['bin/sumlabels.py', 'bin/sumtrees.py'],
+    'dirs': ['lib/python3.11/site-packages/%(namelower)s'],
+}
+
+sanity_check_commands = ["sumtrees.py --help"]
+
+sanity_pip_check = True
+
+moduleclass = 'bio'
