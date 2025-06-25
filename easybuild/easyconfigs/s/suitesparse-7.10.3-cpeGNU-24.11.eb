@@ -1,0 +1,59 @@
+import os
+
+easyblock = 'EB_SuiteSparse'
+
+name = 'suitesparse'
+version = '7.10.3'
+
+homepage = 'https://faculty.cse.tamu.edu/davis/suitesparse.html'
+whatis = ['Description: SuiteSparse is a collection of libraries to manipulate sparse matrices.']
+
+description = """
+SuiteSparse is a suite of sparse matrix algorithms. This package include:
+
+  - AMD       : approximate minimum degree ordering
+  - BTF       : permutation to block triangular form
+  - CAMD      : constrained approximate minimum degree ordering
+  - CCOLAMD   : constrained column approximate minimum degree ordering
+  - CHOLMOD   : sparse Cholesky factorization
+  - COLAMD    : column approximate minimum degree ordering
+  - CXSparse  : CSparse Extended, includes support for complex matrices
+  - KLU       : parse LU factorization, primarily for circuit simulation
+  - LDL       : a very concise LDL' factorization package
+  - RBio      : read/write sparse matrices in Rutherford/Boeing format
+  - SPQR      : sparse QR factorization.
+  - UMFPACK   : sparse LU factorization
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'unroll': True, 'pic': False}
+
+github_account = 'DrTimothyAldenDavis'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['09e7bcc8e5de0a5b55d2ae9fd6378d5f4dc1b85a933593339a0872b24e2cc102']
+
+builddependencies = [
+    ('cmake', '3.31.3','',True),
+    ('m4', '1.4.19','',True),
+    ('craype-network-none', EXTERNAL_MODULE),
+    ('craype-accel-host',   EXTERNAL_MODULE),
+]
+
+dependencies = [
+    ('cray-libsci',EXTERNAL_MODULE),
+    ('mpfr', '4.2.1','',True),
+]
+
+os.environ['LIBBLAS_MT'] ="-L${CRAY_LIBSCI_PREFIX_DIR}/lib -lsci_gnu_mp"
+os.environ['LIBLAPACK_MT'] ="-L${CRAY_LIBSCI_PREFIX_DIR}/lib -lsci_gnu_mp"
+cmake_options = '-DBLA_VENDOR=All'
+
+# make sure that bin/demo can find libsuitesparseconfig.so.5 during build
+prebuildopts = "export LD_LIBRARY_PATH=%(builddir)s/SuiteSparse-%(version)s/lib:$LD_LIBRARY_PATH && " #CC=cc CXX=CC
+# remove broken symlink
+prebuildopts += "rm -f GraphBLAS/CUDA/test/graphblascuda_test && "
+
+#preinstallopts = "export CC=cc CXX=CC && "
+
+moduleclass = 'numlib'
