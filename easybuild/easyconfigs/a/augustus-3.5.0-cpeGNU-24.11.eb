@@ -1,0 +1,88 @@
+# Updated by: Pavel Grochal (INUITS)
+# License: GPLv2
+
+easyblock = 'ConfigureMake'
+
+name = 'augustus'
+version = '3.5.0'
+
+homepage = 'https://bioinf.uni-greifswald.de/augustus/'
+whatis = [
+    'Description: Genome annotation with AUGUSTUS',
+]
+description = """
+AUGUSTUS is a program that predicts genes in eukaryotic genomic sequences.
+This web server provides an interface for training AUGUSTUS for predicting genes
+in genomes of novel species. It also enables you to predict genes in a genome
+sequence with already trained parameters.
+
+AUGUSTUS usually belongs to the most accurate programs for the species it is
+trained for. Often it is the most accurate ab initio program. For example,
+at the independent gene finder assessment (EGASP) on the human ENCODE regions
+AUGUSTUS was the most accurate gene finder among the tested ab initio programs.
+At the more recent nGASP (worm), it was among the best in the ab initio and
+transcript-based categories.
+
+Please be aware that gene prediction accuracy of AUGUSTUS always depends on the quality
+of the training gene set that was used for training species specific parameters.
+You should not expect the greatest accuracy from fully automated training gene
+generation as provided by this web server application. Instead, you should manually
+inspect (and maybe interatively improve) the training gene set.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+
+source_urls = ['https://github.com/Gaius-Augustus/AUGUSTUS/archive']
+sources = ['v%(version)s.tar.gz']
+checksums = ['5ed6ce6106303b800c5e91d37a250baff43b20824657b853ae04d11ad8bdd686']
+
+dependencies = [
+    ('zlib', '1.3.1','',True),
+    ('boost', '1.85.0'),
+    ('gsl', '2.8'),
+    ('samtools', '1.20','',True),
+    ('lpsolve', '5.5.2.11','',True),
+    ('bamtools', '2.5.2','',True),
+    ('sqlite', '3.43.1','',True),
+    ('suitesparse', '7.10.3'),
+    ('biopython', '1.85'),
+]
+
+skipsteps = ['configure']
+
+# run "make clean" to avoid using binaries included with the source tarball
+prebuildopts = "make clean && "
+
+_tmpl = 'INCLUDE_PATH_{dep}=-I{root}{incl} LIBRARY_PATH_{dep}="-L{root}{lib} -Wl,-rpath,{root}{lib}"'
+
+buildopts = ' '.join([
+    'COMPGENEPRED=true SQLITE=true ZIPINPUT=true MYSQL=false CXX="$CXX" ',
+    _tmpl.format(dep='ZLIB', root='$EBROOTZLIB', incl='/include', lib='/lib'),
+    _tmpl.format(dep='BOOST', root='$EBROOTBOOST', incl='/include', lib='/lib'),
+    _tmpl.format(dep='LPSOLVE', root='$EBROOTLPSOLVE', incl='/include', lib='/lib'),
+    _tmpl.format(dep='SUITESPARSE', root='$EBROOTSUITESPARSE', incl='/include', lib='/lib'),
+    _tmpl.format(dep='GSL', root='$EBROOTGSL', incl='/include', lib='/lib'),
+    _tmpl.format(dep='SQLITE', root='$EBROOTSQLITE', incl='/include', lib='/lib'),
+    _tmpl.format(dep='BAMTOOLS', root='$EBROOTBAMTOOLS', incl='/include/bamtools', lib='/lib'),
+    _tmpl.format(dep='HTSLIB', root='$EBROOTHTSLIB', incl='/include/htslib', lib='/lib'),
+])
+
+preinstallopts = "sed -i '/ln -sf/d' Makefile && "
+installopts = 'INSTALLDIR=%(installdir)s '
+
+sanity_check_paths = {
+    'files': ['bin/augustus', 'bin/bam2hints', 'bin/etraining', 'bin/fastBlockSearch',
+              'bin/filterBam', 'bin/getSeq', 'bin/homGeneMapping', 'bin/joingenes',
+              'bin/load2sqlitedb', 'bin/prepareAlign'],
+    'dirs': ['config', 'scripts'],
+}
+sanity_check_commands = ['augustus --help']
+
+modextrapaths = {'PATH': 'scripts'}
+modextravars = {
+    'AUGUSTUS_BIN_PATH': '%(installdir)s/bin',
+    'AUGUSTUS_CONFIG_PATH': '%(installdir)s/config',
+    'AUGUSTUS_SCRIPTS_PATH': '%(installdir)s/scripts',
+}
+
+moduleclass = 'bio'
