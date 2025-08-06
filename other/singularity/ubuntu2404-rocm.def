@@ -1,0 +1,40 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%post
+# Install needed packages
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y wget git bash gcc gfortran g++ make libnuma-dev locales language-pack-sv language-pack-en python3.12
+
+# Fix timezone issue
+export TZ=Europe/Stockholm
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+echo $TZ > /etc/timezone
+
+# Install ROCM 6.3.1
+cd /tmp
+apt update
+apt install -y "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+apt install -y python3-setuptools python3-wheel libpython3.12
+usermod -a -G video $(whoami) # Add the current user to the video group
+wget https://repo.radeon.com/amdgpu-install/6.3.1/ubuntu/noble/amdgpu-install_6.3.60301-1_all.deb
+apt install -y ./amdgpu-install_6.3.60301-1_all.deb
+apt update
+apt install -y amdgpu-dkms rocm
+
+# Compiling a GPU test application
+wget https://raw.githubusercontent.com/PDC-support/introduction-to-pdc/master/example/hello_world_gpu.cpp
+hipcc --offload-arch=gfx90a -o /usr/local/bin/hello_world_gpu hello_world_gpu.cpp
+
+%help
+Container with AMD GPU support and AMD GPU example(s) built on Ubuntu 24.04
+See *hipcc --version* to see what version is installed
+
+In order to test GPU functionality...
+
+Local:
+singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
+
+GPU:
+srun -n 1 singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
