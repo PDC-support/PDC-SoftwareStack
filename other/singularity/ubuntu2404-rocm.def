@@ -5,7 +5,7 @@ From: ubuntu:24.04
 # Install needed packages
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y wget git bash gcc gfortran g++ make libnuma-dev locales language-pack-sv language-pack-en python3.12
+apt-get install -y wget git bash gcc gfortran g++ make cmake vim libnuma-dev locales language-pack-sv language-pack-en python3.12
 
 # Fix timezone issue
 export TZ=Europe/Stockholm
