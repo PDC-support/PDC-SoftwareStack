@@ -1,0 +1,68 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%post
+# Build variables
+export MPICH_VERSION=4.3.1
+
+# Install needed packages
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y wget git bash gcc gfortran g++ make cmake vim libnuma-dev locales language-pack-sv language-pack-en python3.12
+
+# Fix timezone issue
+export TZ=Europe/Stockholm
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+echo $TZ > /etc/timezone
+
+# Install ROCM 6.3.1
+cd /tmp
+apt update
+apt install -y "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+apt install -y python3-setuptools python3-wheel libpython3.12
+usermod -a -G video $(whoami) # Add the current user to the video group
+wget https://repo.radeon.com/amdgpu-install/6.3.1/ubuntu/noble/amdgpu-install_6.3.60301-1_all.deb
+apt install -y ./amdgpu-install_6.3.60301-1_all.deb
+apt update
+apt install -y amdgpu-dkms rocm
+
+# Compiling a GPU test application
+wget https://raw.githubusercontent.com/PDC-support/introduction-to-pdc/master/example/hello_world_gpu.cpp
+hipcc --offload-arch=gfx90a -o /usr/local/bin/hello_world_gpu hello_world_gpu.cpp
+
+# Install MPICH
+cd /tmp
+wget http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz
+tar zxvf mpich-$MPICH_VERSION.tar.gz
+cd mpich-$MPICH_VERSION
+./configure --prefix=/opt/mpich-$MPICH_VERSION
+make install
+export PATH=$PATH:/opt/mpich-$MPICH_VERSION/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mpich-$MPICH_VERSION/lib
+
+# Compiling a MPI test application
+wget https://raw.githubusercontent.com/PDC-support/introduction-to-pdc/master/example/hello_world_mpi.c
+mpicc -fopenmp -o /usr/local/bin/hello_world_mpi hello_world_mpi.c
+
+%help
+Container with AMD GPU support and AMD GPU example(s) built on Ubuntu 24.04
+See *hipcc --version* to see what version is installed
+
+In order to test GPU functionality
+
+Local:
+singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
+
+GPU:
+srun -n 1 singularity exec --rocm <CONTAINER_NAME> hello_world_gpu
+
+Container with MPICH and MPI example(s) in /opt/mpich-<MPICH_VERSION>.
+MPICH_VERSION=4.3.1
+See environment to examine the mpich version.
+In order to test MPI functionality
+
+Local:
+singularity exec <CONTAINER_NAME>.sif /opt/mpich-4.3.1/bin/mpirun -n <PROCS> hello_world_mpi
+
+MPI cluster:
+srun -n <PROCS> --mpi=pmi2 singularity exec <container name>.sif hello_world_mpi
