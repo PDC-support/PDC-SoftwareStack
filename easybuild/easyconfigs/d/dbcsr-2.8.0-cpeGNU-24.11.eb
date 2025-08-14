@@ -1,0 +1,53 @@
+# Contributed by Johan Hellsvik (PDC)
+
+easyblock = 'CMakeMake'
+
+name = 'dbcsr'
+version = '2.8.0'
+
+homepage = 'https://github.com/cp2k/dbcsr'
+
+whatis = [
+    "DBCSR is a library designed to efficiently perform sparse matrix-matrix "
+    "multiplication, among other operations. It is MPI and OpenMP parallel and "
+    "can exploit Nvidia and AMD GPUs via CUDA and HIP."
+]
+
+description = """
+DBCSR stands for Distributed Blocked Compressed Sparse Row. DBCSR is a
+library designed to efficiently perform sparse matrix-matrix multiplication,
+among other operations. It is MPI and OpenMP parallel and can exploit Nvidia
+and AMD GPUs via CUDA and HIP.
+"""
+
+docurls = [
+    'Documentation: https://cp2k.github.io/dbcsr/develop',
+]
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'openmp': True, 'opt': True, 'pic': True}
+
+source_urls = ['https://github.com/cp2k/%(name)s/archive']
+sources = ['v%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '4.0.1', '', ('system', '')),
+    ('fypp', '3.2', '-cray-python3.11', ('system', '')),
+]
+
+preconfigopts = "CXX=CC CC=cc FC=ftn &&"
+configopts  = ' -DUSE_MPI=ON '
+configopts += ' -DUSE_OPENMP=ON '
+configopts += ' -DWITH_C_API=ON '
+configopts += ' -DWITH_EXAMPLES=ON '
+configopts += ' -DCMAKE_BUILD_TYPE=Release '
+configopts += ' -DBUILD_TESTING=ON '
+configopts += ' -DTEST_MPI_RANKS=2 '
+configopts += ' -DTEST_OMP_THREADS=2 '
+
+sanity_check_paths = {
+    'files': ['lib64/libdbcsr.a','include/dbcsr.h'],
+    'dirs': ['lib64','include'],
+}
+
+moduleclass = 'lib'
