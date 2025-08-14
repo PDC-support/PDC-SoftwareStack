@@ -1,0 +1,50 @@
+# Created for LUMI by Orian Louant
+# Adapted for Dardel by Johan Hellsvik (PDC)
+easyblock = 'PythonPackage'
+
+local_craypython_version =  '3.11.7'
+local_craypython_maj_min = '.'.join( local_craypython_version.split('.')[:2] )
+
+name = 'wheel'
+version = '0.45.1'
+versionsuffix = '-cray-python%s' % local_craypython_maj_min
+
+homepage = 'https://pypi.python.org/pypi/wheel'
+
+whatis = ['Description: a package to build and manipulate Python wheels']
+
+description = """
+ The wheel library is the reference implementation of the Python wheel packaging
+ standard, as defined in PEP 427.
+
+ It has two different roles:
+
+  - a setuptools extension for building wheels that provides the bdist_wheel
+    setuptools command
+  - a command line tool for working with wheel files
+"""
+
+docurls = ['https://wheel.readthedocs.io/en/stable/']
+software_license_urls = ['https://github.com/pypa/wheel/blob/main/LICENSE.txt']
+
+toolchain = SYSTEM
+
+sources = [SOURCE_TAR_GZ]
+
+checksums = [
+    '661e1abd9198507b1409a20c02106d9670b2576e916d58f520316666abca6729', # wheel-0.45.1.tar.gz
+]
+
+use_pip = True
+
+dependencies = [
+    ('cray-python/3.11.7', EXTERNAL_MODULE),
+    ('flit_core', '3.10.1', '-cray-python3.11'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/wheel'],
+    'dirs': ['lib/python%s/site-packages' % local_craypython_maj_min],
+}
+
+moduleclass = 'tools'
