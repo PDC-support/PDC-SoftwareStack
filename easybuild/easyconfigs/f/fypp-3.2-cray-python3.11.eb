@@ -1,0 +1,43 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'PythonPackage'
+
+local_craypython_version =  '3.11.7'
+local_craypython_maj_min = '.'.join( local_craypython_version.split('.')[:2] )
+
+name = 'fypp'
+version = '3.2'
+versionsuffix = '-cray-python%s' % local_craypython_maj_min
+
+homepage = 'https://pypi.org/project/fypp/'
+
+whatis = ['https://pypi.org/project/fypp/']
+
+description = """
+Fypp is a Python powered preprocessor. It can be used for any programming languages but its primary aim is to offer a Fortran preprocessor, which helps to extend Fortran with condititional compiling and template metaprogramming capabilities. Instead of introducing its own expression syntax, it uses Python expressions in its preprocessor directives, offering the consistency and versatility of Python when formulating metaprogramming tasks. It puts strong emphasis on robustness and on neat integration into developing toolchains."""
+
+docurls = ['https://fypp.readthedocs.io/en/stable/']
+software_license_urls = ['https://fypp.readthedocs.io/en/stable/']
+
+toolchain = SYSTEM
+
+sources = [SOURCE_TAR_GZ]
+
+checksums = [
+    '05c20f71dd9a7206ffe2d8688032723f97b8c2984d472ba045819d7d2b513bce', # fypp-3.2.tar.gz
+]
+
+use_pip = True
+
+builddependencies = [
+    ('wheel', '0.45.1', '-cray-python3.11', True),
+]
+dependencies = [
+    ('cray-python/3.11.7', EXTERNAL_MODULE),
+]
+
+sanity_check_paths = {
+    'files': ['bin/fypp'],
+    'dirs': ['lib/python%s/site-packages' % local_craypython_maj_min],
+}
+
+moduleclass = 'tools'
