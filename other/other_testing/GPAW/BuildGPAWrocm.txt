@@ -1,0 +1,38 @@
+# Build instructions for GPAW on Dardel AMD GPU nodes
+
+# Load environment for GPAW
+ml PDC/24.11
+ml rocm/6.3.3
+ml craype-accel-amd-gfx90a
+ml cray-fftw/3.3.10.9
+ml libxc/7.0.0-cpeGNU-24.11
+ml scalapack/4.0-cpeGNU-24.11-amd
+
+# Download a GPAW release
+mkdir GPAWrocm
+cd GPAWrocm
+wget https://pypi.org/packages/source/g/gpaw/gpaw-25.1.0.tar.gz
+tar xvf gpaw-25.1.0.tar.gz
+cd gpaw-25.1.0
+cp -p ../../siteconfig_scalapack_rocm.py .
+
+# Load cray-python, set up a Python virtual environment
+ml cray-python/3.11.7
+python3 -m venv gpawenv
+source gpawenv/bin/activate
+
+# Install required Python packages with pip
+pip install --upgrade pip
+pip install numpy scipy matplotlib ase
+
+# Build CuPy from source
+export CUPY_INSTALL_USE_HIP=1
+export ROCM_HOME=/opt/rocm-6.3.3
+export HCC_AMDGPU_TARGET=gfx90a
+export CPATH=/opt/rocm-6.3.3/include:$CPATH
+export CPATH=/opt/rocm-6.3.3/include/thrust:$CPATH
+CC=cc CXX=CC pip install cupy
+
+# Build GPAW from source
+export GPAW_CONFIG=siteconfig_scalapack_rocm.py
+pip install .
