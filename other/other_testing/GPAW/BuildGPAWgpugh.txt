@@ -1,0 +1,58 @@
+# Build instructions for GPAW on Dardel Grace Hopper GPU nodes
+
+# Load the PrgEnv-nvidia environment
+module use /opt/cray/pe/lmod/modulefiles/comnet/nvidia/23.11/ofi/1.0
+module use /opt/cray/pe/lmod/modulefiles/compiler/nvidia/23.9
+ml PrgEnv-nvidia
+ml cuda/12.6
+ml cray-fftw/3.3.10.10
+export LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/math_libs/lib64:$LIBRARY_PATH
+
+# Download a GPAW release
+mkdir GPAWgpugh
+cd GPAWgpugh
+wget https://pypi.org/packages/source/g/gpaw/gpaw-25.1.0.tar.gz
+tar xvf gpaw-25.1.0.tar.gz
+cd gpaw-25.1.0
+cp -p ../../siteconfig_gpugh.py .
+
+# Load cray-python, set up a Python virtual environment
+ml cray-python/3.11.7
+python3 -m venv gpawenv
+source gpawenv/bin/activate
+
+# Install required Python packages with pip
+pip install --upgrade pip
+pip install numpy scipy matplotlib ase
+
+# Install CuPy
+pip install cupy-cuda12x
+
+# Install CuPy from source
+#LDFLAGS="$CRAY_CUDATOOLKIT_POST_LINK_OPTS" NVCC="nvcc $CRAY_CUDATOOLKIT_INCLUDE_OPTS" CC=cc CXX=CC pip install --force --no-cache-dir cupy
+#LDFLAGS="$CRAY_CUDATOOLKIT_POST_LINK_OPTS" NVCC="nvcc $CRAY_CUDATOOLKIT_INCLUDE_OPTS" CC=cc CXX=CC pip install cupy
+
+# Build Libxc from source
+wget https://gitlab.com/libxc/libxc/-/archive/7.0.0/libxc-7.0.0.tar.gz
+tar xvf libxc-7.0.0.tar.gz
+cd libxc-7.0.0
+
+# Configure
+mkdir build
+cd build
+cmake .. \
+-DENABLE_FORTRAN=ON \
+-DCMAKE_INSTALL_LIBDIR=lib \
+-DBUILD_SHARED_LIBS=ON \
+-DCMAKE_INSTALL_PREFIX=`pwd`/install > BuildLibxc_CMakeLog.txt 2>&1
+
+# Build and install
+make -j 72 > BuildLibxc_make.txt 2>&1
+make install
+cd ../../
+#export CPATH=`pwd`/libxc-7.0.0/build/install/include:$CPATH
+#export LD_LIBRARY_PATH=`pwd`/libxc-7.0.0/build/install/lib:$LD_LIBRARY_PATH
+
+# Build GPAW
+export GPAW_CONFIG=siteconfig_gpugh.py
+pip install .
