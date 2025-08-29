@@ -1,0 +1,9 @@
+# Build instructions for UppASD ASD_GUI on Dardel AMD nodes
+
+# Load Cray Python, create venv and install dependencies
+ml cray-python/3.11.7
+python -m venv asd_gui_env
+. asd_gui_env/bin/activate
+pip install numpy matplotlib pyyaml pandas pyqt6==6.4.2 pyqt6-qt6==6.4.2 vtk
+cd ASD_GUI
+pip install .

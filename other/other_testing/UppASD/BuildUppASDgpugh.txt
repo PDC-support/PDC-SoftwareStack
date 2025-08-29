@@ -1,0 +1,23 @@
+# Build instructions for UppASD on Dardel Grace Hopper GPU nodes
+
+# Load the PrgEnv-nvidia environment
+module use /opt/cray/pe/lmod/modulefiles/comnet/nvidia/23.11/ofi/1.0
+module use /opt/cray/pe/lmod/modulefiles/compiler/nvidia/23.9
+ml PrgEnv-nvidia
+ml cuda/12.6
+ml cray-fftw/3.3.10.10
+ml cudatoolkit
+
+# Set additional include directories
+export CMAKE_PREFIX_PATH=${CUDA_HOME}/../../math_libs:${CMAKE_PREFIX_PATH}
+export CPATH=${CUDA_HOME}/../../math_libs/include:${CPATH}
+
+# Create build directory
+mkdir buildCuda1
+cd buildCuda1
+
+# Configure
+cmake .. -DUSE_CUDA=1
+
+# Build
+make -j 35

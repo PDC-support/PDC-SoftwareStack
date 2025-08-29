@@ -1,0 +1,16 @@
+# Build instructions for UppASD on Dardel AMD GPU nodes
+
+# Load the PrgEnv-gnu environment, ROCM, and FFTW
+ml PrgEnv-gnu
+ml rocm/6.3.3
+ml cray-fftw/3.3.10.9
+
+# Create build directory
+mkdir buildGnuHIP1
+cd buildGnuHIP1
+
+# Configure
+cmake .. -DUSE_HIP=1
+
+# Build
+make -j 32
