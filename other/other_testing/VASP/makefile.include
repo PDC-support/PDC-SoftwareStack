@@ -15,7 +15,7 @@ CPP_OPTIONS = -DHOST=\"LinuxNV\" \
               -DUSENCCL \
 	      -DCRAY_MPICH
 
-CPP         = nvfortran -Mpreprocess -Mfree -Mextend -E $(CPP_OPTIONS) $*$(FUFFIX)  > $*$(SUFFIX)
+CPP         = ftn -Mpreprocess -Mfree -Mextend -E $(CPP_OPTIONS) $*$(FUFFIX)  > $*$(SUFFIX)
 
 # N.B.: you might need to change the cuda-version here
 #       to one that comes with your NVIDIA-HPC SDK
@@ -79,20 +79,20 @@ LLIBS      += -L$(QD)/lib -lqdmod -lqd
 INCS       += -I$(QD)/include/qd
 
 # BLAS (mandatory)
-BLAS        = -lblas
+#BLAS        = -lblas
 
 # LAPACK (mandatory)
-LAPACK      = -llapack
+#LAPACK      = -llapack
 
 # scaLAPACK (mandatory)
-SCALAPACK   = -Mscalapack
+#SCALAPACK   = -Mscalapack
 
-LLIBS      += $(SCALAPACK) $(LAPACK) $(BLAS)
+#LLIBS      += $(SCALAPACK) $(LAPACK) $(BLAS)
 
 # FFTW (mandatory)
-FFTW_ROOT  ?= /path/to/your/fftw/installation
-LLIBS      += -L$(FFTW_ROOT)/lib -lfftw3 -lfftw3_omp
-INCS       += -I$(FFTW_ROOT)/include
+#FFTW_ROOT  ?= /path/to/your/fftw/installation
+#LLIBS      += -L$(FFTW_ROOT)/lib -lfftw3 -lfftw3_omp
+#INCS       += -I$(FFTW_ROOT)/include
 
 # Use cusolvermp (optional)
 # supported as of NVHPC-SDK 24.1 (and needs CUDA-11.8)
