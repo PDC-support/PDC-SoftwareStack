@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #SBATCH -A pdc.staff
 #SBATCH -J vasp
 #SBATCH -t 24:00:00
@@ -23,7 +22,7 @@ ml cray-fftw/3.3.10.10
 
 # Run time linking
 export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/cuda/12.6/targets/sbsa-linux/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/extras/qd/lib/:$LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/extras/qd/lib/:$LD_LIBRARY_PATH
 
 # Runtime environment
 export MPICH_GPU_SUPPORT_ENABLED=1
