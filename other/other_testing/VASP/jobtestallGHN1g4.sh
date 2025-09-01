@@ -6,30 +6,23 @@
 #SBATCH -p gpugh
 #SBATCH -n 4
 #SBATCH -c 72
+#SBATCH --gpus-per-task 1
+#SBATCH -x nid002897
 
-# Add to module path 
+# Add to module path
 module use /opt/cray/pe/lmod/modulefiles/comnet/nvidia/23.11/ofi/1.0
 module use /opt/cray/pe/lmod/modulefiles/compiler/nvidia/23.9
 
 # Load modules
 ml PrgEnv-nvidia
 ml cuda/12.6
-ml show craype-accel-nvidia90
-ml show cudatoolkit
+ml cudatoolkit/24.11_12.6
+ml craype-arm-grace
+ml craype-accel-nvidia90
 ml cray-fftw/3.3.10.10
-
-# Why are not these loaded by default?
-ml craype-network-ofi
-ml cray-mpich/8.1.30
-
-export CRAY_ACCEL_TARGET=nvidia90
-
-# Compile time linking
-export LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/comm_libs/12.6/openmpi4/openmpi-4.1.5/lib:$LIBRARY_PATH
 
 # Run time linking
 export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/cuda/12.6/targets/sbsa-linux/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/comm_libs/12.6/openmpi4/openmpi-4.1.5/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/opt/nvidia/hpc_sdk/Linux_aarch64/24.11/compilers/extras/qd/lib/:$LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
 # Runtime environment
