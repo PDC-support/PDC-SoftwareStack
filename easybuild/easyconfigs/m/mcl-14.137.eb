@@ -1,0 +1,54 @@
+easyblock = 'ConfigureMake'
+
+name = 'mcl'
+version = '14.137'
+
+homepage = 'https://micans.org/mcl/'
+whatis = [
+    'Description: MCL - a cluster algorithm for graphs',
+]
+description = """
+The MCL algorithm is short for the Markov Cluster Algorithm, a fast and scalable
+unsupervised cluster algorithm for graphs (also known as networks) based on
+simulation of (stochastic) flow in graphs. It has found usage in bioinformatics
+and other disciplines. These pages contain descriptions, an animation, various
+bits and pieces, and mcl software. The software scales to millions of nodes and
+hundreds of millions of edges, running on a single machine and utilising multiple
+CPUs. The software is widely used, part of various Linux distributions, and has
+been stable for about a decade now. The mcl program comes with various network
+loading, creation and manipulation companions, and development is focused on these.
+"""
+
+toolchain = SYSTEM
+
+
+source_urls = ['http://micans.org/%(namelower)s/src/']
+sources = ['%(namelower)s-%(version_major)s-%(version_minor)s.tar.gz']
+checksums = [
+    'b5786897a8a8ca119eb355a5630806a4da72ea84243dba85b19a86f14757b497',  # mcl-14-137.tar.gz
+]
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('perl', '5.34.0'),
+]
+
+preconfigopts = 'export CFLAGS="$CFLAGS -fcommon" && '
+configopts = '--enable-blast '
+
+fix_perl_shebang_for = ['bin/%s' % x for x in ['mclblastline', 'mclpipeline', 'mcxdeblast']]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in [
+        'clm', 'clmformat', 'clxdo', 'mcl', 'mclblastline', 'mclcm', 'mclpipeline', 'mcx', 'mcxarray',
+        'mcxassemble', 'mcxdeblast', 'mcxdump', 'mcxi', 'mcxload', 'mcxmap', 'mcxrand', 'mcxsubs'
+    ]],
+    'dirs': ['share']
+}
+
+sanity_check_commands = ["mcl --help"]
+
+moduleclass = 'bio'
