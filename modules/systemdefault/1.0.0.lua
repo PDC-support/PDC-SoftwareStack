@@ -44,3 +44,4 @@ setenv("BLASTDB", "/pdc/software/resources/blastdb")
   setenv("CRAY_LIBSCI_BASE_DIR", os.getenv("CRAY_PE_LIBSCI_BASE_DIR") or "")
   setenv("CRAY_LIBSCI_PREFIX", os.getenv("CRAY_PE_LIBSCI_PREFIX") or "")
 ---  end
+set_alias("build_container","$PDC_SHUB/build_container.sh")
