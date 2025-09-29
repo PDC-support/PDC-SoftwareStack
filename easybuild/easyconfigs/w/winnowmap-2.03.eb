@@ -1,0 +1,43 @@
+easyblock = 'MakeCp'
+
+name = 'winnowmap'
+version = '2.03'
+
+homepage = 'https://github.com/marbl/Winnowmap'
+whatis = [
+    'Description: Long read / genome alignment software.',
+]
+
+description = """
+Winnowmap is a long-read mapping algorithm optimized for mapping ONT and
+PacBio reads to repetitive reference sequences. Winnowmap development began
+on top of minimap2 codebase, and since then we have incorporated the following
+two ideas to improve mapping accuracy within repeats.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/marbl/Winnowmap/archive/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['f6375960ee2184b68c0f56d3ca95e12ec3218f9e44aeecbdb14f85f581112c83']
+
+builddependencies = [
+    ('binutils', '2.37'),
+]
+dependencies = [
+    ('jemalloc', '5.3.0'),
+]
+
+# fix - not use sysctl.h - not works on RHEL9 systems
+prebuildopts = "sed -i '36,39d' ext/meryl/src/utility/src/utility/system.C && "
+
+files_to_copy = ['bin', 'lib']
+
+sanity_check_paths = {
+    'files': ['bin/meryl', 'bin/winnowmap'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["winnowmap -h"]
+
+moduleclass = 'bio'
