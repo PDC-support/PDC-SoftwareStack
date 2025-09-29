@@ -1,0 +1,49 @@
+# This easyconfig was created by the BEAR Software team at the University of Birmingham.
+easyblock = 'CMakeMake'
+
+name = 'metamdbg'
+version = '1.2'
+
+homepage = "https://github.com/GaetanBenoitDev/metaMDBG/"
+whatis = [
+    'Description: MetaMDBG: a lightweight assembler for long and accurate metagenomics reads.',
+]
+description = """
+MetaMDBG is a fast and low-memory assembler for long and accurate metagenomics
+reads (e.g. PacBio HiFi, Nanopore r10.4). It is based on the minimizer de-Bruijn
+graph (MDBG), which have been reimplemented specifically for metagenomics assembly.
+MetaMDBG combines an efficient multi-k approach in minimizer-space for dealing
+with uneven species coverages, and a novel abundance-based filtering method
+for simplifying strain complexity.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'GaetanBenoitDev'
+source_urls = [GITHUB_SOURCE]
+sources = ['metaMDBG-%(version)s.tar.gz']
+checksums = ['beff0c85f53d7d06fd01dbdf0b16af4b795c0b988497ba75b7935607a744ff52']
+
+builddependencies = [
+    ('cmake', '4.0.1'),
+    ('binutils', '2.37'),
+]
+
+dependencies = [
+    ('minimap2', '2.28'),
+    ('zlib', '1.3.1'),
+]
+
+preconfigopts = 'export CC=gcc-12 CXX=g++-12 &&'
+preinstallopts = "mkdir -p %(installdir)s/bin &&"
+install_cmd = 'cp'
+installopts = "bin/metaMDBG %(installdir)s/bin/"
+
+sanity_check_paths = {
+    'files': ['bin/metaMDBG'],
+    'dirs': [],
+}
+
+sanity_check_commands = ['metaMDBG --help']
+
+moduleclass = 'bio'
