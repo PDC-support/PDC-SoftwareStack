@@ -1,0 +1,49 @@
+easyblock = 'ConfigureMake'
+
+name = 'fastplong'
+version = '0.4.1'
+
+homepage = 'https://github.com/%(github_account)s/%(name)s'
+whatis = [
+    'Description: Ultra-fast preprocessing and quality control for long-read sequencing data',
+    'This module provides one executable.',
+]
+
+description = """
+Ultrafast preprocessing and quality control for long reads (Nanopore, PacBio,
+Cyclone, etc.). If you're searching for tools to preprocess short reads
+(Illumina, MGI, etc.), please use fastp instead.
+
+fastplong supports batch processing of multiple FASTQ files in a folder,
+see 'batch processing'.
+"""
+
+toolchain = SYSTEM
+
+github_account = 'OpenGene'
+source_urls = [GITHUB_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['9d957babfaa216512a542a39dd1b0389384b3d444b55353032e7b707c2cfc969']
+
+dependencies = [
+    ('libdeflate', '1.19'),
+    ('isa-l', '2.31.0'),
+    ('highway','1.2.0'),
+]
+
+skipsteps = ['configure']
+
+buildopts = ' CXX=${CXX}'
+
+preinstallopts = 'mkdir -p %(installdir)s/bin && '
+
+installopts = 'PREFIX=%(installdir)s'
+
+sanity_check_paths = {
+    'files': ['bin/%(name)s'],
+    'dirs': [],
+}
+
+sanity_check_commands = [('%(name)s', '--help')]
+
+moduleclass = 'bio'
