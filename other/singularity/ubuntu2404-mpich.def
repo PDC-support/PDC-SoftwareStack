@@ -8,7 +8,7 @@ export MPICH_VERSION=4.3.1
 # Install needed packages
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y wget git bash gcc gfortran g++ emacs vi make python3.12 python3-setuptools python3-wheel libpython3.12
+apt-get install -y wget git bash gcc gfortran g++ emacs make python3.12 python3-setuptools python3-wheel libpython3.12
 
 # Fix timezone issue
 export TZ=Europe/Stockholm
