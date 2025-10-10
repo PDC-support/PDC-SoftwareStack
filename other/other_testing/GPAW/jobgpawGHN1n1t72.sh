@@ -17,7 +17,7 @@ export LD_LIBRARY_PATH=$GPAWROOT/GPAWgpucpenvidia/gpaw-25.7.0/libxc-7.0.0/build/
 # Runtime environment
 export MPICH_GPU_SUPPORT_ENABLED=1
 export PMPI_GPU_AWARE=1
-export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=72
 export OMP_PLACES=cores
 export SRUN_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 export GPAW_NEW=1
