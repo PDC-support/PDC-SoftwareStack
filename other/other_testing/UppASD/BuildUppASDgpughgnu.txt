@@ -1,0 +1,14 @@
+# Build instructions for UppASD on Dardel Grace Hopper GPU nodes
+
+# Load the environment
+ml PrgEnv-gnu
+ml gcc-native/13.2
+ml cudatoolkit/24.11_12.6
+ml cray-fftw/3.3.10.10
+ml cmake/4.1.2
+
+# Configure with CMake
+cmake -S . -B build -DUSE_CUDA=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug
+
+# Build
+cmake --build build -j 72
