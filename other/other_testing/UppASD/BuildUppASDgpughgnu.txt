@@ -8,7 +8,7 @@ ml cray-fftw/3.3.10.10
 ml cmake/4.1.2
 
 # Configure with CMake
-cmake -S . -B build -DUSE_CUDA=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B buildGnu -DUSE_CUDA=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug
 
 # Build
-cmake --build build -j 72
+cmake --build buildGnu -j 72

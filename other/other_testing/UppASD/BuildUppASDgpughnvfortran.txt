@@ -2,13 +2,10 @@
 
 # Load the cpeNVIDIA environment
 ml cpeNVIDIA
+ml cmake/4.1.2
 
-# Create build directory
-mkdir buildCuda1
-cd buildCuda1
-
-# Configure
-cmake .. -DUSE_CUDA=1
+# Configure with CMake
+cmake -S . -B buildNvfortran -DUSE_CUDA=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug
 
 # Build
-make -j 72
+cmake --build buildNvfortran -j 72
