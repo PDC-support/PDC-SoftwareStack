@@ -12,3 +12,10 @@ cmake -S . -B buildGnu -DUSE_CUDA=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=D
 
 # Build
 cmake --build buildGnu -j 72
+
+# Alternatively, use one of the CMake preset build configurations
+cmake --preset releaseCuda
+cmake --build build/releaseCuda -j 72
+
+# The available preset configurations can be listed with
+cmake --list-presets
