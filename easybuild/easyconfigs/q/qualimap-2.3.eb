@@ -1,0 +1,40 @@
+easyblock = 'Tarball'
+
+name = 'qualimap'
+version = '2.3'
+
+homepage = 'http://qualimap.bioinfo.cipf.es/'
+whatis = [
+    'Description: Qualimap - Evaluating next generation sequencing alignment data',
+]
+description = """
+Qualimap 2 is a platform-independent application written in Java and R that
+provides both a Graphical User Inteface (GUI) and a command-line interface
+to facilitate the quality control of alignment sequencing data and its
+derivatives like feature counts.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://bitbucket.org/kokonech/qualimap/downloads/']
+sources = ['%(name)s_v%(version)s.zip']
+checksums = ['2a04dd864b712da30923cce3bc8dfc6ea59612118e8b0ff1a246fe43b8d34c40']
+
+dependencies = [
+    ('java', EXTERNAL_MODULE),
+    ('Rbio', EXTERNAL_MODULE),
+]
+
+# fixes `Unrecognized VM option 'MaxPermSize=1024m'`
+preinstallopts = "sed -i 's/MaxPermSize/MaxMetaspaceSize/g' qualimap qualimap_bash_fix && "
+
+sanity_check_paths = {
+    'files': ['qualimap'],
+    'dirs': [],
+}
+
+sanity_check_commands = ["qualimap --help"]
+
+modextrapaths = {'PATH': ''}
+
+moduleclass = 'bio'
