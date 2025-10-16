@@ -1,0 +1,40 @@
+# EasyBuild easyconfig
+# Author: Pablo Escobar Lopez
+# sciCORE - University of Basel
+# SIB Swiss Institute of Bioinformatics
+# Modified by Adam Huffman
+# Big Data Institute, University of Oxford
+# Further modified for PDC by Karl Johan Westrin
+
+easyblock = 'Tarball'
+
+name = 'igv'
+version = '2.17.4'
+
+homepage = 'https://www.broadinstitute.org/software/igv/'
+whatis = [
+    'Description: IDV - Integrative Genomics Viewer.',
+]
+description = """
+This package contains command line utilities for preprocessing, computing
+feature count density (coverage),  sorting, and indexing data files.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['http://data.broadinstitute.org/igv/projects/downloads/%(version_major)s.%(version_minor)s']
+sources = ['IGV_%(version)s.zip']
+checksums = ['6a36ae64fa3b74182db654a93f6254256305a8afa6b878f381b5d04fc1e8eaa5']
+
+dependencies = [
+    ('java', '17.0.4', '', SYSTEM),
+]
+
+sanity_check_paths = {
+    'files': ['%(namelower)s.sh', 'lib/%(namelower)s.jar'],
+    'dirs': [],
+}
+
+modextrapaths = {'PATH': ''}
+
+moduleclass = 'bio'
