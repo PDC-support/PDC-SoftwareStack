@@ -1,0 +1,50 @@
+# EasyBuild easyconfig
+#
+# John Dey jfdey@fredhutch.org
+# Fred Hutchenson Cancer Research Center
+#
+# Updated: Pavel Grochal (INUITS)
+
+easyblock = 'Tarball'
+
+name = 'prokka'
+version = '1.14.6'
+
+homepage = 'https://www.vicbioinformatics.com/software.prokka.shtml'
+description = "Prokka is a software tool for the rapid annotation of prokaryotic genomes."
+
+toolchain = SYSTEM
+
+github_account = 'tseemann'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.zip']
+checksums = ['51332bb16c794c27db6ecb5111ee5f3db88b3e1e3d6684b1bc1b8725e57b7f80']
+
+dependencies = [
+    ('perl', '5.34.0'),
+    ('blast+', EXTERNAL_MODULE),
+    ('java', '17.0.4'),
+    ('parallel', '20230422'),
+    ('tbl2asn', '20230713'),
+]
+
+local_bin_files = ['prokka', 'prokka-cdd_to_hmm', 'prokka-genpept_to_fasta_db', 'prokka-tigrfams_to_hmm',
+                   'prokka-biocyc_to_fasta_db', 'prokka-clusters_to_hmm', 'prokka-hamap_to_hmm',
+                   'prokka-uniprot_to_fasta_db', 'prokka-build_kingdom_dbs', 'prokka-genbank_to_fasta_db',
+                   'prokka-make_tarball']
+
+postinstallcmds = ["%(installdir)s/bin/prokka --setupdb"]
+
+sanity_check_paths = {
+    'files': ['bin/%s' % x for x in local_bin_files] + ['binaries/linux/aragorn', 'db/cm/Bacteria', 'doc/ToDoList.txt', 'db/hmm/HAMAP.hmm.h3i'],
+    'dirs': ['bin', 'binaries', 'db',  'db/cm', 'db/genus', 'db/hmm', 'db/kingdom', 'doc'],
+}
+
+sanity_check_commands = [
+    "prokka --version",
+    "prokka --listdb",
+]
+
+modloadmsg = "prokka scripts are located in $EBROOTPROKKA/bin; databases are located in $EBROOTPROKKA/db\n"
+
+moduleclass = 'bio'
