@@ -1,0 +1,70 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'CMakeMake'
+
+name = 'cp2k'
+version = '2025.2'
+versionsuffix = '-gpu'
+
+homepage = 'http://www.cp2k.org/'
+
+whatis = [
+    'Description: CP2K is a program to perform atomistic and molecular simulations of solid state, liquid, molecular and biological systems.'
+]
+
+description = """
+CP2K is a freely available (GPL) program, written in Fortran 95, to
+perform atomistic and molecular simulations of solid state, liquid,
+molecular and biological systems. It provides a general framework for
+different methods such as e.g. density functional theory (DFT) using a
+mixed Gaussian and plane waves approach (GPW), and classical pair and
+many-body potentials.
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'openmp': True, 'usempi': True}
+
+source_urls = ['https://github.com/%(namelower)s/%(namelower)s/releases/download/v%(version)s']
+sources = [SOURCELOWER_TAR_BZ2]
+
+builddependencies = [
+    ('cmake', '4.0.1', '', ('system', '')),
+]
+
+dependencies = [
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('cray-hdf5', EXTERNAL_MODULE),
+    ('craype-accel-amd-gfx90a', EXTERNAL_MODULE),
+    ('rocm/6.3.3', EXTERNAL_MODULE),
+    ('dbcsr', '2.8.0'),
+    ('elpa', '2025.01.001'),
+    ('libint-cp2k', '2.6.0'),
+    ('libxc', '7.0.0'),
+    ('plumed', '2.9.3'),
+    ('spglib', '2.6.0'),
+    ('gsl', '2.8'),
+    ('spla', '1.6.1', '-gpu'),
+    ('spfft', '1.1.1', '-gpu'),
+]
+
+preconfigopts = "CXX=CC CC=cc FC=ftn &&"
+configopts  = ' -DCMAKE_BUILD_TYPE=Release '
+configopts += ' -DCP2K_BLAS_INCLUDE_DIRS=${CRAY_LIBSCI_PREFIX}/include/ '
+configopts += ' -DCP2K_LAPACK_INCLUDE_DIRS=${CRAY_LIBSCI_PREFIX}/include/ '
+configopts += ' -DCP2K_USE_MPI_F08=ON '
+configopts += ' -DCP2K_USE_FFTW3=ON '
+configopts += ' -DCP2K_USE_HDF5=ON '
+configopts += ' -DCP2K_USE_LIBXC=ON '
+configopts += ' -DCP2K_USE_MPI=ON '
+configopts += ' -DCP2K_USE_SPGLIB=ON '
+configopts += ' -DCP2K_USE_PLUMED=ON '
+configopts += ' -DCP2K_USE_ELPA=ON '
+configopts += ' -DCP2K_USE_SPLA=ON '
+configopts += ' -DCP2K_USE_ACCEL=HIP '
+configopts += ' -DCP2K_WITH_GPU=Mi250 '
+
+sanity_check_paths = {
+    'files': ['bin/%(namelower)s.psmp'],
+    'dirs': ['bin', 'include', 'lib'],
+}
+
+moduleclass = 'chem'
