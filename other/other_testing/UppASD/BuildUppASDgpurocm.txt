@@ -4,6 +4,8 @@
 ml PrgEnv-gnu
 ml rocm/6.3.3
 ml cray-fftw/3.3.10.9
+ml cmake/4.1.2
+ml craype-accel-amd-gfx90a
 
 # Create build directory
 mkdir buildGnuHIP1
