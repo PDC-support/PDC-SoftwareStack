@@ -1,4 +1,5 @@
 # modified by Matthias Kraushaar (CSCS)
+# modified for Dardel by Johan Hellsvik (PDC)
 easyblock = 'ConfigureMake'
 
 name = 'abinit'
@@ -20,11 +21,11 @@ builddependencies = [
     ('cray-python', EXTERNAL_MODULE),
 ]
 dependencies = [
-    ('libxc', '7.0.0'),
     ('cray-fftw', EXTERNAL_MODULE),
     ('cray-hdf5-parallel', EXTERNAL_MODULE),
     ('cray-netcdf-hdf5parallel', EXTERNAL_MODULE),
     ('wannier90', '3.1.0'),
+    ('libxc', '7.0.0'),
 ]
 
 # Needed due to changes in GCC10.
@@ -32,7 +33,7 @@ configopts = 'FCFLAGS="-fallow-argument-mismatch -ffree-line-length-none $FCFLAG
 configopts += 'FFLAGS="-fallow-argument-mismatch $FFLAGS" '
 
 # Ensure MPI
-configopts += '--with-mpi="yes" --enable-openmp="no" '
+configopts += '--with-mpi="yes" --enable-openmp="yes" '
 configopts += ' FC="ftn" CC="ftn" CXX="ftn" '
 
 # FFTW
