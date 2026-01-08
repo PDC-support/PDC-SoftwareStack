@@ -9,8 +9,14 @@ name = 'seqtk'
 version = '1.4'
 
 homepage = 'https://github.com/lh3/seqtk/'
-description = """Seqtk is a fast and lightweight tool for processing sequences in the FASTA or FASTQ format.
- It seamlessly parses both FASTA and FASTQ files which can also be optionally compressed by gzip."""
+whatis = [
+    'Description: Toolkit for processing sequences in FASTA/Q formats.',
+]
+description = """
+Seqtk is a fast and lightweight tool for processing sequences in the FASTA or
+FASTQ format. It seamlessly parses both FASTA and FASTQ files which can also
+be optionally compressed by gzip.
+"""
 
 toolchain = SYSTEM
 
