@@ -1,0 +1,44 @@
+easyblock = 'MakeCp'
+
+name = 'delly'
+version = '1.1.6'
+
+homepage = 'https://github.com/dellytools/delly/'
+whatis = [
+    'Description: DELLY2: Structural variant discovery by integrated paired-end and split-read analysis',
+]
+description = """
+Delly is an integrated structural variant (SV) prediction method that can discover,
+genotype and visualize deletions, tandem duplications, inversions and translocations
+at single-nucleotide resolution in short-read massively parallel sequencing data.
+It uses paired-ends, split-reads and read-depth to sensitively and accurately
+delineate genomic rearrangements throughout the genome.
+"""
+
+toolchain = SYSTEM
+toolchainopts = {'pic': True}
+
+github_account = 'dellytools'
+source_urls = [GITHUB_LOWER_SOURCE]
+sources = ['v%(version)s.tar.gz']
+checksums = ['08961e9c81431eb486476fa71eea94941ad24ec1970b71e5a7720623a39bfd2a']
+
+dependencies = [
+    ('boost', '1.79.0','-nompi'),
+    ('htslib', '1.20'),
+]
+
+build_cmd = 'make PARALLEL=1 -B src/delly'
+
+files_to_copy = [
+    (['src/delly'], 'bin'),
+]
+
+sanity_check_paths = {
+    'files': ['bin/delly'],
+    'dirs': ['bin']
+}
+
+sanity_check_commands = ['delly']
+
+moduleclass = 'bio'
