@@ -1,0 +1,44 @@
+# Contributed by Johan Hellsvik (PDC)
+easyblock = 'CMakeNinja'
+
+name = 'octopus'
+version = '16.3'
+
+homepage = 'https://octopus-code.org/'
+description = """Octopus is a scientific program aimed at the ab initio virtual experimentation
+on a hopefully ever-increasing range of system types. Electrons are described quantum-mechanically
+within density-functional theory (DFT), in its time-dependent form (TDDFT) when doing simulations
+in time. Nuclei are described classically as point particles. Electron-nucleus interaction is
+ described within the pseudopotential approximation."""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchainopts = {'usempi': True, 'pic': True}
+
+source_urls = ['https://octopus-code.org/download/%(version)s/']
+sources = [SOURCELOWER_TAR_XZ]
+
+builddependencies = [
+    ('cmake', '4.1.2', '', True),
+    ('ninja', '1.12.1', '', True),
+]
+
+dependencies = [
+    ('cray-libsci', EXTERNAL_MODULE),
+    ('cray-fftw', EXTERNAL_MODULE),
+    ('libxc', '7.0.0'),
+    ('gsl', '2.8')
+]
+
+preconfigopts = "CXX=CC CC=cc FC=ftn &&"
+configopts  = ' -GNinja '
+configopts += ' -DCMAKE_BUILD_TYPE=Release '
+configopts += ' -DOCTOPUS_MPI=ON '
+configopts += ' -DOCTOPUS_OpenMP=ON '
+configopts += ' -DOCTOPUS_FFTW=ON '
+
+sanity_check_paths = {
+    'files': ['bin/octopus','bin/oct-xyz-anim', 'bin/oct-wannier90','lib/liboctopus.a'],
+    'dirs': ['bin','lib','include'],
+}
+
+moduleclass = 'chem'
