@@ -36,6 +36,10 @@ packages:
       buildable: false
     hdf5:
       externals:
+      - spec: hdf5@1.12.2.9%gcc@13.2.1
+        prefix: /opt/cray/pe/hdf5/1.12.2.9/gnu/12.3
+        modules:
+        - cray-hdf5/1.12.2.9
       - spec: hdf5@1.12.2.9
         modules:
         - cray-hdf5/1.12.2.9
