@@ -1,0 +1,251 @@
+Bootstrap: docker
+From: nvidia/cuda:12.6.2-devel-ubuntu22.04
+
+%labels
+    Maintainer "Henric Zazzi"
+    Application "AlphaFold3 ARM64 (XLA-only build)"
+    Description "AF3 on ARM64 with JAX + XLA only. Triton, tokamax, jax-triton disabled."
+
+%environment
+    export MAMBA_ROOT_PREFIX=/opt/conda
+    export PATH="/opt/conda/envs/af3/bin:/opt/conda/bin:$PATH"
+    export JAX_PLATFORM_NAME=gpu
+    # Pure XLA (no Triton)
+    export XLA_FLAGS="--xla_gpu_enable_triton_gemm=false --xla_disable_hlo_passes=custom-kernel-fusion-rewriter"
+    export XLA_PYTHON_CLIENT_PREALLOCATE=true
+    export XLA_CLIENT_MEM_FRACTION=0.95
+
+%help
+  Quick checks...
+
+  1) Confirm GPUs are visible:
+     nvidia-smi
+
+  2) Run a quick JAX/XLA device+matmul check:
+     jax-check
+
+  3) Run a heavier JAX/XLA matmul test:
+     jax-burn
+
+  4) Confirm AlphaFold 3 CLI is wired correctly by building converters to a temp dir:
+     af3-build-data /tmp/out
+
+  5) Run AlphaFold 3
+     af3-run --help
+     af3-run --flash_attention_implementation=xla <your AF3 args...>
+
+  Notes:
+  - This build is ARM64-focused and uses JAX + XLA only (no Triton, tokamax, or jax-triton).
+  - The default 'run' entrypoint executes AF3 with --flash_attention_implementation=xla.
+
+%post
+    # Apptainer runs /bin/sh (dash) → do NOT use pipefail
+    set -eux
+    export DEBIAN_FRONTEND=noninteractive
+    export MAMBA_ROOT_PREFIX=/opt/conda
+
+    echo ">>> Base packages"
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        software-properties-common ca-certificates gnupg \
+        curl wget git unzip bzip2 tar \
+        build-essential cmake ninja-build pkg-config \
+        libffi-dev libssl-dev zlib1g-dev clang
+    add-apt-repository -y universe
+    apt-get update
+
+    echo ">>> Optional OS-level bio tools"
+    apt-get install -y --no-install-recommends kalign hmmer dssp || echo "Falling back to conda for bio tools"
+    rm -rf /var/lib/apt/lists/*
+
+    echo ">>> Install micromamba (ARM64)"
+    curl -Ls https://micro.mamba.pm/api/micromamba/linux-aarch64/latest \
+      | tar -xvj -O bin/micromamba > /usr/local/bin/micromamba
+    chmod 0755 /usr/local/bin/micromamba
+
+    echo ">>> Create AF3 environment (Python 3.12)"
+    micromamba create -y -r $MAMBA_ROOT_PREFIX -n af3 \
+        -c conda-forge -c bioconda \
+        python=3.12 pip rdkit hmmer kalign3 dssp
+
+    echo ">>> Upgrade pip/setuptools/wheel"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 \
+      pip install --upgrade pip setuptools wheel
+
+    echo ">>> Install JAX CUDA12"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 \
+      pip install "jax[cuda12]==0.4.30" \
+        -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+
+    echo ">>> Clone AlphaFold3 repo (v3.0.1)"
+    cd /opt
+    git clone --depth 1 --branch v3.0.1 https://github.com/google-deepmind/alphafold3.git
+    cd alphafold3
+
+    echo ">>> Remove Triton-related packages (XLA-only)"
+    sed -i '/tokamax/d' requirements.txt
+    sed -i '/tokamak/d' requirements.txt
+    sed -i '/triton/d' requirements.txt
+    sed -i '/jax-triton/d' requirements.txt
+    sed -i '/flash-attn/d' requirements.txt
+    sed -i '/flash_attn/d' requirements.txt
+    sed -i '/xformers/d' requirements.txt
+
+    echo ">>> Install AF3 Python deps"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 \
+      pip install --no-cache-dir -r requirements.txt
+
+    echo ">>> Install AF3 package (no deps)"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 \
+      pip install --no-deps .
+
+    echo ">>> Build AF3 chemical component converters (pickle)"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 python - <<'PY'
+import site, os, subprocess, sys
+sp = next(p for p in site.getsitepackages() if p.endswith('site-packages'))
+outdir = os.path.join(sp, 'alphafold3', 'constants', 'converters')
+os.makedirs(outdir, exist_ok=True)
+print("Writing converters:", outdir, file=sys.stderr)
+subprocess.check_call(["build_data", "--output_dir", outdir])
+PY
+
+    ###############################################################
+    #  Disable ALL Triton imports (attention.py, triton_utils, FA)
+    ###############################################################
+
+    echo ">>> Patch attention.py to disable Triton imports"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 python - <<'PY'
+import site, pathlib, re
+sp = next(p for p in site.getsitepackages() if p.endswith('site-packages'))
+att = pathlib.Path(sp)/"alphafold3/jax/attention/attention.py"
+txt = att.read_text()
+txt = re.sub(r"from alphafold3\.jax\.attention import flash_attention as attention_triton",
+             "attention_triton = None  # Triton disabled", txt)
+att.write_text(txt)
+print("Patched:", att)
+PY
+
+    echo ">>> Patch triton_utils.py to pure XLA stubs"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 python - <<'PY'
+import site, pathlib
+sp = next(p for p in site.getsitepackages() if p.endswith('site-packages'))
+tu = pathlib.Path(sp)/"alphafold3/jax/common/triton_utils.py"
+tu.write_text("""
+# XLA-only stub of triton_utils
+def flash_attention(*a, **k):
+    raise RuntimeError("Triton flash attention disabled (XLA-only).")
+def has_triton():
+    return False
+""")
+print("Stubbed:", tu)
+PY
+
+    echo ">>> Patch flash_attention.py to pure XLA stub"
+    micromamba run -r $MAMBA_ROOT_PREFIX -n af3 python - <<'PY'
+import site, pathlib
+sp = next(p for p in site.getsitepackages() if p.endswith('site-packages'))
+fa = pathlib.Path(sp)/"alphafold3/jax/attention/flash_attention.py"
+fa.write_text("""
+# XLA-only stub of flash_attention
+def flash_attention(*a, **k):
+    raise RuntimeError("flash_attention disabled (XLA-only build)")
+""")
+print("Stubbed:", fa)
+PY
+
+    ###############################################################
+    #  Copy run_alphafold.py
+    ###############################################################
+
+    echo ">>> Copy run_alphafold.py"
+    mkdir -p /opt/alphafold3_env
+    cp /opt/alphafold3/run_alphafold.py /opt/alphafold3_env/run_alphafold.py
+
+    ###############################################################
+    #  JAX GPU test scripts (these MUST remain)
+    ###############################################################
+
+    echo ">>> Write JAX tests"
+    mkdir -p /opt/tests
+
+    cat >/opt/tests/jax_check.py <<'PY'
+import jax
+from jax import numpy as jnp
+print("Devices:", jax.devices())
+x=jnp.ones((512,512))
+y=(x@x).block_until_ready()
+print("Matrix multiply OK:", y.shape)
+PY
+
+    cat >/opt/tests/jax_burn.py <<'PY'
+import jax
+from jax import numpy as jnp
+print("Devices:", jax.devices())
+x=jnp.ones((4096,4096),dtype=jnp.float32)
+y=jnp.dot(x,x).block_until_ready()
+print("Heavier XLA test OK:", y.dtype, y.shape)
+PY
+
+    ###############################################################
+    #  Helper: af3-build-data
+    ###############################################################
+
+    cat >/usr/local/bin/af3-build-data <<'SH'
+#!/bin/sh
+set -eu
+OUT="${1:-/tmp/af3_converters}"
+mkdir -p "$OUT"
+PY="/opt/conda/envs/af3/bin/python"
+SP="$($PY - <<'PY'
+import site, os
+sp = next(p for p in site.getsitepackages() if p.endswith('site-packages'))
+print(os.path.join(sp,'alphafold3','constants','converters'))
+PY
+)"
+echo "Copying converters from $SP → $OUT"
+cp -v "$SP"/*.pickle "$OUT"/
+echo "Done."
+SH
+    chmod +x /usr/local/bin/af3-build-data
+
+    ###############################################################
+    #  Wrapper: jax-check / jax-burn
+    ###############################################################
+
+    cat >/usr/local/bin/jax-check <<'SH'
+#!/bin/sh
+set -eu
+exec /opt/conda/envs/af3/bin/python /opt/tests/jax_check.py "$@"
+SH
+    chmod +x /usr/local/bin/jax-check
+
+    cat >/usr/local/bin/jax-burn <<'SH'
+#!/bin/sh
+set -eu
+exec /opt/conda/envs/af3/bin/python /opt/tests/jax_burn.py "$@"
+SH
+    chmod +x /usr/local/bin/jax-burn
+
+    ###############################################################
+    #  Hardened AF3 CLI wrapper (XLA-only)
+    ###############################################################
+
+    cat >/usr/local/bin/af3-run <<'SH'
+#!/bin/sh
+set -eu
+exec /opt/conda/envs/af3/bin/python - "$@" <<'PY'
+import sys,runpy
+sys.argv=[ "/opt/alphafold3_env/run_alphafold.py",
+           "--flash_attention_implementation=xla"]+sys.argv[1:]
+runpy.run_path("/opt/alphafold3_env/run_alphafold.py",run_name="__main__")
+PY
+SH
+    chmod +x /usr/local/bin/af3-run
+
+    echo ">>> Clean caches"
+    micromamba clean -a -y
+    rm -rf /root/.cache/pip
+
+%runscript
+    # Run AF3 (pure XLA implementation)
+    exec python /opt/alphafold3_env/run_alphafold.py --flash_attention_implementation=xla "$@"
