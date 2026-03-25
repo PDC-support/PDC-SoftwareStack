@@ -1,0 +1,25 @@
+--- src/pseudo.F	2026-03-06 15:40:30.000000000 +0100
++++ src/pseudo_new.F	2026-03-25 08:45:30.000000000 +0100
+@@ -235,9 +235,9 @@
+ !        END IF
+       END IF
+ #endif
+-      OPEN(UNIT=10,FILE=DIR_APP(1:DIR_LEN)//'POTCAR',STATUS='OLD',IOSTAT=IERR)
++      OPEN(UNIT=10,FILE=DIR_APP(1:DIR_LEN)//'POTCAR',ACTION='READ',STATUS='OLD',IOSTAT=IERR)
+       IF (IERR/=0) THEN
+-         OPEN(UNIT=10,FILE='POTCAR',STATUS='OLD')
++         OPEN(UNIT=10,FILE='POTCAR',ACTION='READ',STATUS='OLD')
+       ENDIF
+ 
+       LPAW = .FALSE.
+--- src/string.F	2026-03-06 15:40:30.000000000 +0100
++++ src/string_new.F	2026-03-24 11:29:48.000000000 +0100
+@@ -94,7 +94,7 @@
+         integer, intent(out) :: ierr  !< error flag that will be set if accessing the file fails
+         character(len=:), allocatable :: content
+         integer file_unit
+-        open(newunit=file_unit,file=filename,status='old',form='unformatted',access='stream',iostat=ierr)
++        open(newunit=file_unit,file=filename,status='old',form='unformatted',access='stream',action='read',iostat=ierr)
+         if (ierr /= 0) then
+             content = ""
+             return
