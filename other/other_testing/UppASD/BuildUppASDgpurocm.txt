@@ -2,17 +2,14 @@
 
 # Load the PrgEnv-gnu environment, ROCM, and FFTW
 ml PrgEnv-gnu
-ml rocm/6.3.3
-ml cray-fftw/3.3.10.9
-ml cmake/4.1.2
+ml rocm/6.4.4
+ml cray-fftw/3.3.10.11
+#ml cmake/4.1.2
 ml craype-accel-amd-gfx90a
+export PATH=/pdc/software/eb/software/cmake/4.1.2/bin:$PATH
 
-# Create build directory
-mkdir buildGnuHIP1
-cd buildGnuHIP1
-
-# Configure
-cmake .. -DUSE_HIP=1
+# Configure with CMake
+cmake -S . -B buildGnuHIP -DUSE_HIP=1 -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug
 
 # Build
-make -j 32
+cmake --build buildGnuHIP -j 64
