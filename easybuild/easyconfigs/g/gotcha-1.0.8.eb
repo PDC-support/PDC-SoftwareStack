@@ -1,0 +1,44 @@
+# Contributed by Johan Hellsvik (PDC)
+
+easyblock = 'CMakeMake'
+
+name = 'gotcha'
+version = '1.0.8'
+
+homepage = 'https://github.com/llnl/gotcha'
+
+whatis = [
+    "Gotcha is a library that wraps functions. Tools can use gotcha"
+    "to install hooks into other libraries, for example putting a"
+    "wrapper function around libc's malloc."
+]
+
+description = """
+Gotcha is a library that wraps functions. Tools can use gotcha
+to install hooks into other libraries, for example putting a
+wrapper function around libc's malloc."""
+
+docurls = [
+    'Documentation: https://github.com/llnl/gotcha',
+]
+
+toolchain = SYSTEM
+
+source_urls = ['https://github.com/llnl/%(name)s/archive']
+sources = ['%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '4.1.2', '', ('system', '')),
+]
+
+preconfigopts = "CXX=CC CC=cc FC=ftn &&"
+configopts  = ' -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_POLICY_VERSION_MINIMUM=3.5 '
+
+sanity_check_paths = {
+    'files': [
+      'lib/libgotcha.so',
+    ],
+    'dirs': [],
+}
+
+moduleclass = 'lib'
