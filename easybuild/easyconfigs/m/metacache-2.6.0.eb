@@ -1,0 +1,46 @@
+easyblock = 'MakeCp'
+
+name = 'metacache'
+version = '2.6.0'
+
+homepage = 'https://github.com/muellan/metacache'
+description = """MetaCache: ultra-fast metagenomic classification with GPU support."""
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('cudatoolkit', '24.11_12.6'),
+]
+
+
+sources = [{
+    'filename': '%(name)s-%(version)s.tar.gz',
+    'git_config': {
+        'repo_name': 'metacache',
+        'url': 'https://github.com/muellan',
+        'tag': 'v2.6.0',
+        'recursive': True,
+    }
+}]
+
+build_cmd = 'make'
+buildopts = 'gpu_release CUDA_ARCH=sm_90'
+
+files_to_copy = [
+    (['*'], 'bin'),
+]
+
+modextravars = {
+    'CUDA_VISIBLE_DEVICES': '0',
+}
+
+sanity_check_paths = {
+    'files': ['bin/metacache_gpu'],
+    'dirs': [],
+}
+
+sanity_check_commands = [
+    'metacache_gpu help',
+]
+
+moduleclass = 'bio'
