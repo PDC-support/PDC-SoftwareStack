@@ -1,0 +1,34 @@
+# @author: Henric Zazzi
+
+easyblock = 'CMakeMake'
+
+name = 'mmseq2-gpu'
+version = '18-8cc5c'
+
+homepage = 'https://github.com/soedinglab/MMseqs2/'
+
+description = """
+MMseqs2 (Many-against-Many sequence searching) is a software suite to search and cluster huge protein and nucleotide sequence sets. """
+
+toolchain = SYSTEM
+
+sources = [
+    'https://github.com/soedinglab/MMseqs2/archive/refs/tags/%(version)s.tar.gz',
+]
+
+builddependencies = [
+    ('cmake', '4.1.2'),
+]
+
+dependencies = [
+    ('cudatoolkit', '24.11_12.6'),
+]
+
+configopts =  '-DCMAKE_BUILD_TYPE=Release -DENABLE_CUDA=ON -DCMAKE_CUDA_FLAGS="--generate-code arch=compute_90,code=sm_90"'
+
+sanity_check_paths = {
+    'files': ['bin/mmseqs'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
