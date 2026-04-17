@@ -4,7 +4,17 @@ name = 'metacache'
 version = '2.6.0'
 
 homepage = 'https://github.com/muellan/metacache'
-description = """MetaCache: ultra-fast metagenomic classification with GPU support."""
+whatis = [
+    'Description: memory efficient, fast & precise taxnomomic classification system for metagenomic read mapping',
+]
+description = """
+MetaCache is a classification system for mapping genomic sequences (short reads,
+long reads, contigs, ...) from metagenomic samples to their most likely taxon of origin.
+MetaCache aims to reduce the memory requirement usually associated with k-mer based
+methods while retaining their speed. It uses locality sensitive hashing to quickly
+identify candidate regions within one or multiple reference genomes. A read is then
+classified based on the similarity to those regions.
+"""
 
 toolchain = SYSTEM
 
@@ -22,6 +32,7 @@ sources = [{
         'recursive': True,
     }
 }]
+patches = ['MetaCache-2.6.0-dbmemory.patch']
 
 build_cmd = 'make'
 buildopts = 'gpu_release CUDA_ARCH=sm_90'

@@ -1,0 +1,28 @@
+a larger memory margin from the hash-table
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN metacache.old/src/gpu_hashmap.cu metacache/src/gpu_hashmap.cu
+--- metacache.old/src/gpu_hashmap.cu	2026-04-14 09:24:30.000000000 +0200
++++ metacache/src/gpu_hashmap.cu	2026-04-17 15:02:08.000000000 +0200
+@@ -1114,10 +1114,10 @@
+         size_t freeMemory = 0;
+         size_t totalMemory = 0;
+         cudaMemGetInfo(&freeMemory, &totalMemory); CUERR
+-        std::cerr << "gpu " << gpuId << " freeMemory: " << helpers::B2GB(freeMemory) << " GB\n";
++        std::cerr << "gpu " << gpuId << " freeMemory: " << helpers::B2GB(freeMemory) << " GB totalMemory: " << helpers::B2GB(totalMemory) << " GB\n";
+ 
+-        // keep 2 GB of memory free aside from hash table
+-        const size_t tableMemory = freeMemory - (1ULL << 31);
++        // keep 8 GB of memory free aside from hash table
++        const size_t tableMemory = freeMemory - (1ULL << 33);
+ 
+         // AoS
+         // constexpr size_t entrySize = sizeof(ValueT) * (build_hash_table::bucket_size() + 1);
+@@ -1128,7 +1128,7 @@
+ 
+         std::cerr << "gpu " << gpuId << " allocate hashtable for "
+                   << capacity << " keys and "
+-                  << capacity * build_hash_table::bucket_size() << " values\n";
++                  << capacity * build_hash_table::bucket_size() << " values and an entry size of " << entrySize <<"\n";
+         buildHashTables_.emplace_back(std::make_unique<build_hash_table>(
+             capacity, max_locations_per_feature()));
+ 
