@@ -1,0 +1,12 @@
+diff -ruN Rhdf5lib.orig/src/Makevars.in Rhdf5lib/src/Makevars.in
+--- Rhdf5lib.orig/src/Makevars.in	2025-01-24 14:27:36.000000000 +0100
++++ Rhdf5lib/src/Makevars.in	2025-01-24 16:04:12.000000000 +0100
+@@ -48,6 +48,8 @@
+ 
+ build-hdf5: @REQUIRE_SZIP@ @EXTRACT_SOURCE@
+ 	cd hdf5; \
++	sed -i "s|/bin/mv|mv|g" ./configure; \
++	sed -i -e "2722,2734s/sed -e/sed -e 's!-fopenmp!!g' -e/g" ./src/Makefile.in; \
+ 	./configure --with-pic --enable-shared=no --enable-cxx --enable-hl \
+ 	--enable-tests=no --enable-tools=no \
+ 	--with-szlib=@SZIP_HOME@ --with-zlib=@ZLIB_HOME@ \

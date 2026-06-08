@@ -1,0 +1,10 @@
+Do not hardcode CC to gcc in Makefile
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN cpp11bigwig.orig/src/libBigWig/Makefile cpp11bigwig/src/libBigWig/Makefile
+--- cpp11bigwig.orig/src/libBigWig/Makefile	2025-06-12 20:12:37.000000000 +0200
++++ cpp11bigwig/src/libBigWig/Makefile	2025-06-12 20:13:48.000000000 +0200
+@@ -1,4 +1,3 @@
+-CC = gcc
+ 
+ CFLAGS = -Wall -O3 -DNOCURL -fpic
+ 
