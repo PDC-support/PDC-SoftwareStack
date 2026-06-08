@@ -1,0 +1,26 @@
+Since version 1.14.3 of cray-hdf5 does not handle showconfig properly (due to h5cc not setting libdir nor includedir for some uspecified reason), simply cat $HDF5_DIR/lib/libhdf5.settings in the configure instead.
+author: Karl Johan Westrin (PDC KTH)
+diff -ruN hdf5r.orig/configure hdf5r/configure
+--- hdf5r.orig/configure	2025-04-17 20:52:58.000000000 +0200
++++ hdf5r/configure	2025-05-23 18:21:40.000000000 +0200
+@@ -3804,17 +3804,17 @@
+         fi
+ 
+ 
+-                HDF5_VERSION=$(eval $H5CC -showconfig | $GREP 'HDF5 Version:' \
++                HDF5_VERSION=$(cat $HDF5_DIR/lib/libhdf5.settings | $GREP 'HDF5 Version:' \
+             | $AWK '{print $3}')
+         HDF5_MAJOR_VERSION=$(echo $HDF5_VERSION | $AWK -F \. '{print $1}')
+         HDF5_MINOR_VERSION=$(echo $HDF5_VERSION | $AWK -F \. {'print $2'})
+         HDF5_REVISION_VERSION=$(echo $HDF5_VERSION | $AWK -F \. {'print $3'})
+ 
+-                                                                                HDF5_tmp_flags=$(eval $H5CC -showconfig \
++                                                                                HDF5_tmp_flags=$(cat $HDF5_DIR/lib/libhdf5.settings \
+             | $GREP 'FLAGS\|Extra libraries:' \
+             | $AWK -F: '{printf("%s "), $2}' )
+ 
+-                HDF5_tmp_inst=$(eval $H5CC -showconfig \
++                HDF5_tmp_inst=$(cat $HDF5_DIR/lib/libhdf5.settings \
+             | $GREP 'Installation point:' \
+             | $AWK '{print $NF}' )
+ 
