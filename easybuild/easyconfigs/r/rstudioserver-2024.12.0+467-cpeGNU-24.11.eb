@@ -1,0 +1,136 @@
+easyblock = 'CMakeNinja'
+
+name = 'rstudioserver'
+version = '2024.12.0+467'
+versionsuffix = '-R-%(rver)s'
+local_git_rev = 'cf37a3e5488c937207f992226d255be71f5e3f41'
+
+homepage = 'https://www.rstudio.com/'
+whatis = [
+    'Description: RStudio: an integrated development environment (IDE) for R.',
+]
+description = """
+This is the RStudio Server version. RStudio is a set of integrated tools
+designed to help you be more productive with R.
+
+The server can be started with:
+  rserver --server-daemonize=0 --www-port=8787
+
+If you need a database config one can be created with:
+  MYTMP=`mktemp -d` && echo -e "provider=sqlite\\ndirectory=${MYTMP}/sqlite" > "${MYTMP}/db.conf"
+and then used with:
+  rserver ... --database-config-file="${MYTMP}/db.conf"
+"""
+
+toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+
+source_urls = ['https://github.com/rstudio/rstudio/archive']
+sources = ['v%(version)s.tar.gz']
+patches = [
+    'RStudio-Server-1.2.1335-fix_env.patch',
+    'RStudio-Server-2024.12.0-467_static-boost.patch',
+    'RStudio-Server-2024.12.0-467_noflatmap.patch',
+]
+checksums = [
+    {'v%(version)s.tar.gz': '4f976a3b77f1c3b6a61b8e1a1850aeba0e0a847efbfc17b03b2fcb19fce13d6a'},
+    {'RStudio-Server-1.2.1335-fix_env.patch': 'a7b6edab4f5605f5695b5a987f2f1b229e90dbcfcb7a85cc2ea9341e8766941b'},
+    {'RStudio-Server-2024.12.0-467_static-boost.patch': '53f196c134710fa024456a95f94f3d3c750f6dbe68be075e2b1f3f4819765628'},
+]
+
+# NOTE TO SELF: To be able to compile this, set the following
+# environment variable to avoid error -122 when compiling:
+# export YARN_CACHE_FOLDER=${SNIC_TMP%/}/yarn_cache
+
+builddependencies = [
+    ('ant', '1.10.12','',SYSTEM),
+    ('boost', '1.85.0'),
+    ('cmake', '4.1.2','',SYSTEM),
+    ('ninja', '1.12.1','',SYSTEM),
+    ('nodejs', '22.17.1'),
+]
+
+dependencies = [
+    ('java', '17.0.4', '', SYSTEM),
+    ('R', '4.4.2'),
+    ('Rbio', '3.20'),
+    ('soci', '4.0.3', '', SYSTEM),
+    ('yaml-cpp', '0.8.0', '', SYSTEM),
+]
+
+osdependencies = [
+    ('pam-devel', 'libpam0g-dev')
+]
+
+preconfigopts = " && ".join([
+    # Install dependencies via scripts. Done in subshell to preserve PWD
+    "(export RSTUDIO_TOOLS_ROOT='%(builddir)s'",
+    "cd '%(start_dir)s/dependencies/common'",
+    "./install-cef",
+    "./install-dictionaries",
+    "./install-mathjax",
+    "./install-quarto",  # Available for X86 and ARM
+    "./install-panmirror",
+    "./install-npm-dependencies)",
+    ""
+])
+
+configopts = " ".join([
+    "-DRSTUDIO_TOOLS_ROOT='%(builddir)s'",
+    "-DRSTUDIO_TARGET=Server",
+    "-DRSTUDIO_USE_SYSTEM_BOOST=ON",
+    "-DRSTUDIO_USE_SYSTEM_SOCI=ON",
+    "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON",
+    "-DQUARTO_ENABLED=ON",
+    "-DRSTUDIO_GIT_REVISION_HASH=" + local_git_rev
+])
+
+# fix for compatibility with Boost-1.85.0
+prebuildopts = "sed -i 's/return afterResponse_;/return static_cast<bool>(afterResponse_);/' "
+prebuildopts += '%(start_dir)s/src/cpp/core/json/JsonRpc.cpp && '
+
+sanity_check_commands = [
+    # RSession requires environment variables R_HOME and R_DOC_DIR
+    'R_HOME="$EBROOTR/lib64/R" R_DOC_DIR="$R_HOME/doc" rsession --verify-installation=1',
+    # RServer requires a db conf (this may also be needed for live use)
+    # Also create and set a soem dirs so it doesn't try to use $HOME
+    ' '.join([
+        'MYTMP=`mktemp -d`',
+        '&& export RSTUDIO_CONFIG_DIR="$MYTMP"',
+        '&& export XDG_DATA_HOME="$MYTMP/.data"',
+        '&& export XDG_CACHE_HOME="$MYTMP/.cache"',
+        '&& mkdir "$XDG_DATA_HOME" "$XDG_CACHE_HOME"',
+        '&& export RS_LOG_DIR="$MYTMP/log"',
+        '&& echo -e "provider=sqlite\\ndirectory=$MYTMP/db" >> "$MYTMP/db.conf"',
+        '&& rserver',
+        '--verify-installation=1',
+        '--server-user="$USER"',
+        '--database-config-file="$MYTMP/db.conf"',
+        '--server-data-dir="$MYTMP/sdd"',
+        '--secure-cookie-key-file="$MYTMP/secure-cookie-key"',
+    ]),
+]
+
+sanity_check_paths = {
+    'files': ['bin/rstudio-server'],
+    'dirs': ['bin', 'extras', 'resources', 'www', 'www-symbolmaps', 'R'],
+}
+
+#RSTUDIO_CONFIG_DIR=$HOME/.config/rstudio
+modluafooter = """
+local dir_user_path = os.getenv("HOME") .. "/.config/rstudio"
+local db_dir_path = dir_user_path .. "/db"
+local usrnm = os.getenv("USER")
+setenv("RSTUDIO_CONFIG_DIR", dir_user_path)
+function directory_exists(path)
+    local lfs = require("lfs")
+    local attr = lfs.attributes(path)
+    return attr and attr.mode == "directory"
+end
+if (mode() == "load") and (not directory_exists(db_dir_path)) then
+    os.execute("mkdir -p " .. db_dir_path)
+    os.execute('echo -e "server-user=' .. usrnm .. '\\nserver-daemonize=0\\nwww-port=8787\\nserver-data-dir=/tmp/rstudio-server/sdd.' .. usrnm .. '\\ndatabase-config-file=' .. db_dir_path .. '.conf" > ' .. dir_user_path .. '/rserver.conf')
+    os.execute('echo -e "provider=sqlite\\ndirectory=' .. db_dir_path ..'" > ' .. db_dir_path .. '.conf')
+end
+"""
+
+moduleclass = 'lang'
