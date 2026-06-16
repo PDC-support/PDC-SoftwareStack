@@ -2,7 +2,7 @@
 
 easyblock = 'CMakeMake'
 
-name = 'mmseq2-gpu'
+name = 'mmseqs2-gpu'
 version = '18-8cc5c'
 
 homepage = 'https://github.com/soedinglab/MMseqs2/'
@@ -21,7 +21,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('cudatoolkit', '24.11_12.6'),
+    ('cudatoolkit', '25.9_13.0'),
 ]
 
 configopts =  '-DCMAKE_BUILD_TYPE=Release -DENABLE_CUDA=ON -DCMAKE_CUDA_FLAGS="--generate-code arch=compute_90,code=sm_90"'
