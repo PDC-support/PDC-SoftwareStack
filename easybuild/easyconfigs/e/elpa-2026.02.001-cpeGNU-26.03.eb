@@ -34,8 +34,6 @@ toolchainopts = {'usempi': True, 'openmp': True}
 
 source_urls = ['https://gitlab.mpcdf.mpg.de/elpa/elpa/-/archive/new_release_2026_02_001/']
 sources = ['elpa-new_release_2026_02_001.tar.gz']
-#source_urls = ['https://gitlab.mpcdf.mpg.de/elpa/elpa/-/archive/new_release_%(version)s/']
-#sources = ['elpa-new_release_%(version)s.tar.gz']
 
 builddependencies = [
     ('automake','1.16.5', '', True),
