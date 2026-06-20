@@ -24,7 +24,7 @@ parallel supercomputers, ELPA eigensolvers have proven to be also very efficient
 for smaller matrices. All major architectures are supported.
 
 ELPA provides static and shared libraries with and without OpenMP support
-and with and without MPI. GPU kernels are not included in this module.
+and with and without MPI.
 """
 
 docurls = [
@@ -32,12 +32,10 @@ docurls = [
 ]
 
 toolchain = {'name': 'cpeGNU', 'version': '26.03'}
-toolchainopts = {'usempi': True, 'openmp': False}
+toolchainopts = {'usempi': True, 'openmp': True}
 
 source_urls = ['https://gitlab.mpcdf.mpg.de/elpa/elpa/-/archive/new_release_2026_02_001/']
 sources = ['elpa-new_release_2026_02_001.tar.gz']
-#source_urls = ['https://gitlab.mpcdf.mpg.de/elpa/elpa/-/archive/release_%(version)s/']
-#sources = ['elpa-release_%(version)s.tar.gz']
 
 builddependencies = [
     ('automake','1.16.5', '', True),
@@ -51,7 +49,7 @@ dependencies = [
 
 preconfigopts  = './autogen.sh && '
 
-configopts = ' '.join([
+local_commonopts = ' '.join([
     'CPP=cpp CC=cc CXX=hipcc FC=ftn',
     'CFLAGS="-g $CFLAGS"',
     'FCFLAGS="-g $FCFLAGS"',
@@ -74,6 +72,11 @@ configopts = ' '.join([
 # copy-pasted from the rocblas one, with the wrong include and floating point type.
 #    '--enable-marshalling-hipblas-library',
 ])
+
+configopts = [
+    local_commonopts + ' --enable-openmp ',
+    local_commonopts + ' --disable-openmp '
+]
 
 prebuildopts = 'export CPATH=$ROCM_PATH/include/hipblas && make clean && '
 maxparallel = 16
