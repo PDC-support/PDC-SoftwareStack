@@ -7,7 +7,7 @@
 
 ```
 AUTO_VERSION=2.71
-OPENMPI_VERSION=4.1.3
+OPENMPI_VERSION=4.1.5
 
 mkdir -p ~/source && cd ~/source
 wget http://ftp.gnu.org/gnu/autoconf/autoconf-$AUTO_VERSION.tar.gz
@@ -24,7 +24,8 @@ srun --pty bash -i
 - Once we are on compute node, we can build Autoconf and OpenMPI
 ```
 AUTO_VERSION=2.71
-OPENMPI_VERSION=4.1.3
+OPENMPI_VERSION=4.1.5
+LIBFABRIC_VERSION=1.15.0.0
 mkdir -p ~/opt/autoconf/$AUTO_VERSION
 mkdir -p ~/opt/openmpi/$OPENMPI_VERSION
 
@@ -38,7 +39,7 @@ make install
 export PATH=~/opt/autoconf/$AUTO_VERSION/bin:$PATH
 cd ~/source/openmpi-$OPENMPI_VERSION
 mkdir build && cd build
-../configure --with-pmi --with-pmi-libdir=/usr/lib64 --with-slurm --prefix=$HOME/opt/openmpi/$OPENMPI_VERSION --with-libfabric=/opt/cray/libfabric/1.11.0.4.67
+../configure --with-pmi --with-pmi-libdir=/usr/lib64 --with-slurm --prefix=$HOME/opt/openmpi/$OPENMPI_VERSION --with-libfabric=/opt/cray/libfabric/$LIBFABRIC_VERSION
 make -j 16
 make install
 ```
@@ -47,7 +48,7 @@ make install
 - You will need to set following environment variables
 ```
 module unload cray-mpich
-OPENMPI_VERSION=4.1.3
+OPENMPI_VERSION=4.1.5
 export PATH=~/opt/openmpi/$OPENMPI_VERSION/bin:$PATH
 export LD_LIBRARY_PATH=~/opt/openmpi/$OPENMPI_VERSION/lib:$LD_LIBRARY_PATH
 ```
@@ -67,8 +68,8 @@ export LD_LIBRARY_PATH=~/opt/openmpi/$OPENMPI_VERSION/lib:$LD_LIBRARY_PATH
 #SBATCH --error=slurm-run-%j.err
 
 module unload cray-mpich
-export PATH=~/opt/openmpi/4.1.3/bin:$PATH
-export LD_LIBRARY_PATH=~/opt/openmpi/4.1.3/lib:$LD_LIBRARY_PATH
+export PATH=~/opt/openmpi/4.1.5/bin:$PATH
+export LD_LIBRARY_PATH=~/opt/openmpi/4.1.5/lib:$LD_LIBRARY_PATH
 
 # Compile the source code
 mpicc -o hello-mpi.o hello-mpi.c
