@@ -18,7 +18,7 @@ evolutionary relationships between sequences as well as
 help identify members of gene families.
 """
 
-toolchain = {'name': 'cpeGNU', 'version': '24.11'}
+toolchain = {'name': 'cpeGNU', 'version': '26.03'}
 toolchainopts = {'usempi': True}
 
 source_urls = ['https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/%(version)s/']
