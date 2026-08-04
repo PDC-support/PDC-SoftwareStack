@@ -1,0 +1,60 @@
+# This file is an EasyBuild reciPY as per https://github.com/easybuilders/easybuild
+
+easyblock = 'ConfigureMake'
+
+name = 'viennarna'
+version = '2.7.2'
+
+homepage = 'https://www.tbi.univie.ac.at/RNA/'
+whatis = [
+    'Description: The ViennaRNA Package',
+]
+description = """
+The Vienna RNA Package consists of a C code library and several stand-alone
+programs for the prediction and comparison of RNA secondary structures.
+"""
+
+toolchain = SYSTEM
+#toolchainopts = {'pic': True}
+
+source_urls = ['https://www.tbi.univie.ac.at/RNA/download/sourcecode/%(version_major)s_%(version_minor)s_x/']
+sources = ['ViennaRNA-2.7.2.tar.gz']
+checksums = [
+    {'ViennaRNA-2.7.2.tar.gz': '1ab5f4a4f76fc85a2243546088e45f5d85f2d7a56cc656e969b005cce9bfab5f'},
+]
+
+builddependencies = [
+    ('autotools', '20220317'),
+    ('flex', '2.6.4'),
+    ('pkgconf', '1.9.3'),
+    ('bison', '3.8.2'),
+    ('swig', '4.2.1'),
+]
+
+dependencies = [
+    ('gsl', '2.7.1'),
+    ('mpfr', '4.2.1'),
+    ('libgd', '2.3.3'),
+    ('x11', '20220504'),
+]
+
+configopts = ' '.join([
+    '--without-python3',
+    '--without-perl',
+    '--with-cluster',
+    '--with-kinwalker',
+])
+
+buildopts = "V=1"
+
+sanity_check_paths = {
+    'files': ['bin/RNA%s' % x for x in ['fold', 'eval', 'heat', 'pdist', 'distance',
+                                        'inverse', 'plot', 'subopt', 'Lfold', 'cofold',
+                                        'paln', 'duplex', 'alifold', 'plfold', 'up',
+                                        'aliduplex', 'Lalifold', '2Dfold', 'parconv',
+                                        'PKplex', 'plex', 'snoop', 'forester']] +
+    ['bin/Kinfold'],
+    'dirs': [],
+}
+
+moduleclass = 'bio'
