@@ -3950,6 +3950,9 @@ exts_list = [
     ('poliscidata', '2.3.0', {
         'checksums': ['3d325d0d2ec72df59b48988f7bb61669454eac45da5c5a66178c3dc3f4848efb'],
     }),
+    ('glmpca', '0.2.0', {
+        'checksums': ['048a9cdb303279275aa2b23bb01777dffdeaec0752709b382c2289f21e70b20b'],
+    }),
 ]
 
 # Prepare a user lib directory for R
