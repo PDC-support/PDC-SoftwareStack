@@ -1,0 +1,28 @@
+# Arash Alizad Banaei (PDC)
+easyblock = 'CMakeMake'
+
+name = 'geant4'
+version = '11.4.2'
+
+homepage = 'https://geant4.web.cern.ch/'
+
+description = """ toolkit to create simulations of the passage of particles or radiation through matter"""
+
+toolchain = {'name': 'cpeGNU', 'version': '26.03'}
+
+source_urls = ['https://gitlab.cern.ch/geant4/geant4/-/archive/v%(version)s']
+
+sources =     ['geant4-v%(version)s.tar.gz']
+
+builddependencies = [
+    ('cmake', '4.3.3', '', True)
+]
+
+configopts = "-DGEANT4_INSTALL_DATA=ON"
+
+sanity_check_paths = {
+    'files': ['bin/geant4.sh'],
+    'dirs': ['bin'],
+}
+
+moduleclass = 'phys'
